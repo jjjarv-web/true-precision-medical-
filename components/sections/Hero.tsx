@@ -12,13 +12,15 @@ const H1_LINES = [
   ['Surgery', 'Centers.'],
 ]
 
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
+
 const wordVariants = {
   hidden: { opacity: 0, y: 22, filter: 'blur(8px)' },
   visible: {
     opacity: 1,
     y: 0,
     filter: 'blur(0px)',
-    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.6, ease: EASE },
   },
 }
 
@@ -27,7 +29,7 @@ const fadeUp = (delay = 0) => ({
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1], delay },
+    transition: { duration: 0.55, ease: EASE, delay },
   },
 })
 
