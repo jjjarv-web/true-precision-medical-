@@ -1,3 +1,24 @@
+export type Insurance = {
+  name: string
+  priority?: boolean
+}
+
+export const INSURANCES: Insurance[] = [
+  { name: 'Medicare', priority: true },
+  { name: 'Medicaid' },
+  { name: 'Blue Cross Blue Shield' },
+  { name: 'Aetna' },
+  { name: 'UnitedHealthcare' },
+  { name: 'Cigna' },
+  { name: 'Humana' },
+  { name: 'Tricare' },
+  { name: 'Anthem' },
+  { name: 'Oscar Health' },
+  { name: 'Molina Healthcare' },
+  { name: 'Centene' },
+  { name: 'Beacon Health' },
+]
+
 export type ConsultationSpecialty = {
   id: string
   label: string
