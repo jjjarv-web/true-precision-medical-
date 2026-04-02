@@ -7,7 +7,7 @@ import { TREATMENT_CATEGORIES } from '@/lib/constants'
 
 export default function Treatments() {
   return (
-    <section id="treatments" className="py-20 md:py-28 bg-brand-bg">
+    <section id="treatments" className="py-32 bg-white">
       <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-14">

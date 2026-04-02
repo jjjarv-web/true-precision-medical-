@@ -17,7 +17,7 @@ const iconColorMap = {
 
 export default function TrustBar() {
   return (
-    <section className="border-y border-brand-primary/8 bg-white py-5">
+    <section className="bg-white py-8">
       <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
         <div className="flex flex-wrap justify-center gap-6 md:gap-14">
           {TRUST_ITEMS.map((item) => {

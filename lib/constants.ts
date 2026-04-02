@@ -1,3 +1,42 @@
+export type Provider = {
+  id: string
+  name: string
+  title: string
+  bio?: string
+  photoUrl?: string
+}
+
+export const PROVIDERS: Provider[] = [
+  {
+    id: 'provider-1',
+    name: 'Dr. Sarah Mitchell',
+    title: 'Orthopedic Surgeon',
+    bio: 'Fellowship-trained in joint preservation and minimally invasive knee and hip procedures. Board Certified.',
+    photoUrl: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?q=80&w=800&auto=format&fit=crop',
+  },
+  {
+    id: 'provider-2',
+    name: 'Dr. James Caldwell',
+    title: 'Interventional Radiologist',
+    bio: 'Specializes in image-guided, catheter-based treatments for vascular and pain conditions. Board Certified.',
+    photoUrl: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?q=80&w=800&auto=format&fit=crop',
+  },
+  {
+    id: 'provider-3',
+    name: 'Dr. Elena Vasquez',
+    title: 'Neurosurgeon',
+    bio: 'Expert in minimally invasive spine surgery and nerve decompression. Fellowship-trained. Board Certified.',
+    photoUrl: 'https://images.unsplash.com/photo-1594824476967-48c8b964273f?q=80&w=800&auto=format&fit=crop',
+  },
+  {
+    id: 'provider-4',
+    name: 'Dr. Ryan Park',
+    title: 'Sports Medicine Specialist',
+    bio: 'Regenerative medicine and arthroscopic solutions for athletes and active patients. Board Certified.',
+    photoUrl: 'https://images.unsplash.com/photo-1537368910025-700350fe46c7?q=80&w=800&auto=format&fit=crop',
+  },
+]
+
 export type Insurance = {
   name: string
   priority?: boolean

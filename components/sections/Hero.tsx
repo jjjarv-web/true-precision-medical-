@@ -78,7 +78,7 @@ export default function Hero() {
         style={{ background: 'radial-gradient(ellipse at 15% 95%, rgba(91,183,166,0.06) 0%, transparent 60%)' }}
       />
 
-      <div className="relative z-10 w-full max-w-4xl mx-auto px-6 sm:px-10 py-44 text-center">
+      <div className="relative z-10 w-full max-w-4xl mx-auto px-6 sm:px-10 pt-40 pb-28 text-center">
 
         {/* H1 — 3 stacked lines, word-by-word blur-fade */}
         <motion.h1

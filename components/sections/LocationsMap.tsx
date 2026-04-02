@@ -24,7 +24,7 @@ export default function LocationsMap() {
   const [mapLoaded, setMapLoaded] = useState(false)
 
   return (
-    <section ref={ref} className="py-28 bg-white border-t border-brand-primary/6">
+    <section ref={ref} className="py-32" style={{ backgroundColor: 'var(--color-brand-bg-alt)' }}>
       <div className="max-w-5xl mx-auto px-6 sm:px-10 lg:px-12">
 
         {/* Heading */}

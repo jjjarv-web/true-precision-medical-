@@ -3,7 +3,7 @@ import { MapPin, Phone } from 'lucide-react'
 
 export default function LocationsCTA() {
   return (
-    <section id="locations" className="py-20 md:py-28 bg-brand-bg-alt">
+    <section id="locations" className="py-32 bg-white">
       <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
         <div className="bg-white rounded-[2.5rem] p-8 md:p-14 shadow-[0_4px_40px_rgba(13,27,62,0.07)] border border-brand-primary/6 flex flex-col lg:flex-row items-center justify-between gap-12">
           {/* Text */}

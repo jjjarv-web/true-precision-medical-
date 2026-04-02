@@ -39,7 +39,7 @@ export default function TrustCredentials() {
   const inView  = useInView(ref, { once: true, margin: '-60px' })
 
   return (
-    <section ref={ref} className="py-28 bg-white">
+    <section ref={ref} className="py-32 bg-white">
       <div className="max-w-5xl mx-auto px-6 sm:px-10 lg:px-12">
 
         {/* Label + headline */}

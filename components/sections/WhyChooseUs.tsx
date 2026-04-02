@@ -3,7 +3,7 @@ import { WHY_FEATURES } from '@/lib/constants'
 
 export default function WhyChooseUs() {
   return (
-    <section className="py-20 md:py-28 overflow-hidden relative" style={{ backgroundColor: '#0D1B3E' }}>
+    <section className="py-32 overflow-hidden relative" style={{ backgroundColor: '#0D1B3E' }}>
       {/* Background orbs */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full pointer-events-none z-0"
         style={{ background: 'radial-gradient(circle, rgba(74,144,212,0.12) 0%, transparent 70%)', transform: 'translate(20%, -30%)' }}

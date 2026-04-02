@@ -7,6 +7,7 @@ import LocationsMap from '@/components/sections/LocationsMap'
 import TrustBar from '@/components/sections/TrustBar'
 import Treatments from '@/components/sections/Treatments'
 import HowItWorks from '@/components/sections/HowItWorks'
+import Providers from '@/components/sections/Providers'
 import WhyChooseUs from '@/components/sections/WhyChooseUs'
 import LocationsCTA from '@/components/sections/LocationsCTA'
 
@@ -22,6 +23,7 @@ export default function HomePage() {
         <TrustBar />
         <Treatments />
         <HowItWorks />
+        <Providers />
         <WhyChooseUs />
         <LocationsCTA />
       </main>
