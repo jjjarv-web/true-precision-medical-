@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { ArrowRight } from 'lucide-react'
+import Image from 'next/image'
 import { CONSULTATION_SPECIALTIES } from '@/lib/constants'
 
 // H1 split into 3 visual lines for centered stacked layout
@@ -70,12 +71,34 @@ export default function Hero() {
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden bg-white">
 
+      {/* Hero background image — ghosted behind white overlay */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <Image
+          src="/images/hero-bg-1.jpg"
+          alt=""
+          fill
+          priority
+          className="object-cover object-[center_30%] opacity-30"
+          sizes="100vw"
+        />
+        {/* White vignette: punches brightest at text center, opens toward edges */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background: [
+              'radial-gradient(ellipse 70% 60% at 50% 42%, rgba(255,255,255,0.94) 0%, rgba(255,255,255,0.50) 55%, transparent 100%)',
+              'linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(255,255,255,0.70) 30%, rgba(255,255,255,0.15) 100%)',
+            ].join(', '),
+          }}
+        />
+      </div>
+
       {/* Ambient glows — barely-there depth */}
       <div className="absolute top-0 right-0 w-[800px] h-[800px] pointer-events-none z-0"
-        style={{ background: 'radial-gradient(ellipse at 75% 5%, rgba(74,144,212,0.08) 0%, transparent 60%)' }}
+        style={{ background: 'radial-gradient(ellipse at 75% 5%, rgba(74,144,212,0.07) 0%, transparent 60%)' }}
       />
       <div className="absolute bottom-0 left-0 w-[600px] h-[600px] pointer-events-none z-0"
-        style={{ background: 'radial-gradient(ellipse at 15% 95%, rgba(91,183,166,0.06) 0%, transparent 60%)' }}
+        style={{ background: 'radial-gradient(ellipse at 15% 95%, rgba(91,183,166,0.05) 0%, transparent 60%)' }}
       />
 
       <div className="relative z-10 w-full max-w-4xl mx-auto px-6 sm:px-10 pt-40 pb-28 text-center">
