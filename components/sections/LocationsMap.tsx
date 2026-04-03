@@ -1,31 +1,39 @@
 'use client'
 
 import { useRef, useState } from 'react'
-import { motion, useInView } from 'motion/react'
-import { MapPin, Phone, Clock, ArrowRight, Navigation } from 'lucide-react'
+import { motion, useInView, AnimatePresence } from 'motion/react'
+import { MapPin, Phone, Clock, Navigation, ChevronRight } from 'lucide-react'
+import { LOCATIONS } from '@/lib/constants'
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
-// Placeholder — update with real address
-const LOCATION = {
-  name:    'True Precision Medical — Scottsdale',
-  address: '8752 E Pinnacle Peak Rd, Suite 100',
-  city:    'Scottsdale, AZ 85255',
-  phone:   '(480) 555-0199',
-  hours:   'Mon – Fri: 8am – 5pm',
-  mapsUrl: 'https://maps.google.com/?q=8752+E+Pinnacle+Peak+Rd+Scottsdale+AZ+85255',
-  embedUrl:
-    'https://www.google.com/maps?q=Scottsdale,+AZ+85255&output=embed&z=13',
-}
+// Arizona overview shown before any location is selected
+const AZ_OVERVIEW_URL =
+  'https://www.google.com/maps?q=Phoenix+Metropolitan+Area+Arizona&output=embed&z=9'
 
 export default function LocationsMap() {
   const ref    = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-60px' })
+
+  const [activeId, setActiveId]   = useState<string | null>(null)
   const [mapLoaded, setMapLoaded] = useState(false)
+
+  const active = activeId ? LOCATIONS.find((l) => l.id === activeId) ?? null : null
+
+  // Arizona overview — zoomed out to show the full state
+  const AZ_OVERVIEW = 'https://www.google.com/maps?q=Arizona&output=embed&z=6'
+
+  const mapSrc = active ? active.embedUrl : AZ_OVERVIEW
+
+  function handleSelect(id: string) {
+    if (id === activeId) return
+    setMapLoaded(false)
+    setActiveId(id)
+  }
 
   return (
     <section ref={ref} className="py-32" style={{ backgroundColor: 'var(--color-brand-bg-alt)' }}>
-      <div className="max-w-5xl mx-auto px-6 sm:px-10 lg:px-12">
+      <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-12">
 
         {/* Heading */}
         <motion.div
@@ -37,105 +45,134 @@ export default function LocationsMap() {
           <div className="flex items-center justify-center gap-2 mb-4">
             <MapPin className="w-4 h-4 text-brand-accent" />
             <span className="text-xs font-semibold uppercase tracking-widest text-brand-muted">
-              Find Us
+              Our Locations
             </span>
           </div>
           <h2 className="font-heading font-extrabold text-brand-ink text-[clamp(28px,4vw,50px)] leading-tight mb-3">
-            We&apos;re real. We&apos;re local.<br className="hidden sm:block" />
-            And we&apos;re probably closer than you think.
+            Closer than you think.<br className="hidden sm:block" />
+            <span className="gradient-text">We&apos;re local.</span>
           </h2>
           <p className="text-brand-ink-secondary text-lg max-w-lg mx-auto leading-relaxed">
-            12 locations across the Valley — board-certified specialists ready to see you.
+            {LOCATIONS.length} locations across the Valley — board-certified specialists ready to see you.
           </p>
         </motion.div>
 
-        {/* Card + Map grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 items-stretch">
+        {/* Layout: location list + map */}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-5 items-stretch">
 
-          {/* Location card */}
+          {/* ── Location list ─────────────────────────── */}
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
+            initial={{ opacity: 0, x: -16 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, ease: EASE, delay: 0.1 }}
-            className="lg:col-span-2 flex flex-col justify-between bg-white border border-brand-primary/10 rounded-2xl p-8 shadow-[0_4px_32px_rgba(30,58,95,0.08)]"
+            className="lg:col-span-2 flex flex-col gap-2"
           >
-            <div>
-              <p className="font-heading font-bold text-brand-ink text-lg mb-6 leading-snug">
-                {LOCATION.name}
-              </p>
-
-              <div className="flex flex-col gap-5">
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-brand-surface-blue flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <MapPin className="w-4 h-4 text-brand-sky" />
+            {LOCATIONS.map((loc, i) => {
+              const isActive = activeId === loc.id
+              return (
+                <motion.button
+                  key={loc.id}
+                  onClick={() => handleSelect(loc.id)}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={inView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ duration: 0.45, ease: EASE, delay: 0.15 + i * 0.06 }}
+                  className={`w-full text-left rounded-2xl border px-5 py-4 transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-brand-sky ${
+                    isActive
+                      ? 'bg-white border-brand-primary/20 shadow-[0_4px_24px_rgba(30,58,95,0.10)]'
+                      : 'bg-white/60 border-transparent hover:bg-white hover:border-brand-primary/10 hover:shadow-sm'
+                  }`}
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-start gap-3 min-w-0">
+                      {/* Pin indicator */}
+                      <div className={`mt-0.5 w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors duration-200 ${
+                        isActive ? 'bg-brand-primary' : 'bg-brand-surface-blue'
+                      }`}>
+                        <MapPin className={`w-3.5 h-3.5 transition-colors duration-200 ${isActive ? 'text-white' : 'text-brand-sky'}`} />
+                      </div>
+                      <div className="min-w-0">
+                        <p className={`font-heading font-bold text-sm leading-tight truncate transition-colors duration-200 ${
+                          isActive ? 'text-brand-primary' : 'text-brand-ink'
+                        }`}>
+                          {loc.name}
+                        </p>
+                        <p className="text-brand-muted text-xs mt-0.5 truncate">{loc.address}</p>
+                        <p className="text-brand-muted-light text-xs">{loc.city}</p>
+                      </div>
+                    </div>
+                    <ChevronRight className={`w-4 h-4 flex-shrink-0 mt-1 transition-all duration-200 ${
+                      isActive ? 'text-brand-primary translate-x-0.5' : 'text-brand-muted-light'
+                    }`} />
                   </div>
-                  <div>
-                    <p className="text-sm font-medium text-brand-ink">{LOCATION.address}</p>
-                    <p className="text-sm text-brand-muted">{LOCATION.city}</p>
-                  </div>
-                </div>
 
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-brand-surface-teal flex items-center justify-center flex-shrink-0">
-                    <Phone className="w-4 h-4 text-brand-accent" />
-                  </div>
-                  <a
-                    href={`tel:${LOCATION.phone.replace(/\D/g, '')}`}
-                    className="text-sm font-medium text-brand-ink hover:text-brand-sky transition-colors"
-                  >
-                    {LOCATION.phone}
-                  </a>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-brand-surface-warm flex items-center justify-center flex-shrink-0">
-                    <Clock className="w-4 h-4 text-orange-500" />
-                  </div>
-                  <p className="text-sm font-medium text-brand-ink">{LOCATION.hours}</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-3 mt-8">
-              <a
-                href={LOCATION.mapsUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 bg-brand-primary hover:bg-brand-primary-dark text-white px-6 py-3.5 rounded-xl text-sm font-semibold transition-all duration-200 shadow-[0_2px_16px_rgba(30,58,95,0.25)] hover:-translate-y-0.5"
-              >
-                <Navigation className="w-4 h-4" />
-                Get Directions
-              </a>
-              <a
-                href="#"
-                className="inline-flex items-center justify-center gap-1.5 text-sm font-semibold text-brand-sky hover:text-brand-primary transition-colors"
-              >
-                See all 12 locations
-                <ArrowRight className="w-3.5 h-3.5" />
-              </a>
-            </div>
+                  {/* Expanded detail — only on active */}
+                  <AnimatePresence initial={false}>
+                    {isActive && (
+                      <motion.div
+                        key="detail"
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.28, ease: EASE }}
+                        className="overflow-hidden"
+                      >
+                        <div className="mt-4 ml-10 flex flex-col gap-2.5">
+                          <div className="flex items-center gap-2">
+                            <Phone className="w-3.5 h-3.5 text-brand-accent flex-shrink-0" />
+                            <a
+                              href={`tel:${loc.phone.replace(/\D/g, '')}`}
+                              onClick={(e) => e.stopPropagation()}
+                              className="text-xs font-medium text-brand-ink hover:text-brand-sky transition-colors"
+                            >
+                              {loc.phone}
+                            </a>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Clock className="w-3.5 h-3.5 text-brand-muted flex-shrink-0" />
+                            <span className="text-xs text-brand-muted">{loc.hours}</span>
+                          </div>
+                          <a
+                            href={loc.mapsUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(e) => e.stopPropagation()}
+                            className="mt-1 inline-flex items-center gap-1.5 text-xs font-semibold text-brand-primary hover:text-brand-sky transition-colors"
+                          >
+                            <Navigation className="w-3 h-3" />
+                            Get Directions
+                          </a>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.button>
+              )
+            })}
           </motion.div>
 
-          {/* Map */}
+          {/* ── Map ───────────────────────────────────── */}
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
+            initial={{ opacity: 0, x: 16 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, ease: EASE, delay: 0.18 }}
-            className="lg:col-span-3 relative rounded-2xl overflow-hidden shadow-[0_4px_40px_rgba(30,58,95,0.12)] border border-brand-primary/8 min-h-[360px]"
+            className="lg:col-span-3 relative rounded-2xl overflow-hidden shadow-[0_4px_40px_rgba(30,58,95,0.12)] border border-brand-primary/8 min-h-[480px]"
           >
-            {/* Skeleton shimmer while loading */}
+            {/* Loading skeleton */}
             {!mapLoaded && (
               <div className="absolute inset-0 bg-brand-bg-alt flex items-center justify-center z-10">
                 <div className="flex flex-col items-center gap-3 text-brand-muted">
-                  <MapPin className="w-8 h-8 animate-pulse text-brand-sky" />
+                  <MapPin className="w-7 h-7 animate-pulse text-brand-sky" />
                   <span className="text-sm font-medium">Loading map…</span>
                 </div>
               </div>
             )}
+
             <iframe
-              src={LOCATION.embedUrl}
-              title="True Precision Medical location map"
+              key={activeId ?? 'overview'}
+              src={mapSrc}
+              title={active ? `True Precision Medical — ${active.name}` : 'True Precision Medical — Arizona Locations'}
               className="absolute inset-0 w-full h-full border-0"
+              style={{ filter: 'none' }}
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
               onLoad={() => setMapLoaded(true)}

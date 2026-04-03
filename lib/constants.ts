@@ -1,3 +1,57 @@
+export type Location = {
+  id: string
+  name: string
+  address: string
+  city: string
+  phone: string
+  hours: string
+  mapsUrl: string
+  embedUrl: string
+}
+
+export const LOCATIONS: Location[] = [
+  {
+    id: 'phoenix',
+    name: 'Phoenix — Central',
+    address: '6036 N 19th Ave, Suite 204',
+    city: 'Phoenix, AZ 85015',
+    phone: '(602) 555-0101',
+    hours: 'Mon – Fri: 8am – 5pm',
+    mapsUrl: 'https://maps.google.com/?q=6036+N+19th+Ave+Phoenix+AZ+85015',
+    embedUrl: 'https://www.google.com/maps?q=6036+N+19th+Ave+Phoenix+AZ+85015&output=embed&z=10',
+  },
+  {
+    id: 'scottsdale',
+    name: 'Scottsdale — North',
+    address: '8752 E Pinnacle Peak Rd, Suite 100',
+    city: 'Scottsdale, AZ 85255',
+    phone: '(480) 555-0199',
+    hours: 'Mon – Fri: 8am – 5pm',
+    mapsUrl: 'https://maps.google.com/?q=8752+E+Pinnacle+Peak+Rd+Scottsdale+AZ+85255',
+    embedUrl: 'https://www.google.com/maps?q=8752+E+Pinnacle+Peak+Rd+Scottsdale+AZ+85255&output=embed&z=10',
+  },
+  {
+    id: 'gilbert',
+    name: 'Gilbert — East Valley',
+    address: '2680 S Val Vista Dr, Suite 110',
+    city: 'Gilbert, AZ 85295',
+    phone: '(480) 555-0177',
+    hours: 'Mon – Fri: 8am – 5pm',
+    mapsUrl: 'https://maps.google.com/?q=2680+S+Val+Vista+Dr+Gilbert+AZ+85295',
+    embedUrl: 'https://www.google.com/maps?q=2680+S+Val+Vista+Dr+Gilbert+AZ+85295&output=embed&z=10',
+  },
+  {
+    id: 'peoria',
+    name: 'Peoria — West Valley',
+    address: '13128 N 94th Dr, Suite 300',
+    city: 'Peoria, AZ 85381',
+    phone: '(623) 555-0144',
+    hours: 'Mon – Fri: 8am – 5pm',
+    mapsUrl: 'https://maps.google.com/?q=13128+N+94th+Dr+Peoria+AZ+85381',
+    embedUrl: 'https://www.google.com/maps?q=13128+N+94th+Dr+Peoria+AZ+85381&output=embed&z=10',
+  },
+]
+
 export type Provider = {
   id: string
   name: string

@@ -57,9 +57,9 @@ function ProviderCard({
               src={provider.photoUrl}
               alt={provider.name}
               fill
-              className={`object-cover object-top transition-transform duration-700 ease-out ${
-                !isTouch ? 'group-hover:scale-[1.04]' : isActive ? 'scale-[1.04]' : ''
-              }`}
+              className={`object-cover object-top transition-all duration-700 ease-out
+                grayscale hover:grayscale-0
+                ${!isTouch ? 'group-hover:scale-[1.04] group-hover:grayscale-0' : isActive ? 'scale-[1.04] grayscale-0' : ''}`}
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
             />
           ) : (
