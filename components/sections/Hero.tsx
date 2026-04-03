@@ -69,7 +69,7 @@ export default function Hero() {
   const selectorDelay = trustDelay + 0.18
 
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden bg-white">
+    <section className="relative min-h-screen flex items-center bg-white">
 
       {/* Hero background image — ghosted behind white overlay */}
       <div className="absolute inset-0 z-0 pointer-events-none">
@@ -90,6 +90,11 @@ export default function Hero() {
               'linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(255,255,255,0.65) 30%, rgba(255,255,255,0.08) 100%)',
             ].join(', '),
           }}
+        />
+        {/* Bottom edge fade — background layer only, never touches content */}
+        <div
+          className="absolute bottom-0 left-0 right-0 h-36 pointer-events-none"
+          style={{ background: 'linear-gradient(to bottom, transparent, white)' }}
         />
       </div>
 

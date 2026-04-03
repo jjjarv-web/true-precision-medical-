@@ -7,11 +7,45 @@ import { ShieldCheck, Building2, UserCheck, Zap, ArrowRight, Hand } from 'lucide
 import { PROVIDERS } from '@/lib/constants'
 
 const STATS = [
-  { value: '15,000+', label: 'Procedures Performed' },
-  { value: '4.9★',    label: 'Average Patient Rating' },
-  { value: '12',      label: 'Arizona Locations' },
-  { value: '0',       label: 'Hospital Stays Required' },
+  { to: 15000, decimals: 0, suffix: '+', label: 'Procedures Performed',   isZero: false },
+  { to: 4.9,   decimals: 1, suffix: '★', label: 'Average Patient Rating', isZero: false },
+  { to: 12,    decimals: 0, suffix: '',  label: 'Arizona Locations',       isZero: false },
+  { to: 0,     decimals: 0, suffix: '',  label: 'Hospital Stays Required', isZero: true  },
 ]
+
+function CountUp({
+  to, decimals, suffix, delay, inView,
+}: { to: number; decimals: number; suffix: string; delay: number; inView: boolean }) {
+  const [display, setDisplay] = useState(decimals > 0 ? (0).toFixed(decimals) : '0')
+
+  useEffect(() => {
+    if (!inView) return
+    const duration = 1600
+    const delayMs  = delay * 1000
+    let start: number | null = null
+    let raf: number
+
+    function tick(ts: number) {
+      if (start === null) start = ts
+      const elapsed = ts - start - delayMs
+      if (elapsed < 0) { raf = requestAnimationFrame(tick); return }
+      const progress = Math.min(elapsed / duration, 1)
+      const eased    = 1 - Math.pow(1 - progress, 3) // ease-out cubic
+      const current  = eased * to
+      setDisplay(
+        decimals > 0
+          ? current.toFixed(decimals)
+          : Math.floor(current).toLocaleString()
+      )
+      if (progress < 1) raf = requestAnimationFrame(tick)
+      else setDisplay(decimals > 0 ? to.toFixed(decimals) : to.toLocaleString())
+    }
+    raf = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(raf)
+  }, [inView, to, decimals, delay])
+
+  return <>{display}{suffix}</>
+}
 
 const CREDENTIALS = [
   {
@@ -177,14 +211,18 @@ export default function TrustCredentials() {
   const handleFirstTap = useCallback(() => setHintDismissed(true), [])
 
   return (
-    <section ref={ref} className="py-32 bg-white">
+    <section
+      ref={ref}
+      className="relative z-10 py-32 bg-white rounded-t-[2.5rem]"
+      style={{ marginTop: '-2.5rem', boxShadow: '0 -8px 48px rgba(30,58,95,0.07)' }}
+    >
       <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-12">
 
         {/* Headline */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: 14 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.55, ease: EASE }}
+          transition={{ duration: 0.5, ease: EASE }}
           className="text-center mb-20"
         >
           <div className="flex items-center justify-center gap-2 mb-4">
@@ -199,27 +237,25 @@ export default function TrustCredentials() {
         </motion.div>
 
         {/* Stats */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, ease: EASE, delay: 0.1 }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-px bg-brand-primary/8 rounded-2xl overflow-hidden mb-20 shadow-[0_2px_40px_rgba(30,58,95,0.07)]"
-        >
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-brand-primary/8 rounded-2xl overflow-hidden mb-20 shadow-[0_2px_40px_rgba(30,58,95,0.07)]">
           {STATS.map((stat, i) => (
             <motion.div
               key={stat.label}
-              initial={{ opacity: 0, y: 12 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, ease: EASE, delay: 0.15 + i * 0.07 }}
+              initial={{ opacity: 0, scale: 0.96, y: 10 }}
+              animate={inView ? { opacity: 1, scale: 1, y: 0 } : {}}
+              transition={{ type: 'spring', stiffness: 340, damping: 28, delay: 0.12 + i * 0.04 }}
               className="bg-white px-8 py-10 text-center"
             >
               <p className="font-heading font-extrabold text-brand-ink text-[clamp(32px,4vw,48px)] leading-none mb-2">
-                {stat.value === '0' ? <span className="gradient-text">Zero</span> : stat.value}
+                {stat.isZero
+                  ? <span className="gradient-text">Zero</span>
+                  : <CountUp to={stat.to} decimals={stat.decimals} suffix={stat.suffix} delay={0.12 + i * 0.04} inView={inView} />
+                }
               </p>
               <p className="text-sm text-brand-muted leading-snug">{stat.label}</p>
             </motion.div>
           ))}
-        </motion.div>
+        </div>
 
         {/* Credential blocks */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-24">
@@ -228,14 +264,19 @@ export default function TrustCredentials() {
             return (
               <motion.div
                 key={cred.title}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 16 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.55, ease: EASE, delay: 0.3 + i * 0.09 }}
+                transition={{ duration: 0.5, ease: EASE, delay: 0.28 + i * 0.04 }}
                 className="flex flex-col gap-4"
               >
-                <div className="w-11 h-11 rounded-xl bg-brand-surface-blue flex items-center justify-center">
+                <motion.div
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={inView ? { scale: 1, opacity: 1 } : {}}
+                  transition={{ type: 'spring', stiffness: 400, damping: 20, delay: 0.32 + i * 0.04 }}
+                  className="w-11 h-11 rounded-xl bg-brand-surface-blue flex items-center justify-center"
+                >
                   <Icon className="w-5 h-5 text-brand-sky" />
-                </div>
+                </motion.div>
                 <div>
                   <h3 className="font-heading font-bold text-brand-ink text-lg mb-2 leading-snug">{cred.title}</h3>
                   <p className="text-brand-ink-secondary leading-relaxed text-[15px]">{cred.body}</p>
@@ -247,9 +288,9 @@ export default function TrustCredentials() {
 
         {/* ── Meet the team divider ─────────────────── */}
         <motion.div
-          initial={{ opacity: 0, y: 12 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, ease: EASE, delay: 0.55 }}
+          transition={{ duration: 0.45, ease: EASE, delay: 0.42 }}
           className="flex items-center gap-5 mb-14"
         >
           <div className="flex-1 h-px bg-brand-primary/8" />

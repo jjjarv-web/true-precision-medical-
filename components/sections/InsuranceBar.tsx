@@ -41,8 +41,7 @@ export default function InsuranceBar() {
   return (
     <section
       ref={ref}
-      className="py-32"
-      style={{ backgroundColor: 'var(--color-brand-bg-alt)' }}
+      className="relative z-0 py-32 bg-white"
     >
       <div className="max-w-2xl mx-auto px-6 sm:px-10 text-center">
 

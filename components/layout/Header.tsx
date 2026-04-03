@@ -25,17 +25,15 @@ export default function Header() {
     >
       <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 flex justify-between items-center">
         {/* Logo */}
-        <a href="/" className="flex items-center" aria-label="True Precision Medical home">
-          <div className="rounded-xl overflow-hidden flex-shrink-0" style={{ background: '#000' }}>
-            <Image
-              src="/logo.png"
-              alt="True Precision Medical"
-              width={220}
-              height={52}
-              className="h-10 w-auto object-contain block"
-              priority
-            />
-          </div>
+        <a href="/" className="flex items-center flex-shrink-0" aria-label="True Precision Medical home">
+          <Image
+            src="/logo/true-precision-medical-logo.svg"
+            alt="True Precision Medical"
+            width={180}
+            height={50}
+            className="h-10 w-auto object-contain block"
+            priority
+          />
         </a>
 
         {/* Desktop Nav */}

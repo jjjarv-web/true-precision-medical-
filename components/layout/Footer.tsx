@@ -11,12 +11,11 @@ export default function Footer() {
           <div className="lg:col-span-2">
             <a href="/" className="inline-flex mb-6" aria-label="True Precision Medical home">
               <Image
-                src="/logo.png"
+                src="/logo/true-precision-medical-logo.svg"
                 alt="True Precision Medical"
-                width={200}
-                height={48}
-                className="h-10 w-auto object-contain"
-                style={{ mixBlendMode: 'screen' }}
+                width={180}
+                height={50}
+                className="h-10 w-auto object-contain rounded-xl"
               />
             </a>
             <p className="text-white/60 mb-8 max-w-sm leading-relaxed text-sm">

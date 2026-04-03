@@ -17,7 +17,7 @@ const iconColorMap = {
 
 export default function TrustBar() {
   return (
-    <section className="bg-white py-8">
+    <section className="py-8" style={{ backgroundColor: 'var(--color-brand-bg-alt)' }}>
       <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
         <div className="flex flex-wrap justify-center gap-6 md:gap-14">
           {TRUST_ITEMS.map((item) => {

@@ -32,7 +32,7 @@ export default function LocationsMap() {
   }
 
   return (
-    <section ref={ref} className="py-32" style={{ backgroundColor: 'var(--color-brand-bg-alt)' }}>
+    <section ref={ref} className="py-32 bg-white">
       <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-12">
 
         {/* Heading */}
