@@ -74,11 +74,11 @@ export default function Hero() {
       {/* Hero background image — ghosted behind white overlay */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <Image
-          src="/images/hero-bg-1.jpg"
+          src="/images/hero-bg-images.jpg"
           alt=""
           fill
           priority
-          className="object-cover object-[center_30%] opacity-30"
+          className="object-cover object-center opacity-35"
           sizes="100vw"
         />
         {/* White vignette: punches brightest at text center, opens toward edges */}
@@ -86,8 +86,8 @@ export default function Hero() {
           className="absolute inset-0"
           style={{
             background: [
-              'radial-gradient(ellipse 70% 60% at 50% 42%, rgba(255,255,255,0.94) 0%, rgba(255,255,255,0.50) 55%, transparent 100%)',
-              'linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(255,255,255,0.70) 30%, rgba(255,255,255,0.15) 100%)',
+              'radial-gradient(ellipse 72% 62% at 50% 42%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.45) 58%, transparent 100%)',
+              'linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(255,255,255,0.65) 30%, rgba(255,255,255,0.08) 100%)',
             ].join(', '),
           }}
         />
