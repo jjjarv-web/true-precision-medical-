@@ -1,38 +1,14 @@
 'use client'
 
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'motion/react'
+import { useState, useRef } from 'react'
+import { useGSAP } from '@gsap/react'
+import gsap from 'gsap'
+import { AnimatePresence, motion } from 'motion/react'
 import { ArrowRight } from 'lucide-react'
 import Image from 'next/image'
 import { CONSULTATION_SPECIALTIES } from '@/lib/constants'
 
-// H1 split into 3 visual lines for centered stacked layout
-const H1_LINES = [
-  ["Arizona's", 'Premier'],
-  ['Minimally', 'Invasive'],
-  ['Surgery', 'Centers.'],
-]
-
-const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
-
-const wordVariants = {
-  hidden: { opacity: 0, y: 22, filter: 'blur(8px)' },
-  visible: {
-    opacity: 1,
-    y: 0,
-    filter: 'blur(0px)',
-    transition: { duration: 0.6, ease: EASE },
-  },
-}
-
-const fadeUp = (delay = 0) => ({
-  hidden: { opacity: 0, y: 14 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.55, ease: EASE, delay },
-  },
-})
+gsap.registerPlugin(useGSAP)
 
 const STAR_PATH =
   'M6 0.5l1.237 3.809H11.4L8.09 6.586l1.237 3.809L6 8.138l-3.326 2.257L3.91 6.586.6 4.309h4.163z'
@@ -62,26 +38,72 @@ function GoogleLogo() {
 
 export default function Hero() {
   const [selected, setSelected] = useState<string | null>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
 
-  const totalWords = H1_LINES.flat().length
-  const bodyDelay  = totalWords * 0.06 + 0.25
-  const trustDelay = bodyDelay + 0.18
-  const selectorDelay = trustDelay + 0.18
+  useGSAP(() => {
+    const tl = gsap.timeline()
+
+    // ── Phase 1: "Major Surgery" enters together ──────────────────────────────
+    tl.fromTo('.gsap-major',
+      { opacity: 0, y: 44, filter: 'blur(14px)' },
+      { opacity: 1, y: 0,  filter: 'blur(0px)', duration: 1.0, ease: 'power3.out' }
+    )
+    .fromTo('.gsap-surgery',
+      { opacity: 0, y: 44, filter: 'blur(14px)' },
+      { opacity: 1, y: 0,  filter: 'blur(0px)', duration: 1.0, ease: 'power3.out' },
+      '<0.1'
+    )
+
+    // ── Phase 2: Breath ───────────────────────────────────────────────────────
+    tl.to({}, { duration: 0.65 })
+
+    // ── Phase 3a: Major shrinks + strikethrough draws ─────────────────────────
+    tl.to('.gsap-major-inner',
+      { scale: 0.76, opacity: 0.18, y: 6, duration: 0.9, ease: 'power2.inOut' }
+    )
+    .to('.gsap-strike',
+      { scaleX: 1, duration: 0.7, ease: 'power2.inOut' },
+      '<'
+    )
+
+    // ── Beat — let the strike land ────────────────────────────────────────────
+    tl.to({}, { duration: 0.38 })
+
+    // ── Phase 3b: Major collapses out, Surgery drifts to center ──────────────
+    // overflow:hidden lets the width:0 collapse clip the content cleanly
+    tl.set('.gsap-major', { overflow: 'hidden' })
+      .to('.gsap-major',
+        { width: 0, marginRight: 0, opacity: 0, duration: 0.65, ease: 'power2.inOut' }
+      )
+
+    // ── Phase 3c: Reimagined blooms in as Major disappears ────────────────────
+    tl.fromTo('.gsap-reimagined',
+      { opacity: 0, y: 38, filter: 'blur(10px)' },
+      { opacity: 1, y: 0,  filter: 'blur(0px)', duration: 1.0, ease: 'power3.out' },
+      '<0.15'
+    )
+
+    // ── Phase 4: Body content staggered reveal ────────────────────────────────
+    tl.fromTo('.gsap-body-item',
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0,  duration: 0.6, ease: 'power2.out', stagger: 0.18 },
+      '-=0.3'
+    )
+  }, { scope: containerRef })
 
   return (
     <section className="relative min-h-screen flex items-center bg-white">
 
-      {/* Hero background image — ghosted behind white overlay */}
+      {/* Hero background image */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <Image
           src="/images/hero-bg-images.jpg"
           alt=""
           fill
           priority
-          className="object-cover object-center opacity-35"
+          className="object-cover object-center opacity-25"
           sizes="100vw"
         />
-        {/* White vignette: punches brightest at text center, opens toward edges */}
         <div
           className="absolute inset-0"
           style={{
@@ -91,14 +113,13 @@ export default function Hero() {
             ].join(', '),
           }}
         />
-        {/* Bottom edge fade — background layer only, never touches content */}
         <div
           className="absolute bottom-0 left-0 right-0 h-36 pointer-events-none"
           style={{ background: 'linear-gradient(to bottom, transparent, white)' }}
         />
       </div>
 
-      {/* Ambient glows — barely-there depth */}
+      {/* Ambient glows */}
       <div className="absolute top-0 right-0 w-[800px] h-[800px] pointer-events-none z-0"
         style={{ background: 'radial-gradient(ellipse at 75% 5%, rgba(74,144,212,0.07) 0%, transparent 60%)' }}
       />
@@ -106,71 +127,92 @@ export default function Hero() {
         style={{ background: 'radial-gradient(ellipse at 15% 95%, rgba(91,183,166,0.05) 0%, transparent 60%)' }}
       />
 
-      <div className="relative z-10 w-full max-w-4xl mx-auto px-6 sm:px-10 pt-40 pb-28 text-center">
+      <div
+        ref={containerRef}
+        className="relative z-10 w-full max-w-4xl mx-auto px-6 sm:px-10 pt-48 pb-28 text-center"
+      >
+        {/* ── H1 ─────────────────────────────────────────────────────────────── */}
+        <h1 className="font-heading font-extrabold leading-[1.2] tracking-tight text-brand-ink text-[clamp(46px,7.5vw,92px)] mb-8">
 
-        {/* H1 — 3 stacked lines, word-by-word blur-fade */}
-        <motion.h1
-          initial="hidden"
-          animate="visible"
-          variants={{
-            hidden: {},
-            visible: { transition: { staggerChildren: 0.07 } },
-          }}
-          className="font-heading font-extrabold leading-[1.04] tracking-tight text-brand-ink text-[clamp(46px,7.5vw,92px)] mb-8"
-        >
-          {H1_LINES.map((line, li) => (
-            <span key={li} className="block">
-              {line.map((word) => (
-                <motion.span
-                  key={`${li}-${word}`}
-                  variants={wordVariants}
-                  className={`inline-block mr-[0.2em] last:mr-0 ${word === 'Premier' ? 'gradient-text' : ''}`}
-                >
-                  {word}
-                </motion.span>
-              ))}
+          {/* Line 1: Major Surgery */}
+          <span className="block">
+
+            {/* "Major" — outer keeps layout, inner scales/fades */}
+            <span
+              className="gsap-major inline-block"
+              style={{ opacity: 0, marginRight: '0.2em' }}
+            >
+              {/* Strikethrough lives inside inner so it moves with the text on scale */}
+              <span
+                className="gsap-major-inner relative inline-block"
+                style={{ transformOrigin: 'center center' }}
+              >
+                Major
+                <span
+                  className="gsap-strike absolute inset-x-0 pointer-events-none rounded-full"
+                  style={{
+                    top: '52%',
+                    height: '0.07em',
+                    marginTop: '-0.035em',
+                    backgroundColor: 'rgba(13,27,62,0.5)',
+                    transform: 'scaleX(0)',
+                    transformOrigin: 'left center',
+                  }}
+                />
+              </span>
             </span>
-          ))}
-        </motion.h1>
 
-        {/* Body copy */}
-        <motion.p
-          variants={fadeUp(bodyDelay)}
-          initial="hidden"
-          animate="visible"
-          className="text-lg md:text-xl text-brand-ink-secondary leading-relaxed max-w-xl mx-auto mb-7"
+            {/* "Surgery" — enters with Major, stays at full weight */}
+            <span
+              className="gsap-surgery inline-block gradient-text py-[0.1em]"
+              style={{ opacity: 0 }}
+            >
+              Surgery
+            </span>
+          </span>
+
+          {/* Line 2: Reimagined */}
+          <span className="block">
+            <span
+              className="gsap-reimagined inline-block"
+              style={{ opacity: 0 }}
+            >
+              Reimagined
+            </span>
+          </span>
+        </h1>
+
+        {/* ── Body copy ───────────────────────────────────────────────────────── */}
+        <p
+          className="gsap-body-item text-lg md:text-xl text-brand-ink-secondary leading-relaxed max-w-xl mx-auto mb-7"
+          style={{ opacity: 0 }}
         >
-          Explore alternatives to major surgery with board-certified specialists
-          in orthopedics, neurosurgery, and interventional radiology.
-        </motion.p>
+          See why Arizona&apos;s board-certified orthopedic surgeons,
+          neurosurgeons, and interventional radiologists are redefining
+          what surgery looks like.
+        </p>
 
-        {/* Google trust signal */}
-        <motion.div
-          variants={fadeUp(trustDelay)}
-          initial="hidden"
-          animate="visible"
-          className="flex items-center justify-center gap-2.5 mb-20"
+        {/* ── Google trust signal ─────────────────────────────────────────────── */}
+        <div
+          className="gsap-body-item flex items-center justify-center gap-2.5 mb-20"
+          style={{ opacity: 0 }}
         >
           <GoogleLogo />
           <GoogleStars />
           <span className="text-sm font-semibold text-brand-ink">4.9</span>
           <span className="text-brand-muted-light text-sm select-none">·</span>
           <span className="text-sm text-brand-muted">340+ reviews on Google</span>
-        </motion.div>
+        </div>
 
-        {/* ── Interactive Consultation Selector ─────────── */}
-        <motion.div
-          variants={fadeUp(selectorDelay)}
-          initial="hidden"
-          animate="visible"
+        {/* ── Consultation Selector ───────────────────────────────────────────── */}
+        <div
+          className="gsap-body-item"
+          style={{ opacity: 0 }}
         >
-
-          {/* The question — subheadline weight */}
           <p className="font-heading font-bold text-brand-ink mb-8 text-[clamp(22px,3vw,36px)] leading-snug">
             What&apos;s bringing you in?
           </p>
 
-          {/* Specialty tiles — large pill chips, flex-wrap centered */}
           <div className="flex flex-wrap justify-center gap-3 max-w-2xl mx-auto mb-12">
             {CONSULTATION_SPECIALTIES.map((spec) => {
               const isSelected = selected === spec.id
@@ -211,7 +253,6 @@ export default function Hero() {
             })}
           </div>
 
-          {/* CTA — completely different idle vs active states */}
           <div className="min-h-[80px] flex flex-col items-center justify-center">
             <AnimatePresence mode="wait">
               {selected ? (
@@ -253,8 +294,7 @@ export default function Hero() {
               )}
             </AnimatePresence>
           </div>
-
-        </motion.div>
+        </div>
       </div>
     </section>
   )
