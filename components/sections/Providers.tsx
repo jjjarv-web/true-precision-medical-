@@ -203,11 +203,13 @@ export default function Providers() {
           ref={(el) => {
             if (!el || window.innerWidth >= 1024) return
             const cs = window.getComputedStyle(el)
+            const card0 = el.children[0] as HTMLElement | null
+            const card0cs = card0 ? window.getComputedStyle(card0) : null
             const badge = document.createElement('div')
-            badge.textContent = `display:${cs.display} dir:${cs.flexDirection} w:${el.offsetWidth}px sw:${el.scrollWidth}px`
-            badge.style.cssText = 'position:fixed;top:8px;left:8px;right:8px;z-index:9999;background:rgba(0,0,0,0.85);color:#0f0;font:11px monospace;padding:6px 8px;border-radius:6px;pointer-events:none'
+            badge.innerHTML = `<b>CAROUSEL DEBUG — tap to dismiss</b><br>container display: <b>${cs.display}</b><br>flexDirection: <b>${cs.flexDirection}</b><br>overflowX: <b>${cs.overflowX}</b><br>container w: <b>${el.offsetWidth}px</b> scrollW: <b>${el.scrollWidth}px</b><br>card[0] w: <b>${card0 ? card0.offsetWidth + 'px' : 'n/a'}</b> (card0cs.width: <b>${card0cs?.width ?? 'n/a'}</b>)`
+            badge.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:9999;background:rgba(0,0,0,0.9);color:#0f0;font:12px monospace;padding:10px 12px;line-height:1.7;cursor:pointer'
+            badge.onclick = () => badge.remove()
             document.body.appendChild(badge)
-            setTimeout(() => badge.remove(), 8000)
           }}
           // #endregion
           className="flex overflow-x-auto snap-x snap-mandatory gap-5
