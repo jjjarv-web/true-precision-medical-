@@ -7,9 +7,7 @@ import { LOCATIONS } from '@/lib/constants'
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
-// Arizona overview shown before any location is selected
-const AZ_OVERVIEW_URL =
-  'https://www.google.com/maps?q=Phoenix+Metropolitan+Area+Arizona&output=embed&z=9'
+const AZ_OVERVIEW = 'https://www.google.com/maps?q=Arizona&output=embed&z=6'
 
 export default function LocationsMap() {
   const ref    = useRef(null)
@@ -19,10 +17,6 @@ export default function LocationsMap() {
   const [mapLoaded, setMapLoaded] = useState(false)
 
   const active = activeId ? LOCATIONS.find((l) => l.id === activeId) ?? null : null
-
-  // Arizona overview — zoomed out to show the full state
-  const AZ_OVERVIEW = 'https://www.google.com/maps?q=Arizona&output=embed&z=6'
-
   const mapSrc = active ? active.embedUrl : AZ_OVERVIEW
 
   function handleSelect(id: string) {
@@ -32,7 +26,7 @@ export default function LocationsMap() {
   }
 
   return (
-    <section ref={ref} className="py-32 bg-white">
+    <section ref={ref} className="py-32 bg-gradient-to-b from-white to-[#f4f7fb]">
       <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-12">
 
         {/* Heading */}
@@ -65,7 +59,7 @@ export default function LocationsMap() {
             initial={{ opacity: 0, x: -16 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, ease: EASE, delay: 0.1 }}
-            className="lg:col-span-2 flex flex-col gap-2"
+            className="lg:col-span-2 flex flex-col gap-2.5"
           >
             {LOCATIONS.map((loc, i) => {
               const isActive = activeId === loc.id
@@ -76,17 +70,24 @@ export default function LocationsMap() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={inView ? { opacity: 1, y: 0 } : {}}
                   transition={{ duration: 0.45, ease: EASE, delay: 0.15 + i * 0.06 }}
-                  className={`w-full text-left rounded-2xl border px-5 py-4 transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-brand-sky ${
+                  className={`relative w-full text-left rounded-[1.4rem] border px-5 py-4 transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-brand-sky backdrop-blur-xl ${
                     isActive
-                      ? 'bg-white border-brand-primary/20 shadow-[0_4px_24px_rgba(30,58,95,0.10)]'
-                      : 'bg-white/60 border-transparent hover:bg-white hover:border-brand-primary/10 hover:shadow-sm'
+                      ? 'bg-white border-brand-primary/18 shadow-[0_2px_8px_rgba(30,58,95,0.06),_0_16px_40px_rgba(30,58,95,0.13),_inset_0_1px_0_rgba(255,255,255,0.92)]'
+                      : 'bg-[rgba(255,255,255,0.58)] border-[rgba(255,255,255,0.62)] shadow-[0_2px_6px_rgba(17,35,70,0.05),_0_10px_28px_rgba(17,35,70,0.07),_inset_0_1px_0_rgba(255,255,255,0.88)] hover:shadow-[0_2px_8px_rgba(30,58,95,0.06),_0_16px_36px_rgba(30,58,95,0.11),_inset_0_1px_0_rgba(255,255,255,0.92)] hover:-translate-y-0.5'
                   }`}
                 >
+                  {/* Active left accent bar */}
+                  {isActive && (
+                    <div className="absolute left-0 top-4 bottom-4 w-[3px] bg-brand-primary rounded-full" />
+                  )}
+
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-start gap-3 min-w-0">
-                      {/* Pin indicator */}
-                      <div className={`mt-0.5 w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors duration-200 ${
-                        isActive ? 'bg-brand-primary' : 'bg-brand-surface-blue'
+                      {/* Pin badge */}
+                      <div className={`mt-0.5 w-9 h-9 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all duration-200 ${
+                        isActive
+                          ? 'bg-brand-primary shadow-[0_4px_12px_rgba(30,58,95,0.24)]'
+                          : 'bg-brand-surface-blue shadow-[0_2px_8px_rgba(17,35,70,0.08)]'
                       }`}>
                         <MapPin className={`w-3.5 h-3.5 transition-colors duration-200 ${isActive ? 'text-white' : 'text-brand-sky'}`} />
                       </div>
@@ -116,10 +117,10 @@ export default function LocationsMap() {
                         transition={{ duration: 0.28, ease: EASE }}
                         className="overflow-hidden"
                       >
-                        <div className="mt-4 ml-11 flex flex-col gap-3">
+                        <div className="mt-4 ml-12 flex flex-col gap-3">
                           {/* Phone */}
                           <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0"
+                            <div className="w-8 h-8 rounded-2xl flex items-center justify-center flex-shrink-0"
                               style={{ backgroundColor: 'rgba(16,185,129,0.10)' }}>
                               <Phone className="w-3.5 h-3.5 flex-shrink-0" style={{ color: '#10b981' }} />
                             </div>
@@ -134,21 +135,24 @@ export default function LocationsMap() {
 
                           {/* Hours */}
                           <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0"
+                            <div className="w-8 h-8 rounded-2xl flex items-center justify-center flex-shrink-0"
                               style={{ backgroundColor: 'rgba(251,146,60,0.10)' }}>
                               <Clock className="w-3.5 h-3.5 flex-shrink-0" style={{ color: '#f97316' }} />
                             </div>
                             <span className="text-sm text-brand-muted">{loc.hours}</span>
                           </div>
 
-                          {/* Get Directions button */}
+                          {/* Get Directions */}
                           <a
                             href={loc.mapsUrl}
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={(e) => e.stopPropagation()}
-                            className="mt-1 w-full flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-white transition-opacity duration-150 hover:opacity-90 active:opacity-80"
-                            style={{ backgroundColor: 'var(--color-brand-primary)' }}
+                            className="mt-1 w-full flex items-center justify-center gap-2 rounded-[1.2rem] px-4 py-2.5 text-sm font-medium tracking-[0.01em] text-white transition-all duration-150 hover:-translate-y-0.5"
+                            style={{
+                              backgroundColor: 'var(--color-brand-primary)',
+                              boxShadow: '0 4px 16px rgba(30,58,95,0.24), inset 0 1px 0 rgba(255,255,255,0.12)',
+                            }}
                           >
                             <Navigation className="w-3.5 h-3.5" />
                             Get Directions
@@ -167,8 +171,18 @@ export default function LocationsMap() {
             initial={{ opacity: 0, x: 16 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, ease: EASE, delay: 0.18 }}
-            className="lg:col-span-3 relative rounded-2xl overflow-hidden shadow-[0_4px_40px_rgba(30,58,95,0.12)] border border-brand-primary/8 min-h-[480px]"
+            className="lg:col-span-3 relative rounded-[1.6rem] overflow-hidden min-h-[480px]"
+            style={{
+              boxShadow: '0 2px 8px rgba(30,58,95,0.06), 0 16px 56px rgba(30,58,95,0.16)',
+              border: '1px solid rgba(30,58,95,0.08)',
+            }}
           >
+            {/* Top-edge vignette — softens the hard map border */}
+            <div
+              className="absolute inset-x-0 top-0 h-8 z-10 pointer-events-none"
+              style={{ background: 'linear-gradient(to bottom, rgba(255,255,255,0.18), transparent)' }}
+            />
+
             {/* Loading skeleton */}
             {!mapLoaded && (
               <div className="absolute inset-0 bg-brand-bg-alt flex items-center justify-center z-10">
@@ -184,7 +198,7 @@ export default function LocationsMap() {
               src={mapSrc}
               title={active ? `True Precision Medical — ${active.name}` : 'True Precision Medical — Arizona Locations'}
               className="absolute inset-0 w-full h-full border-0"
-              style={{ filter: 'none' }}
+              style={{ filter: 'saturate(0.85) brightness(1.04) contrast(0.96)' }}
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
               onLoad={() => setMapLoaded(true)}
