@@ -197,29 +197,10 @@ export default function Providers() {
           </p>
         </motion.div>
 
-        {/* Mobile: horizontal snap carousel | lg+: auto-fill grid */}
-        <div
-          // #region agent log
-          ref={(el) => {
-            if (!el || window.innerWidth >= 1024) return
-            const cs = window.getComputedStyle(el)
-            const card0 = el.children[0] as HTMLElement | null
-            const card0cs = card0 ? window.getComputedStyle(card0) : null
-            const badge = document.createElement('div')
-            badge.innerHTML = `<b>CAROUSEL DEBUG — tap to dismiss</b><br>container display: <b>${cs.display}</b><br>flexDirection: <b>${cs.flexDirection}</b><br>overflowX: <b>${cs.overflowX}</b><br>container w: <b>${el.offsetWidth}px</b> scrollW: <b>${el.scrollWidth}px</b><br>card[0] w: <b>${card0 ? card0.offsetWidth + 'px' : 'n/a'}</b> (card0cs.width: <b>${card0cs?.width ?? 'n/a'}</b>)`
-            badge.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:9999;background:rgba(0,0,0,0.9);color:#0f0;font:12px monospace;padding:10px 12px;line-height:1.7;cursor:pointer'
-            badge.onclick = () => badge.remove()
-            document.body.appendChild(badge)
-          }}
-          // #endregion
-          className="flex overflow-x-auto snap-x snap-mandatory gap-5
-                     -mx-6 px-6 pb-5
-                     [&::-webkit-scrollbar]:hidden [scrollbar-width:none]
-                     lg:grid lg:gap-6 lg:mx-0 lg:px-0 lg:pb-0 lg:overflow-visible"
-          style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))' }}
-        >
+        {/* ── Mobile: horizontal snap carousel (hidden on lg+) ── */}
+        <div className="flex overflow-x-auto snap-x snap-mandatory gap-5 -mx-6 px-6 pb-5 [&::-webkit-scrollbar]:hidden [scrollbar-width:none] lg:hidden">
           {PROVIDERS.map((provider, i) => (
-            <div key={provider.id} className="snap-center flex-none w-[76vw] sm:w-[56vw] lg:w-auto"
+            <div key={provider.id} className="snap-center flex-none w-[76vw] sm:w-[58vw]">
               <ProviderCard
                 provider={provider}
                 index={i}
@@ -228,6 +209,23 @@ export default function Providers() {
                 hintDismissed={hintDismissed}
               />
             </div>
+          ))}
+        </div>
+
+        {/* ── Desktop: auto-fill grid (hidden below lg) ── */}
+        <div
+          className="hidden lg:grid gap-6"
+          style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))' }}
+        >
+          {PROVIDERS.map((provider, i) => (
+            <ProviderCard
+              key={provider.id}
+              provider={provider}
+              index={i}
+              isTouch={isTouch}
+              onFirstTap={handleFirstTap}
+              hintDismissed={hintDismissed}
+            />
           ))}
         </div>
 
