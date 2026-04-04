@@ -201,11 +201,13 @@ export default function Providers() {
         <div
           // #region agent log
           ref={(el) => {
-            if (!el) return
+            if (!el || window.innerWidth >= 1024) return
             const cs = window.getComputedStyle(el)
-            const parentCs = window.getComputedStyle(el.parentElement!)
-            const grandCs = window.getComputedStyle(el.parentElement!.parentElement!)
-            fetch('http://127.0.0.1:7283/ingest/5a7b47d7-b9b3-4d69-af8c-223127166c6c',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'f5319e'},body:JSON.stringify({sessionId:'f5319e',location:'Providers.tsx:carousel-container',message:'carousel computed styles',data:{display:cs.display,flexDirection:cs.flexDirection,flexWrap:cs.flexWrap,overflowX:cs.overflowX,width:el.offsetWidth,scrollWidth:el.scrollWidth,windowWidth:window.innerWidth,parentOverflowX:parentCs.overflowX,parentOverflow:parentCs.overflow,grandOverflowX:grandCs.overflowX,grandOverflow:grandCs.overflow},timestamp:Date.now(),hypothesisId:'A-B-C-E'})}).catch(()=>{})
+            const badge = document.createElement('div')
+            badge.textContent = `display:${cs.display} dir:${cs.flexDirection} w:${el.offsetWidth}px sw:${el.scrollWidth}px`
+            badge.style.cssText = 'position:fixed;top:8px;left:8px;right:8px;z-index:9999;background:rgba(0,0,0,0.85);color:#0f0;font:11px monospace;padding:6px 8px;border-radius:6px;pointer-events:none'
+            document.body.appendChild(badge)
+            setTimeout(() => badge.remove(), 8000)
           }}
           // #endregion
           className="flex overflow-x-auto snap-x snap-mandatory gap-5
@@ -216,14 +218,6 @@ export default function Providers() {
         >
           {PROVIDERS.map((provider, i) => (
             <div key={provider.id} className="snap-center flex-none w-[76vw] sm:w-[56vw] lg:w-auto"
-              // #region agent log
-              ref={i === 0 ? (el) => {
-                if (!el) return
-                const cs = window.getComputedStyle(el)
-                fetch('http://127.0.0.1:7283/ingest/5a7b47d7-b9b3-4d69-af8c-223127166c6c',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'f5319e'},body:JSON.stringify({sessionId:'f5319e',location:'Providers.tsx:card-wrapper-0',message:'first card wrapper computed styles',data:{display:cs.display,width:el.offsetWidth,flexShrink:cs.flexShrink,flexGrow:cs.flexGrow,windowWidth:window.innerWidth},timestamp:Date.now(),hypothesisId:'D'})}).catch(()=>{})
-              } : undefined}
-              // #endregion
-            >
               <ProviderCard
                 provider={provider}
                 index={i}
