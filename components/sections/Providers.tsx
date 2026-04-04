@@ -197,19 +197,24 @@ export default function Providers() {
           </p>
         </motion.div>
 
+        {/* Mobile: horizontal snap carousel | lg+: auto-fill grid */}
         <div
-          className="grid gap-6"
+          className="flex overflow-x-auto snap-x snap-mandatory gap-5
+                     -mx-6 px-6 pb-5
+                     [&::-webkit-scrollbar]:hidden [scrollbar-width:none]
+                     lg:grid lg:gap-6 lg:mx-0 lg:px-0 lg:pb-0 lg:overflow-visible"
           style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))' }}
         >
           {PROVIDERS.map((provider, i) => (
-            <ProviderCard
-              key={provider.id}
-              provider={provider}
-              index={i}
-              isTouch={isTouch}
-              onFirstTap={handleFirstTap}
-              hintDismissed={hintDismissed}
-            />
+            <div key={provider.id} className="snap-center flex-none w-[76vw] sm:w-[56vw] lg:w-auto">
+              <ProviderCard
+                provider={provider}
+                index={i}
+                isTouch={isTouch}
+                onFirstTap={handleFirstTap}
+                hintDismissed={hintDismissed}
+              />
+            </div>
           ))}
         </div>
 
