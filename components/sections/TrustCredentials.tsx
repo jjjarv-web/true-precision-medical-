@@ -300,9 +300,23 @@ export default function TrustCredentials() {
           <div className="flex-1 h-px bg-brand-primary/8" />
         </motion.div>
 
-        {/* Provider cards */}
+        {/* Provider cards — mobile: horizontal snap carousel | lg+: grid */}
+        <div className="flex overflow-x-auto snap-x snap-mandatory gap-5 -mx-6 px-6 pb-5 [&::-webkit-scrollbar]:hidden [scrollbar-width:none] lg:hidden">
+          {PROVIDERS.map((provider, i) => (
+            <div key={provider.id} className="snap-center flex-none w-[76vw] sm:w-[58vw]">
+              <ProviderCard
+                provider={provider}
+                index={i}
+                isTouch={isTouch}
+                onFirstTap={handleFirstTap}
+                hintDismissed={hintDismissed}
+              />
+            </div>
+          ))}
+        </div>
+
         <div
-          className="grid gap-6"
+          className="hidden lg:grid gap-6"
           style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))' }}
         >
           {PROVIDERS.map((provider, i) => (
