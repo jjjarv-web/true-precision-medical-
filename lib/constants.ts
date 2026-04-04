@@ -118,12 +118,12 @@ export type ConsultationSpecialty = {
 }
 
 export const CONSULTATION_SPECIALTIES: ConsultationSpecialty[] = [
-  { id: 'knee',     label: 'Knee Pain'        },
-  { id: 'shoulder', label: 'Shoulder Pain'    },
-  { id: 'spine',    label: 'Spine & Back'     },
-  { id: 'hip',      label: 'Hip Pain'         },
-  { id: 'nerve',    label: 'Nerve Conditions' },
-  { id: 'sports',   label: 'Sports Injury'    },
+  { id: 'joint',    label: 'Joint Pain'       },
+  { id: 'spine',    label: 'Back & Neck'      },
+  { id: 'mens',     label: "Men's Health"     },
+  { id: 'womens',   label: "Women's Health"   },
+  { id: 'nerve',    label: 'Nerve Pain'       },
+  { id: 'vascular', label: 'Vascular & Vein'  },
 ]
 
 export const NAV_LINKS = [

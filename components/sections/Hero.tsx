@@ -3,12 +3,13 @@
 import { useState, useRef } from 'react'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { AnimatePresence, motion } from 'motion/react'
 import { ArrowRight } from 'lucide-react'
 import Image from 'next/image'
 import { CONSULTATION_SPECIALTIES } from '@/lib/constants'
 
-gsap.registerPlugin(useGSAP)
+gsap.registerPlugin(useGSAP, ScrollTrigger)
 
 const STAR_PATH =
   'M6 0.5l1.237 3.809H11.4L8.09 6.586l1.237 3.809L6 8.138l-3.326 2.257L3.91 6.586.6 4.309h4.163z'
@@ -89,6 +90,39 @@ export default function Hero() {
       { opacity: 1, y: 0,  duration: 0.6, ease: 'power2.out', stagger: 0.18 },
       '-=0.3'
     )
+
+    // ── Scroll attention: pulse the "What's bringing you in?" block ───────────
+    // Fires once when the user scrolls ~50px — a nudge before they leave.
+    const attentionTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: containerRef.current,
+        start: 'top -50px',
+        toggleActions: 'play none none none',
+        once: true,
+      },
+    })
+
+    attentionTl
+      .to('.gsap-bringing-heading', {
+        scale: 1.05,
+        duration: 0.42,
+        ease: 'power2.out',
+      })
+      .to('.gsap-bringing-heading', {
+        scale: 1,
+        duration: 0.38,
+        ease: 'power2.inOut',
+      })
+      .to('.gsap-pills-wrapper', {
+        y: -7,
+        duration: 0.36,
+        ease: 'power2.out',
+      }, '<0.06')
+      .to('.gsap-pills-wrapper', {
+        y: 0,
+        duration: 0.44,
+        ease: 'power2.inOut',
+      })
   }, { scope: containerRef })
 
   return (
@@ -101,7 +135,7 @@ export default function Hero() {
           alt=""
           fill
           priority
-          className="object-cover object-center opacity-25"
+          className="object-cover object-center opacity-[0.22]"
           sizes="100vw"
         />
         <div
@@ -194,7 +228,7 @@ export default function Hero() {
 
         {/* ── Google trust signal ─────────────────────────────────────────────── */}
         <div
-          className="gsap-body-item flex items-center justify-center gap-2.5 mb-20"
+          className="gsap-body-item flex items-center justify-center gap-2.5 mb-12"
           style={{ opacity: 0 }}
         >
           <GoogleLogo />
@@ -209,11 +243,11 @@ export default function Hero() {
           className="gsap-body-item"
           style={{ opacity: 0 }}
         >
-          <p className="font-heading font-bold text-brand-ink mb-8 text-[clamp(22px,3vw,36px)] leading-snug">
+          <p className="gsap-bringing-heading font-heading font-bold text-brand-ink mb-8 text-[clamp(22px,3vw,36px)] leading-snug">
             What&apos;s bringing you in?
           </p>
 
-          <div className="flex flex-wrap justify-center gap-3 max-w-2xl mx-auto mb-12">
+          <div className="gsap-pills-wrapper flex flex-wrap justify-center gap-3 max-w-2xl mx-auto mb-12">
             {CONSULTATION_SPECIALTIES.map((spec) => {
               const isSelected = selected === spec.id
               const isDimmed   = selected !== null && !isSelected
@@ -222,25 +256,29 @@ export default function Hero() {
                   key={spec.id}
                   onClick={() => setSelected(isSelected ? null : spec.id)}
                   animate={{
-                    backgroundColor: isSelected ? '#1E3A5F' : '#ffffff',
-                    borderColor:     isSelected ? '#1E3A5F' : 'rgba(30,58,95,0.13)',
-                    opacity:         isDimmed ? 0.3 : 1,
-                    scale:           isDimmed ? 0.94 : 1,
-                    filter:          isDimmed ? 'blur(0.4px)' : 'blur(0px)',
+                    backgroundColor: isSelected ? '#1E3A5F' : 'rgba(255,255,255,0.58)',
+                    borderColor:     isSelected ? '#1E3A5F' : 'rgba(255,255,255,0.60)',
+                    boxShadow: isSelected
+                      ? '0 8px 32px rgba(30,58,95,0.30), inset 0 1px 0 rgba(255,255,255,0.12)'
+                      : '0 2px 6px rgba(17,35,70,0.05), 0 10px 32px rgba(17,35,70,0.07), inset 0 1px 0 rgba(255,255,255,0.88), inset 0 -1px 0 rgba(255,255,255,0.22)',
+                    opacity: isDimmed ? 0.32 : 1,
+                    scale:   isDimmed ? 0.94 : 1,
+                    filter:  isDimmed ? 'blur(0.4px)' : 'blur(0px)',
                   }}
                   whileHover={{
                     y: isSelected ? 0 : -3,
-                    scale: isDimmed ? 0.94 : isSelected ? 1 : 1.03,
-                    borderColor: isSelected ? '#1E3A5F' : 'rgba(74,144,212,0.55)',
-                    boxShadow:   isSelected
-                      ? '0 8px 28px rgba(30,58,95,0.28)'
-                      : '0 8px 22px rgba(30,58,95,0.11)',
+                    scale: isDimmed ? 0.94 : isSelected ? 1 : 1.02,
+                    borderColor: isSelected ? '#1E3A5F' : 'rgba(74,144,212,0.50)',
+                    boxShadow: isSelected
+                      ? '0 12px 36px rgba(30,58,95,0.34), inset 0 1px 0 rgba(255,255,255,0.12)'
+                      : '0 4px 10px rgba(17,35,70,0.05), 0 18px 48px rgba(17,35,70,0.10), inset 0 1px 0 rgba(255,255,255,0.92), inset 0 -1px 0 rgba(255,255,255,0.28)',
+                    transition: { duration: 0.15, ease: 'easeOut' },
                   }}
                   whileTap={{ scale: 0.96 }}
                   transition={{ type: 'spring', stiffness: 360, damping: 26 }}
-                  className="px-7 py-4 rounded-2xl border-[1.5px] text-base font-semibold
-                             cursor-pointer outline-none focus-visible:ring-2
-                             focus-visible:ring-brand-sky select-none"
+                  className="px-9 py-[1.1rem] min-w-[172px] rounded-[1.6rem] border text-sm font-medium tracking-[0.01em] cursor-pointer
+                             outline-none focus-visible:ring-2 focus-visible:ring-brand-sky
+                             select-none backdrop-blur-2xl text-center"
                 >
                   <motion.span
                     animate={{ color: isSelected ? '#ffffff' : '#0D1B3E' }}
@@ -266,12 +304,16 @@ export default function Hero() {
                 >
                   <motion.a
                     href="#"
-                    whileHover={{ y: -2, boxShadow: '0 14px 44px rgba(74,144,212,0.52)' }}
+                    whileHover={{
+                      y: -3,
+                      boxShadow: '0 12px 40px rgba(30,58,95,0.38), inset 0 1px 0 rgba(255,255,255,0.16)',
+                      transition: { duration: 0.15, ease: 'easeOut' },
+                    }}
                     whileTap={{ scale: 0.97 }}
                     transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                     className="inline-flex items-center gap-2.5 bg-brand-primary text-white
-                               px-8 py-4 rounded-2xl text-base font-semibold"
-                    style={{ boxShadow: '0 6px 30px rgba(74,144,212,0.40)' }}
+                               px-9 py-[1.1rem] rounded-[1.6rem] text-sm font-medium tracking-[0.01em]"
+                    style={{ boxShadow: '0 8px 32px rgba(30,58,95,0.30), inset 0 1px 0 rgba(255,255,255,0.12)' }}
                   >
                     Start Your Free Virtual Consultation
                     <ArrowRight className="w-4 h-4" />
