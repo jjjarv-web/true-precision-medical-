@@ -112,18 +112,50 @@ export const INSURANCES: Insurance[] = [
   { name: 'Beacon Health' },
 ]
 
-export type ConsultationSpecialty = {
+export type Specialty = {
   id: string
   label: string
+  desc: string
+  img: string
 }
 
-export const CONSULTATION_SPECIALTIES: ConsultationSpecialty[] = [
-  { id: 'joint',    label: 'Joint Pain'       },
-  { id: 'spine',    label: 'Back & Neck'      },
-  { id: 'mens',     label: "Men's Health"     },
-  { id: 'womens',   label: "Women's Health"   },
-  { id: 'nerve',    label: 'Nerve Pain'       },
-  { id: 'vascular', label: 'Vascular & Vein'  },
+export const SPECIALTIES: Specialty[] = [
+  {
+    id: 'joint',
+    label: 'Joint Pain',
+    desc: 'Knee, hip, and shoulder preservation and minimally invasive repair.',
+    img: '/images/joint-pain.jpg',
+  },
+  {
+    id: 'spine',
+    label: 'Back & Neck',
+    desc: 'Advanced neurosurgery and pain management without major fusion.',
+    img: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=800&auto=format&fit=crop',
+  },
+  {
+    id: 'mens',
+    label: "Men's Health",
+    desc: 'Targeted treatments for conditions affecting men\'s quality of life and vitality.',
+    img: 'https://images.unsplash.com/photo-1537368910025-700350fe46c7?q=80&w=800&auto=format&fit=crop',
+  },
+  {
+    id: 'womens',
+    label: "Women's Health",
+    desc: 'Compassionate, specialized care for conditions unique to women\'s health.',
+    img: 'https://images.unsplash.com/photo-1594824476967-48c8b964273f?q=80&w=800&auto=format&fit=crop',
+  },
+  {
+    id: 'nerve',
+    label: 'Nerve Pain',
+    desc: 'Image-guided, targeted treatments for nerve and chronic pain conditions.',
+    img: 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?q=80&w=800&auto=format&fit=crop',
+  },
+  {
+    id: 'vascular',
+    label: 'Vascular & Vein',
+    desc: 'Minimally invasive vascular treatments for healthier circulation and vein health.',
+    img: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=800&auto=format&fit=crop',
+  },
 ]
 
 export const NAV_LINKS = [
@@ -170,39 +202,6 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
   },
 ]
 
-export type TreatmentCategory = {
-  title: string
-  desc: string
-  colorClass: string
-  img: string
-}
-
-export const TREATMENT_CATEGORIES: TreatmentCategory[] = [
-  {
-    title: 'Orthopedics',
-    desc: 'Knee, hip, and shoulder preservation and minimally invasive repair.',
-    colorClass: 'bg-brand-surface-warm',
-    img: 'https://images.unsplash.com/photo-1552196563-552592671689?q=80&w=800&auto=format&fit=crop',
-  },
-  {
-    title: 'Spine & Back',
-    desc: 'Advanced neurosurgery and pain management without major fusion.',
-    colorClass: 'bg-brand-surface-blue',
-    img: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=800&auto=format&fit=crop',
-  },
-  {
-    title: 'Interventional',
-    desc: 'Image-guided, targeted treatments for vascular and pain conditions.',
-    colorClass: 'bg-brand-surface-purple',
-    img: 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?q=80&w=800&auto=format&fit=crop',
-  },
-  {
-    title: 'Sports Medicine',
-    desc: 'Regenerative therapies and arthroscopic solutions for active patients.',
-    colorClass: 'bg-brand-bg-alt',
-    img: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=800&auto=format&fit=crop',
-  },
-]
 
 export type HowItWorksStep = {
   step: string

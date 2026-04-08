@@ -7,7 +7,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { AnimatePresence, motion } from 'motion/react'
 import { ArrowRight } from 'lucide-react'
 import Image from 'next/image'
-import { CONSULTATION_SPECIALTIES } from '@/lib/constants'
+import { SPECIALTIES } from '@/lib/constants'
 
 gsap.registerPlugin(useGSAP, ScrollTrigger)
 
@@ -248,7 +248,7 @@ export default function Hero() {
           </p>
 
           <div className="gsap-pills-wrapper flex flex-wrap justify-center gap-3 max-w-2xl mx-auto mb-12">
-            {CONSULTATION_SPECIALTIES.map((spec) => {
+            {SPECIALTIES.map((spec) => {
               const isSelected = selected === spec.id
               const isDimmed   = selected !== null && !isSelected
               return (
