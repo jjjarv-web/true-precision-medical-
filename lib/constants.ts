@@ -168,6 +168,61 @@ export const NAV_LINKS = [
 export const PHONE_NUMBER = '(800) 555-0199'
 export const PHONE_HREF = 'tel:18005550199'
 
+/** Swappable per client: Google Maps → Share → copy link (strip ?entry=… tracking if you like). */
+export const GOOGLE_BUSINESS_REVIEWS_URL =
+  'https://www.google.com/maps/place/True+Precision+Medical/@33.525985,-112.103685,17z/data=!3m1!4b1!4m6!3m5!1s0x872b123bb6d63d83:0x15f41e757384b1d6!8m2!3d33.5257521!4d-112.1009342!16s%2Fg%2F11t0vntnv-'
+
+export type BeforeAfterPair = {
+  beforeSrc: string
+  afterSrc: string
+  altBefore: string
+  altAfter: string
+  caption: string
+}
+
+/** Replace with consented clinical or lifestyle photography per compliance. */
+export const PATIENT_STORIES_BEFORE_AFTER: BeforeAfterPair = {
+  beforeSrc:
+    'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=1400&auto=format&fit=crop',
+  afterSrc:
+    'https://images.unsplash.com/photo-1576678927484-cc907957088c?q=80&w=1400&auto=format&fit=crop',
+  altBefore: 'Illustrative before — replace with approved imagery',
+  altAfter: 'Illustrative after — replace with approved imagery',
+  caption:
+    'Individual results vary. Images shown are placeholders; use consented patient photography or cleared clinical assets for production.',
+}
+
+export type FeaturedTestimonial = {
+  id: string
+  quote: string
+  name: string
+  detail: string
+}
+
+export const FEATURED_TESTIMONIALS: FeaturedTestimonial[] = [
+  {
+    id: '1',
+    quote:
+      'From the first consult to same-day discharge, everything felt coordinated and calm. I wish I had found this team sooner.',
+    name: 'Carolyn S.',
+    detail: 'Knee care · Phoenix',
+  },
+  {
+    id: '2',
+    quote:
+      'The staff explained every step. I walked out knowing exactly what to expect—and the follow-up was just as thoughtful.',
+    name: 'James T.',
+    detail: 'Outpatient procedure · Scottsdale',
+  },
+  {
+    id: '3',
+    quote:
+      'Minimal downtime, clear communication, and physicians who actually listened. An exceptional experience top to bottom.',
+    name: 'Elena R.',
+    detail: 'Vascular consult · East Valley',
+  },
+]
+
 export type ServiceCategory = {
   label: string
   icon: 'bone' | 'activity' | 'brain' | 'stethoscope'
@@ -230,20 +285,24 @@ export const HOW_IT_WORKS_STEPS: HowItWorksStep[] = [
 export type WhyFeature = {
   title: string
   desc: string
+  icon: 'scan-line' | 'building-2' | 'award'
 }
 
 export const WHY_FEATURES: WhyFeature[] = [
   {
     title: 'Minimally Invasive Focus',
     desc: 'Our techniques use smaller incisions, causing less trauma to your body, which means significantly less pain and faster healing.',
+    icon: 'scan-line',
   },
   {
     title: 'Outpatient Convenience',
     desc: 'Avoid the hospital entirely. Our premium surgical centers are designed for comfort, efficiency, and same-day discharge.',
+    icon: 'building-2',
   },
   {
     title: 'Elite Specialists',
     desc: 'You are treated by fellowship-trained experts who specialize exclusively in advanced, tissue-sparing procedures.',
+    icon: 'award',
   },
 ]
 

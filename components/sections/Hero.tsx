@@ -14,11 +14,20 @@ gsap.registerPlugin(useGSAP, ScrollTrigger)
 const STAR_PATH =
   'M6 0.5l1.237 3.809H11.4L8.09 6.586l1.237 3.809L6 8.138l-3.326 2.257L3.91 6.586.6 4.309h4.163z'
 
+const STAR_STEP = 11.5
+
 function GoogleStars() {
   return (
-    <svg width="74" height="11" viewBox="0 0 74 11" fill="none" aria-hidden="true">
+    <svg
+      width={5 * STAR_STEP + 2}
+      height="12"
+      viewBox={`0 0 ${5 * STAR_STEP + 2} 12`}
+      fill="none"
+      aria-hidden="true"
+      className="shrink-0"
+    >
       {[0, 1, 2, 3, 4].map((i) => (
-        <g key={i} transform={`translate(${i * 15}, 0)`}>
+        <g key={i} transform={`translate(${1 + i * STAR_STEP}, 0.5)`}>
           <path d={STAR_PATH} fill="#FBBC05" />
         </g>
       ))}
@@ -28,7 +37,7 @@ function GoogleStars() {
 
 function GoogleLogo() {
   return (
-    <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+    <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" className="shrink-0">
       <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
       <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
       <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
@@ -226,16 +235,26 @@ export default function Hero() {
           what surgery looks like.
         </p>
 
-        {/* ── Google trust signal ─────────────────────────────────────────────── */}
+        {/* ── Google trust signal (official-style summary bar) ───────────────── */}
         <div
-          className="gsap-body-item flex items-center justify-center gap-2.5 mb-12"
+          className="gsap-body-item flex justify-center mb-12"
           style={{ opacity: 0 }}
         >
-          <GoogleLogo />
-          <GoogleStars />
-          <span className="text-sm font-semibold text-brand-ink">4.9</span>
-          <span className="text-brand-muted-light text-sm select-none">·</span>
-          <span className="text-sm text-brand-muted">340+ reviews on Google</span>
+          <div
+            className="inline-flex items-center gap-2.5 sm:gap-3 flex-wrap justify-center rounded-xl bg-[#F9F9FB] px-4 py-2.5 sm:px-5 sm:py-3 border border-black/[0.04] shadow-[0_1px_2px_rgba(0,0,0,0.04)]"
+            role="group"
+            aria-label="Google rating summary"
+          >
+            <div className="flex items-center gap-2 sm:gap-2.5">
+              <GoogleLogo />
+              <GoogleStars />
+            </div>
+            <span className="text-sm font-bold text-[#1A1C1E] tabular-nums leading-none">4.9</span>
+            <span className="text-sm text-[#5F6368] select-none leading-none" aria-hidden>
+              ·
+            </span>
+            <span className="text-sm text-[#5F6368] leading-none">400+ reviews on Google</span>
+          </div>
         </div>
 
         {/* ── Consultation Selector ───────────────────────────────────────────── */}

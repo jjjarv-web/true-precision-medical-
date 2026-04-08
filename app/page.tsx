@@ -8,6 +8,7 @@ import TrustBar from '@/components/sections/TrustBar'
 import Treatments from '@/components/sections/Treatments'
 import HowItWorks from '@/components/sections/HowItWorks'
 import WhyChooseUs from '@/components/sections/WhyChooseUs'
+import PatientStories from '@/components/sections/PatientStories'
 import LocationsCTA from '@/components/sections/LocationsCTA'
 
 export default function HomePage() {
@@ -23,6 +24,7 @@ export default function HomePage() {
         <Treatments />
         <HowItWorks />
         <WhyChooseUs />
+        <PatientStories />
         <LocationsCTA />
       </main>
       <Footer />
