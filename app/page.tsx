@@ -17,11 +17,11 @@ export default function HomePage() {
       <Header />
       <main className="flex-grow">
         <Hero />
+        <Treatments />
         <InsuranceBar />
         <TrustCredentials />
         <LocationsMap />
         <TrustBar />
-        <Treatments />
         <HowItWorks />
         <WhyChooseUs />
         <PatientStories />
