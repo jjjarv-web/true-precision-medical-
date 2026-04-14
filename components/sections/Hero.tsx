@@ -82,7 +82,7 @@ export default function Hero() {
         filter: 'blur(8px)',
         duration: 0.5,
         ease: 'power2.in',
-        onStart: () => gsap.set('.gsap-h1-surgery', { mixBlendMode: 'overlay' }),
+        onStart: () => { gsap.set('.gsap-h1-surgery', { mixBlendMode: 'overlay' }); },
       }, 3.5)
       // Step 2 — glass settle: white + overlay on dark bg = letters become luminous windows into the image
       .to('.gsap-h1-surgery', {
