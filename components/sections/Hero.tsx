@@ -278,7 +278,7 @@ export default function Hero() {
                       boxShadow: '0 6px 28px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.35)',
                     }}
                   >
-                    Start Your Free Virtual Consultation
+                    Start Your Free Virtual Assessment
                     <ArrowRight className="w-4 h-4" />
                   </motion.a>
                   <p className="text-xs text-white/50 tracking-wide">
