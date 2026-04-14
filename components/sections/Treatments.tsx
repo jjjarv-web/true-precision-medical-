@@ -8,7 +8,7 @@ const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
 export default function Treatments() {
   return (
-    <section id="treatments" className="bg-[#07080c] pt-0 pb-28 sm:pb-36">
+    <section id="treatments" className="bg-[#07080c] pt-0 pb-40 sm:pb-48">
       <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-12">
 
         {/* Section header */}

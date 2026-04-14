@@ -213,8 +213,7 @@ export default function TrustCredentials() {
   return (
     <section
       ref={ref}
-      className="relative z-10 py-32 bg-white rounded-t-[2.5rem]"
-      style={{ marginTop: '-2.5rem', boxShadow: '0 -8px 48px rgba(30,58,95,0.07)' }}
+      className="py-32 bg-white"
     >
       <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-12">
 
