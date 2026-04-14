@@ -100,11 +100,23 @@ export default function Hero() {
         duration: 1.8,
         ease: 'power2.out',
       }, 3.8)
-      .fromTo(
-        '.gsap-specialty-section',
-        { opacity: 0, y: 14, filter: 'blur(8px)' },
-        { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.8, ease: 'power2.inOut' },
-        3.5
+      // Layer 1 — headline words stagger in one by one
+      .fromTo('.gsap-path-word',
+        { opacity: 0, y: 12, filter: 'blur(4px)' },
+        { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.7, ease: 'power3.out', stagger: 0.1 },
+        4.2
+      )
+      // Layer 2 — pills grid rises in as a unit
+      .fromTo('.gsap-pills-entrance',
+        { opacity: 0, y: 10 },
+        { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' },
+        4.9
+      )
+      // Layer 3 — idle CTA hint whispers in last
+      .fromTo('.gsap-cta-idle',
+        { opacity: 0 },
+        { opacity: 1, duration: 0.6, ease: 'power1.out' },
+        5.35
       )
 
     const attentionTl = gsap.timeline({
@@ -223,12 +235,16 @@ export default function Hero() {
           </div>
         </div>
 
-        <div className="gsap-specialty-section" style={{ opacity: 0 }}>
+        <div className="gsap-specialty-section">
           <p className="gsap-bringing-heading font-heading font-semibold text-white mb-8 text-[clamp(20px,2.8vw,32px)] leading-snug tracking-[-0.02em]">
-            What can we help you with?
+            {['What', 'brings', 'you', 'in?'].map((word, i) => (
+              <span key={i} className="gsap-path-word inline-block" style={{ opacity: 0 }}>
+                {word}{i < 3 ? '\u00A0' : ''}
+              </span>
+            ))}
           </p>
 
-          <div className="gsap-pills-wrapper grid grid-cols-2 gap-3 max-w-md sm:max-w-xl mx-auto mb-10">
+          <div className="gsap-pills-wrapper gsap-pills-entrance grid grid-cols-2 gap-3 max-w-md sm:max-w-xl mx-auto mb-10" style={{ opacity: 0 }}>
             {SPECIALTIES.map((spec) => {
               const isSelected = selected === spec.id
               const isDimmed = selected !== null && !isSelected
@@ -311,9 +327,10 @@ export default function Hero() {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.25 }}
-                  className="text-sm text-white/45"
+                  className="gsap-cta-idle text-xs text-white/30 tracking-wide"
+                  style={{ opacity: 0 }}
                 >
-                  Select a condition above to get started
+                  Select a condition to get started
                 </motion.p>
               )}
             </AnimatePresence>
