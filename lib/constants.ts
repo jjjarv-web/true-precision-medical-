@@ -10,6 +10,8 @@ export type Location = {
   hours: string
   mapsUrl: string
   embedUrl: string
+  lat: number
+  lng: number
 }
 
 export const LOCATIONS: Location[] = [
@@ -22,6 +24,8 @@ export const LOCATIONS: Location[] = [
     hours: 'Mon – Fri: 8am – 5pm',
     mapsUrl: 'https://maps.google.com/?q=6036+N+19th+Ave+Phoenix+AZ+85015',
     embedUrl: 'https://www.google.com/maps?q=6036+N+19th+Ave+Phoenix+AZ+85015&output=embed&z=10',
+    lat: 33.5069,
+    lng: -112.1012,
   },
   {
     id: 'scottsdale',
@@ -32,6 +36,8 @@ export const LOCATIONS: Location[] = [
     hours: 'Mon – Fri: 8am – 5pm',
     mapsUrl: 'https://maps.google.com/?q=8752+E+Pinnacle+Peak+Rd+Scottsdale+AZ+85255',
     embedUrl: 'https://www.google.com/maps?q=8752+E+Pinnacle+Peak+Rd+Scottsdale+AZ+85255&output=embed&z=10',
+    lat: 33.7067,
+    lng: -111.9225,
   },
   {
     id: 'gilbert',
@@ -42,6 +48,8 @@ export const LOCATIONS: Location[] = [
     hours: 'Mon – Fri: 8am – 5pm',
     mapsUrl: 'https://maps.google.com/?q=2680+S+Val+Vista+Dr+Gilbert+AZ+85295',
     embedUrl: 'https://www.google.com/maps?q=2680+S+Val+Vista+Dr+Gilbert+AZ+85295&output=embed&z=10',
+    lat: 33.2792,
+    lng: -111.7896,
   },
   {
     id: 'peoria',
@@ -52,6 +60,8 @@ export const LOCATIONS: Location[] = [
     hours: 'Mon – Fri: 8am – 5pm',
     mapsUrl: 'https://maps.google.com/?q=13128+N+94th+Dr+Peoria+AZ+85381',
     embedUrl: 'https://www.google.com/maps?q=13128+N+94th+Dr+Peoria+AZ+85381&output=embed&z=10',
+    lat: 33.5847,
+    lng: -112.2553,
   },
 ]
 
@@ -200,6 +210,7 @@ export type FeaturedTestimonial = {
   quote: string
   name: string
   detail: string
+  date: string
 }
 
 export const FEATURED_TESTIMONIALS: FeaturedTestimonial[] = [
@@ -209,6 +220,7 @@ export const FEATURED_TESTIMONIALS: FeaturedTestimonial[] = [
       'From the first consult to same-day discharge, everything felt coordinated and calm. I wish I had found this team sooner.',
     name: 'Carolyn S.',
     detail: 'Knee care · Phoenix',
+    date: 'Jan 2025',
   },
   {
     id: '2',
@@ -216,6 +228,7 @@ export const FEATURED_TESTIMONIALS: FeaturedTestimonial[] = [
       'The staff explained every step. I walked out knowing exactly what to expect—and the follow-up was just as thoughtful.',
     name: 'James T.',
     detail: 'Outpatient procedure · Scottsdale',
+    date: 'Mar 2025',
   },
   {
     id: '3',
@@ -223,6 +236,62 @@ export const FEATURED_TESTIMONIALS: FeaturedTestimonial[] = [
       'Minimal downtime, clear communication, and physicians who actually listened. An exceptional experience top to bottom.',
     name: 'Elena R.',
     detail: 'Vascular consult · East Valley',
+    date: 'Feb 2025',
+  },
+  {
+    id: '4',
+    quote:
+      'I was nervous about any procedure. They took the time I needed, answered every question, and I was home the same afternoon.',
+    name: 'Michael D.',
+    detail: 'Spine · Peoria',
+    date: 'Dec 2024',
+  },
+  {
+    id: '5',
+    quote:
+      'Professional from check-in to discharge. The facility feels nothing like a hospital—quiet, modern, and genuinely comfortable.',
+    name: 'Patricia W.',
+    detail: 'Fibroid treatment · Gilbert',
+    date: 'Nov 2024',
+  },
+  {
+    id: '6',
+    quote:
+      'After years of putting off care, I finally got relief. The imaging-guided approach meant a smaller incision and faster recovery than I expected.',
+    name: 'Robert K.',
+    detail: 'Joint pain · Phoenix',
+    date: 'Apr 2025',
+  },
+  {
+    id: '7',
+    quote: 'Clear, direct, and kind. That combination is rare.',
+    name: 'Sandra M.',
+    detail: 'Consultation · Scottsdale',
+    date: 'Mar 2025',
+  },
+  {
+    id: '8',
+    quote:
+      'My referring doctor sent me here and I am glad they did. The specialist walked me through options I did not know existed outside of major surgery.',
+    name: 'David L.',
+    detail: 'Second opinion · East Valley',
+    date: 'Jan 2025',
+  },
+  {
+    id: '9',
+    quote:
+      'Scheduling was straightforward, wait times were reasonable, and billing was explained upfront. As someone who manages a busy schedule, that mattered.',
+    name: 'Angela H.',
+    detail: 'Outpatient procedure · Phoenix',
+    date: 'Feb 2025',
+  },
+  {
+    id: '10',
+    quote:
+      'I appreciated the focus on minimally invasive options first. It aligned with what I wanted: fix the problem without an unnecessary hospital stay.',
+    name: 'Thomas B.',
+    detail: 'Nerve pain · Peoria',
+    date: 'Dec 2024',
   },
 ]
 
