@@ -13,10 +13,10 @@ export default function HowItWorks() {
 
         {/* Section header */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.6, ease: EASE }}
+          viewport={{ once: true, margin: '-110px' }}
+          transition={{ duration: 0.65, ease: EASE }}
           className="mb-20 sm:mb-24"
         >
           <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#9A9490] mb-5 block">
@@ -38,8 +38,8 @@ export default function HowItWorks() {
           <motion.div
             initial={{ scaleX: 0, opacity: 0 }}
             whileInView={{ scaleX: 1, opacity: 1 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 1.1, ease: EASE, delay: 0.2 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 1.2, ease: EASE, delay: 0.25 }}
             className="hidden lg:block absolute top-8 left-[calc(1/6*100%)] right-[calc(1/6*100%)] h-px origin-left"
             style={{ background: 'linear-gradient(to right, transparent, rgba(26,24,20,0.1) 15%, rgba(26,24,20,0.1) 85%, transparent)' }}
             aria-hidden
@@ -49,10 +49,10 @@ export default function HowItWorks() {
             {HOW_IT_WORKS_STEPS.map((item, i) => (
               <motion.div
                 key={item.step}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 28 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-40px' }}
-                transition={{ duration: 0.55, ease: EASE, delay: i * 0.12 }}
+                viewport={{ once: true, margin: '-60px' }}
+                transition={{ duration: 0.6, ease: EASE, delay: i * 0.15 }}
                 className="flex flex-col"
               >
                 {/* Step indicator */}

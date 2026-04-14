@@ -179,7 +179,7 @@ export default function Hero() {
           style={{ opacity: 0 }}
         />
         <div
-          className="absolute inset-0 bg-gradient-to-b from-black/72 via-black/55 to-black/80"
+          className="absolute inset-0 bg-gradient-to-b from-black/62 via-black/47 to-black/70"
           aria-hidden
         />
         <div

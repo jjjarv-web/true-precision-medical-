@@ -12,7 +12,7 @@ const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
 export default function LocationsMap() {
   const ref    = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-60px' })
+  const inView = useInView(ref, { once: true, margin: '-100px' })
 
   const [activeId, setActiveId] = useState<string | null>(null)
   const active = activeId ? LOCATIONS.find((l) => l.id === activeId) ?? null : null

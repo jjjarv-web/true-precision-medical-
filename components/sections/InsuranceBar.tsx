@@ -14,7 +14,7 @@ const REMAINING = INSURANCES.length - IDLE_PILLS.length
 
 export default function InsuranceBar() {
   const ref    = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-80px' })
+  const inView = useInView(ref, { once: true, margin: '-110px' })
 
   const [query, setQuery]     = useState('')
   const [focused, setFocused] = useState(false)

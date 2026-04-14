@@ -56,10 +56,10 @@ export default function PatientStories() {
       <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-12">
 
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-60px' }}
-          transition={{ duration: 0.55, ease: EASE }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.65, ease: EASE }}
           className="text-center max-w-3xl mx-auto mb-14 sm:mb-16"
         >
           <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/40 mb-5 block">

@@ -13,10 +13,10 @@ export default function Treatments() {
 
         {/* Section header */}
         <motion.div
-          initial={{ opacity: 0, y: 18 }}
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-60px' }}
-          transition={{ duration: 0.65, ease: EASE }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.7, ease: EASE }}
           className="mb-14 lg:mb-18 pt-8"
         >
           <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/40 mb-5 block">
@@ -36,10 +36,10 @@ export default function Treatments() {
             <motion.a
               key={spec.id}
               href="#"
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-40px' }}
-              transition={{ duration: 0.55, ease: EASE, delay: i * 0.07 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ duration: 0.6, ease: EASE, delay: i * 0.10 }}
               className="group relative flex flex-col gap-5 p-8 bg-[#07080c] cursor-pointer transition-colors duration-300 hover:bg-white/[0.04]"
             >
               {/* Index */}

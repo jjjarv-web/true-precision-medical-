@@ -37,10 +37,10 @@ function ProviderCard({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-60px' }}
-      transition={{ duration: 0.55, ease: EASE, delay: index * 0.07 }}
+      viewport={{ once: true, margin: '-80px' }}
+      transition={{ duration: 0.6, ease: EASE, delay: index * 0.10 }}
       className="group relative flex-none cursor-pointer"
       style={{ aspectRatio: '3/4' }}
       onClick={() => isTouch && setRevealed((r) => !r)}
@@ -105,9 +105,9 @@ export default function TrustCredentials() {
   const providersRef  = useRef(null)
   const statsRef      = useRef(null)
   const credRef       = useRef(null)
-  const providersInView = useInView(providersRef, { once: true, margin: '-60px' })
-  const statsInView     = useInView(statsRef,     { once: true, margin: '-60px' })
-  const credInView      = useInView(credRef,      { once: true, margin: '-80px' })
+  const providersInView = useInView(providersRef, { once: true, margin: '-100px' })
+  const statsInView     = useInView(statsRef,     { once: true, margin: '-100px' })
+  const credInView      = useInView(credRef,      { once: true, margin: '-100px' })
   const [isTouch, setIsTouch] = useState(false)
 
   useEffect(() => {
@@ -117,7 +117,7 @@ export default function TrustCredentials() {
   return (
     <>
       {/* ── Block 1: Providers ─────────────────────────────── white */}
-      <section ref={providersRef} className="pt-24 pb-0 bg-white">
+      <section ref={providersRef} className="pt-24 pb-0 bg-white overflow-hidden">
         <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-12">
 
           {/* Section heading */}
@@ -136,7 +136,7 @@ export default function TrustCredentials() {
           </motion.div>
 
           {/* Mobile carousel */}
-          <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 -mx-6 px-6 pb-4 [&::-webkit-scrollbar]:hidden [scrollbar-width:none] lg:hidden">
+          <div className="flex overflow-x-auto overflow-y-hidden snap-x snap-mandatory gap-4 -mx-6 px-6 pb-4 [&::-webkit-scrollbar]:hidden [scrollbar-width:none] lg:hidden">
             {PROVIDERS.map((provider, i) => (
               <div key={provider.id} className="snap-center flex-none w-[72vw] sm:w-[52vw]">
                 <ProviderCard provider={provider} index={i} isTouch={isTouch} />
@@ -183,7 +183,7 @@ export default function TrustCredentials() {
                 key={cred.index}
                 initial={{ opacity: 0, y: 10 }}
                 animate={credInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.45, ease: EASE, delay: i * 0.07 }}
+                transition={{ duration: 0.5, ease: EASE, delay: i * 0.11 }}
                 className="lg:px-8 first:lg:pl-0 last:lg:pr-0 flex flex-col gap-2"
               >
                 <span className="font-mono text-[11px] text-[#1A1814]/25 tracking-widest select-none">
@@ -260,9 +260,9 @@ export default function TrustCredentials() {
 
             {/* Google rating */}
             <motion.div
-              initial={{ opacity: 0, y: 18 }}
+              initial={{ opacity: 0, y: 24 }}
               animate={statsInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.55, ease: EASE, delay: 0.45 }}
+              transition={{ duration: 0.6, ease: EASE, delay: 0.45 }}
               className="flex flex-col items-center py-10 sm:pr-10"
             >
               <p
@@ -282,9 +282,9 @@ export default function TrustCredentials() {
 
             {/* No. 1 GAE */}
             <motion.div
-              initial={{ opacity: 0, y: 18 }}
+              initial={{ opacity: 0, y: 24 }}
               animate={statsInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.55, ease: EASE, delay: 0.55 }}
+              transition={{ duration: 0.6, ease: EASE, delay: 0.55 }}
               className="flex flex-col items-center py-10 sm:px-10 border-t border-white/[0.06] sm:border-t-0 sm:border-l sm:border-r sm:border-white/[0.06]"
             >
               <p
@@ -306,9 +306,9 @@ export default function TrustCredentials() {
 
             {/* 15,000+ procedures */}
             <motion.div
-              initial={{ opacity: 0, y: 18 }}
+              initial={{ opacity: 0, y: 24 }}
               animate={statsInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.55, ease: EASE, delay: 0.65 }}
+              transition={{ duration: 0.6, ease: EASE, delay: 0.65 }}
               className="flex flex-col items-center py-10 sm:pl-10 border-t border-white/[0.06] sm:border-t-0"
             >
               <p
