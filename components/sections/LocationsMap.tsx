@@ -1,112 +1,106 @@
 'use client'
 
+import dynamic from 'next/dynamic'
 import { useRef, useState } from 'react'
 import { motion, useInView, AnimatePresence } from 'motion/react'
-import { MapPin, Phone, Clock, Navigation, ChevronRight } from 'lucide-react'
+import { MapPin, Phone, Clock, Navigation } from 'lucide-react'
 import { LOCATIONS } from '@/lib/constants'
 
-const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
+const LeafletMap = dynamic(() => import('./LeafletMap'), { ssr: false })
 
-const AZ_OVERVIEW = 'https://www.google.com/maps?q=Arizona&output=embed&z=6'
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
 export default function LocationsMap() {
   const ref    = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-60px' })
 
-  const [activeId, setActiveId]   = useState<string | null>(null)
-  const [mapLoaded, setMapLoaded] = useState(false)
-
+  const [activeId, setActiveId] = useState<string | null>(null)
   const active = activeId ? LOCATIONS.find((l) => l.id === activeId) ?? null : null
-  const mapSrc = active ? active.embedUrl : AZ_OVERVIEW
-
-  function handleSelect(id: string) {
-    if (id === activeId) return
-    setMapLoaded(false)
-    setActiveId(id)
-  }
 
   return (
-    <section ref={ref} className="py-32 bg-gradient-to-b from-white to-[#f4f7fb]">
-      <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-12">
+    <section
+      ref={ref}
+      className="relative bg-[#07080C]"
+      style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)' }}
+    >
+      <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-12 pt-24 pb-28">
 
-        {/* Heading */}
+        {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: 14 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.55, ease: EASE }}
-          className="text-center mb-14"
+          transition={{ duration: 0.5, ease: EASE }}
+          className="mb-14"
         >
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <MapPin className="w-4 h-4 text-brand-accent" />
-            <span className="text-xs font-semibold uppercase tracking-widest text-brand-muted">
-              Our Locations
-            </span>
-          </div>
-          <h2 className="font-heading font-extrabold text-brand-ink text-[clamp(28px,4vw,50px)] leading-tight mb-3">
-            Closer than you think.<br className="hidden sm:block" />
-            <span className="gradient-text">We&apos;re local.</span>
+          <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/40 mb-4 block">
+            Our Locations
+          </span>
+          <h2
+            className="font-heading font-bold text-[#EDE6D8] leading-[1.05] tracking-[-0.04em]"
+            style={{ fontSize: 'clamp(28px, 4vw, 48px)' }}
+          >
+            Closer than you think.
           </h2>
-          <p className="text-brand-ink-secondary text-lg max-w-lg mx-auto leading-relaxed">
-            {LOCATIONS.length} locations across the Valley — board-certified specialists ready to see you.
+          <p className="text-white/55 text-[15px] mt-3 max-w-sm leading-relaxed">
+            Most patients are seen within the week. Easy parking at every site.
           </p>
         </motion.div>
 
-        {/* Layout: location list + map */}
+        {/* Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-5 items-stretch">
 
-          {/* ── Location list ─────────────────────────── */}
+          {/* Location list */}
           <motion.div
-            initial={{ opacity: 0, x: -16 }}
+            initial={{ opacity: 0, x: -12 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, ease: EASE, delay: 0.1 }}
-            className="lg:col-span-2 flex flex-col gap-2.5"
+            className="lg:col-span-2 flex flex-col gap-2"
           >
             {LOCATIONS.map((loc, i) => {
               const isActive = activeId === loc.id
               return (
                 <motion.button
                   key={loc.id}
-                  onClick={() => handleSelect(loc.id)}
+                  onClick={() => setActiveId(isActive ? null : loc.id)}
                   initial={{ opacity: 0, y: 10 }}
                   animate={inView ? { opacity: 1, y: 0 } : {}}
                   transition={{ duration: 0.45, ease: EASE, delay: 0.15 + i * 0.06 }}
-                  className={`relative w-full text-left rounded-[1.4rem] border px-5 py-4 transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-brand-sky backdrop-blur-xl ${
+                  className={`relative w-full text-left rounded-2xl border px-5 py-4 transition-all duration-200 outline-none focus-visible:ring-1 focus-visible:ring-[#4DCCE8]/50 ${
                     isActive
-                      ? 'bg-white border-brand-primary/18 shadow-[0_2px_8px_rgba(30,58,95,0.06),_0_16px_40px_rgba(30,58,95,0.13),_inset_0_1px_0_rgba(255,255,255,0.92)]'
-                      : 'bg-[rgba(255,255,255,0.58)] border-[rgba(255,255,255,0.62)] shadow-[0_2px_6px_rgba(17,35,70,0.05),_0_10px_28px_rgba(17,35,70,0.07),_inset_0_1px_0_rgba(255,255,255,0.88)] hover:shadow-[0_2px_8px_rgba(30,58,95,0.06),_0_16px_36px_rgba(30,58,95,0.11),_inset_0_1px_0_rgba(255,255,255,0.92)] hover:-translate-y-0.5'
+                      ? 'bg-white/[0.12] border-[#4DCCE8]/30'
+                      : 'bg-white/[0.07] border-white/[0.12] hover:bg-white/[0.10] hover:border-white/[0.18]'
                   }`}
                 >
-                  {/* Active left accent bar */}
+                  {/* Aqua left accent */}
                   {isActive && (
-                    <div className="absolute left-0 top-4 bottom-4 w-[3px] bg-brand-primary rounded-full" />
+                    <div className="absolute left-0 top-4 bottom-4 w-[3px] rounded-full bg-[#4DCCE8]" />
                   )}
 
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-start gap-3 min-w-0">
-                      {/* Pin badge */}
-                      <div className={`mt-0.5 w-9 h-9 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all duration-200 ${
-                        isActive
-                          ? 'bg-brand-primary shadow-[0_4px_12px_rgba(30,58,95,0.24)]'
-                          : 'bg-brand-surface-blue shadow-[0_2px_8px_rgba(17,35,70,0.08)]'
+                      <div className={`mt-0.5 w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-200 ${
+                        isActive ? 'bg-[#4DCCE8]/15' : 'bg-white/[0.05]'
                       }`}>
-                        <MapPin className={`w-3.5 h-3.5 transition-colors duration-200 ${isActive ? 'text-white' : 'text-brand-sky'}`} />
+                        <MapPin className={`w-3.5 h-3.5 transition-colors duration-200 ${
+                          isActive ? 'text-[#4DCCE8]' : 'text-white/30'
+                        }`} />
                       </div>
                       <div className="min-w-0">
-                        <p className={`font-heading font-bold text-sm leading-tight truncate transition-colors duration-200 ${
-                          isActive ? 'text-brand-primary' : 'text-brand-ink'
+                        <p className={`font-heading font-semibold text-sm leading-tight transition-colors duration-200 ${
+                          isActive ? 'text-[#EDE6D8]' : 'text-white/70'
                         }`}>
                           {loc.name}
                         </p>
-                        <p className="text-brand-muted text-xs mt-0.5 truncate">{loc.address}</p>
-                        <p className="text-brand-muted-light text-xs">{loc.city}</p>
+                        <p className="text-white/40 text-xs mt-0.5">{loc.address}</p>
+                        <p className="text-white/30 text-xs">{loc.city}</p>
                       </div>
                     </div>
-                    <ChevronRight className={`w-4 h-4 flex-shrink-0 mt-1 transition-all duration-200 ${
-                      isActive ? 'text-brand-primary translate-x-0.5' : 'text-brand-muted-light'
+                    <div className={`w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0 transition-all duration-200 ${
+                      isActive ? 'bg-[#4DCCE8]' : 'bg-white/15'
                     }`} />
                   </div>
 
-                  {/* Expanded detail — only on active */}
+                  {/* Expanded detail */}
                   <AnimatePresence initial={false}>
                     {isActive && (
                       <motion.div
@@ -114,49 +108,42 @@ export default function LocationsMap() {
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
-                        transition={{ duration: 0.28, ease: EASE }}
+                        transition={{ duration: 0.26, ease: EASE }}
                         className="overflow-hidden"
                       >
-                        <div className="mt-4 ml-12 flex flex-col gap-3">
-                          {/* Phone */}
+                        <div className="mt-4 ml-11 flex flex-col gap-3">
+
                           <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-2xl flex items-center justify-center flex-shrink-0"
-                              style={{ backgroundColor: 'rgba(16,185,129,0.10)' }}>
-                              <Phone className="w-3.5 h-3.5 flex-shrink-0" style={{ color: '#10b981' }} />
+                            <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 bg-white/[0.06]">
+                              <Phone className="w-3 h-3 text-white/40" />
                             </div>
                             <a
                               href={`tel:${loc.phone.replace(/\D/g, '')}`}
                               onClick={(e) => e.stopPropagation()}
-                              className="text-sm font-medium text-brand-ink hover:text-brand-sky transition-colors"
+                              className="text-sm text-white/50 hover:text-[#4DCCE8] transition-colors"
                             >
                               {loc.phone}
                             </a>
                           </div>
 
-                          {/* Hours */}
                           <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-2xl flex items-center justify-center flex-shrink-0"
-                              style={{ backgroundColor: 'rgba(251,146,60,0.10)' }}>
-                              <Clock className="w-3.5 h-3.5 flex-shrink-0" style={{ color: '#f97316' }} />
+                            <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 bg-white/[0.06]">
+                              <Clock className="w-3 h-3 text-white/40" />
                             </div>
-                            <span className="text-sm text-brand-muted">{loc.hours}</span>
+                            <span className="text-sm text-white/40">{loc.hours}</span>
                           </div>
 
-                          {/* Get Directions */}
                           <a
                             href={loc.mapsUrl}
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={(e) => e.stopPropagation()}
-                            className="mt-1 w-full flex items-center justify-center gap-2 rounded-[1.2rem] px-4 py-2.5 text-sm font-medium tracking-[0.01em] text-white transition-all duration-150 hover:-translate-y-0.5"
-                            style={{
-                              backgroundColor: 'var(--color-brand-primary)',
-                              boxShadow: '0 4px 16px rgba(30,58,95,0.24), inset 0 1px 0 rgba(255,255,255,0.12)',
-                            }}
+                            className="mt-1 w-full flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-[#07080C] bg-[#4DCCE8] hover:bg-[#6DD8EE] transition-colors duration-150"
                           >
                             <Navigation className="w-3.5 h-3.5" />
                             Get Directions
                           </a>
+
                         </div>
                       </motion.div>
                     )}
@@ -166,43 +153,24 @@ export default function LocationsMap() {
             })}
           </motion.div>
 
-          {/* ── Map ───────────────────────────────────── */}
+          {/* Map */}
           <motion.div
-            initial={{ opacity: 0, x: 16 }}
+            initial={{ opacity: 0, x: 12 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, ease: EASE, delay: 0.18 }}
-            className="lg:col-span-3 relative rounded-[1.6rem] overflow-hidden min-h-[480px]"
-            style={{
-              boxShadow: '0 2px 8px rgba(30,58,95,0.06), 0 16px 56px rgba(30,58,95,0.16)',
-              border: '1px solid rgba(30,58,95,0.08)',
-            }}
+            className="lg:col-span-3 relative rounded-2xl overflow-hidden min-h-[480px]"
+            style={{ border: '1px solid rgba(255,255,255,0.07)', filter: 'brightness(1.35)' }}
           >
-            {/* Top-edge vignette — softens the hard map border */}
-            <div
-              className="absolute inset-x-0 top-0 h-8 z-10 pointer-events-none"
-              style={{ background: 'linear-gradient(to bottom, rgba(255,255,255,0.18), transparent)' }}
+            <LeafletMap
+              locations={LOCATIONS.map(({ id, lat, lng }) => ({ id, lat, lng }))}
+              activeId={activeId}
+              onSelect={setActiveId}
             />
 
-            {/* Loading skeleton */}
-            {!mapLoaded && (
-              <div className="absolute inset-0 bg-brand-bg-alt flex items-center justify-center z-10">
-                <div className="flex flex-col items-center gap-3 text-brand-muted">
-                  <MapPin className="w-7 h-7 animate-pulse text-brand-sky" />
-                  <span className="text-sm font-medium">Loading map…</span>
-                </div>
-              </div>
-            )}
-
-            <iframe
-              key={activeId ?? 'overview'}
-              src={mapSrc}
-              title={active ? `True Precision Medical — ${active.name}` : 'True Precision Medical — Arizona Locations'}
-              className="absolute inset-0 w-full h-full border-0"
-              style={{ filter: 'saturate(0.85) brightness(1.04) contrast(0.96)' }}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              onLoad={() => setMapLoaded(true)}
-            />
+            {/* Attribution overlay — bottom right */}
+            <div className="absolute bottom-2 right-2 z-[1000] text-[9px] text-white/20 pointer-events-none select-none">
+              © OpenStreetMap · CARTO
+            </div>
           </motion.div>
 
         </div>

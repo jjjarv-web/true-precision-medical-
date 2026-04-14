@@ -317,7 +317,7 @@ export default function Hero() {
                     <ArrowRight className="w-4 h-4" />
                   </motion.a>
                   <p className="text-xs text-white/50 tracking-wide">
-                    No referral needed&nbsp;&nbsp;·&nbsp;&nbsp;Free&nbsp;&nbsp;·&nbsp;&nbsp;Takes less than 5 minutes
+                    Takes less than 5 minutes
                   </p>
                 </motion.div>
               ) : (

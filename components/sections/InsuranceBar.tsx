@@ -45,7 +45,7 @@ export default function InsuranceBar() {
     <>
       <section
         ref={ref}
-        className="relative z-10 -mt-12 rounded-t-[2rem] pb-40"
+        className="relative z-10 -mt-12 rounded-t-[2rem] pb-28"
         style={{
           background: 'linear-gradient(to bottom, #F9F7F4 0%, #F9F7F4 60%, #ffffff 100%)',
           boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.55)',
@@ -60,14 +60,14 @@ export default function InsuranceBar() {
             transition={{ duration: 0.6, ease: EASE }}
             className="mb-10 pt-28 sm:pt-32"
           >
-            <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-muted/60 mb-5 block">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#9A9490] mb-5 block">
               Insurance & Coverage
             </span>
-            <h2 className="font-heading font-bold text-[#1A1814] text-[clamp(28px,4vw,48px)] leading-[1.08] tracking-[-0.03em] mb-4">
-              Is your plan accepted?
+            <h2 className="font-heading font-bold text-[#1A1814] text-[clamp(28px,4vw,48px)] leading-[1.08] tracking-[-0.04em] mb-4">
+              Your plan is almost<br className="hidden sm:block" /> certainly covered.
             </h2>
             <p className="text-[#4A4440] text-base leading-relaxed">
-              We accept most major insurance plans. Type yours below to confirm instantly.
+              We accept most major insurance plans. Type yours to confirm in seconds.
             </p>
           </motion.div>
 
@@ -81,18 +81,18 @@ export default function InsuranceBar() {
             <motion.div
               animate={{
                 boxShadow: focused
-                  ? '0 0 0 3px rgba(74,144,212,0.18), 0 8px 32px rgba(13,27,62,0.10)'
+                  ? '0 0 0 3px rgba(77,204,232,0.18), 0 8px 32px rgba(26,24,20,0.08)'
                   : matchState === 'match'
-                  ? '0 0 0 2.5px rgba(91,183,166,0.30), 0 4px 20px rgba(13,27,62,0.07)'
-                  : '0 2px 16px rgba(13,27,62,0.06)',
+                  ? '0 0 0 2.5px rgba(77,204,232,0.28), 0 4px 20px rgba(26,24,20,0.06)'
+                  : '0 2px 16px rgba(26,24,20,0.06)',
               }}
               transition={{ duration: 0.2 }}
               className="relative rounded-2xl"
             >
               <div className="relative flex items-center">
                 <Search
-                  className="absolute left-5 w-4.5 h-4.5 pointer-events-none z-10 transition-colors duration-200 w-[18px] h-[18px]"
-                  style={{ color: focused ? '#4A90D4' : '#94A3B8' }}
+                  className="absolute left-5 pointer-events-none z-10 transition-colors duration-200 w-[18px] h-[18px]"
+                  style={{ color: focused ? '#4DCCE8' : '#9A9490' }}
                 />
                 <input
                   type="text"
@@ -116,7 +116,7 @@ export default function InsuranceBar() {
                       transition={{ duration: 0.2, ease: EASE }}
                       className="absolute right-5"
                     >
-                      <CheckCircle2 className="w-5 h-5 text-brand-accent" />
+                      <CheckCircle2 className="w-5 h-5 text-[#4DCCE8]" />
                     </motion.span>
                   )}
                 </AnimatePresence>
@@ -146,7 +146,7 @@ export default function InsuranceBar() {
                       >
                         <span>{ins.name}</span>
                         {ins.priority && (
-                          <span className="text-[10px] font-semibold text-brand-accent uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+                          <span className="text-[10px] font-semibold text-[#4DCCE8] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
                             In-network
                           </span>
                         )}
@@ -169,12 +169,12 @@ export default function InsuranceBar() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -6 }}
                   transition={{ duration: 0.3, ease: EASE }}
-                  className="flex items-center gap-2.5 bg-white border border-brand-accent/25
-                             rounded-xl px-5 py-3 shadow-[0_2px_12px_rgba(91,183,166,0.12)]"
+                  className="flex items-center gap-2.5 bg-white border border-[#4DCCE8]/25
+                             rounded-xl px-5 py-3 shadow-[0_2px_12px_rgba(77,204,232,0.12)]"
                 >
-                  <CheckCircle2 className="w-4 h-4 text-brand-accent flex-shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-[#4DCCE8] flex-shrink-0" />
                   <p className="text-sm font-semibold text-[#1A1814]">
-                    <span className="text-brand-accent">{query}</span> is accepted — you&apos;re covered.
+                    <span className="text-[#4DCCE8]">{query}</span> is accepted — you&apos;re covered.
                   </p>
                 </motion.div>
               )}
@@ -186,13 +186,13 @@ export default function InsuranceBar() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -6 }}
                   transition={{ duration: 0.3, ease: EASE }}
-                  className="flex items-center gap-2.5 bg-white border border-brand-sky/20
-                             rounded-xl px-5 py-3 shadow-[0_2px_12px_rgba(74,144,212,0.08)]"
+                  className="flex items-center gap-2.5 bg-white border border-[#4DCCE8]/20
+                             rounded-xl px-5 py-3 shadow-[0_2px_12px_rgba(77,204,232,0.08)]"
                 >
-                  <Phone className="w-4 h-4 text-brand-sky flex-shrink-0" />
+                  <Phone className="w-4 h-4 text-[#4DCCE8] flex-shrink-0" />
                   <p className="text-sm text-[#4A4440]">
                     Don&apos;t see your plan?{' '}
-                    <a href="tel:18005550199" className="font-semibold text-brand-sky hover:text-brand-primary transition-colors">
+                    <a href="tel:18005550199" className="font-semibold text-[#4DCCE8] hover:text-[#1A1814] transition-colors">
                       Call us
                     </a>
                     {' '}— we likely have options.
@@ -214,14 +214,14 @@ export default function InsuranceBar() {
                       key={name}
                       onMouseDown={() => { setQuery(name); setFocused(false) }}
                       className="px-3 py-1.5 rounded-full bg-white border border-black/[0.07] text-xs
-                                 font-medium text-[#4A4440] hover:border-brand-sky/40
-                                 hover:text-brand-sky transition-colors duration-200 cursor-pointer"
+                                 font-medium text-[#4A4440] hover:border-[#4DCCE8]/40
+                                 hover:text-[#4DCCE8] transition-colors duration-200 cursor-pointer"
                     >
                       {name}
                     </button>
                   ))}
                   <span className="px-3 py-1.5 rounded-full bg-transparent border border-black/[0.06]
-                                   text-xs text-brand-muted-light select-none">
+                                   text-xs text-[#C4BEBB] select-none">
                     +{REMAINING} more
                   </span>
                 </motion.div>

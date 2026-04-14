@@ -8,7 +8,7 @@ const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
 export default function Treatments() {
   return (
-    <section id="treatments" className="bg-[#07080c] pt-0 pb-40 sm:pb-48">
+    <section id="treatments" className="bg-[#07080c] pt-0 pb-28 sm:pb-32">
       <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-12">
 
         {/* Section header */}
@@ -19,11 +19,11 @@ export default function Treatments() {
           transition={{ duration: 0.65, ease: EASE }}
           className="mb-14 lg:mb-18 pt-8"
         >
-          <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-white/30 mb-5 block">
+          <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/40 mb-5 block">
             Specialty Areas
           </span>
-          <h2 className="font-heading font-bold text-[clamp(30px,4vw,52px)] text-white leading-[1.08] tracking-[-0.03em]">
-            Minimally invasive precision,<br className="hidden sm:block" /> across every condition.
+          <h2 className="font-heading font-bold text-[clamp(30px,4vw,52px)] text-[#EDE6D8] leading-[1.08] tracking-[-0.04em]">
+            Every condition.<br className="hidden sm:block" /> One standard of care.
           </h2>
         </motion.div>
 

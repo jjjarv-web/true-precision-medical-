@@ -27,7 +27,7 @@ export default function Header() {
         darkTransparent
           ? 'bg-black/45 backdrop-blur-md py-5 border-b border-white/[0.06]'
           : isScrolled
-            ? 'bg-white/95 backdrop-blur-md shadow-[0_1px_20px_rgba(13,27,62,0.08)] py-3'
+            ? 'bg-[#07080C]/92 backdrop-blur-md border-b border-white/[0.06] py-3'
             : 'bg-transparent py-5'
       }`}
     >
@@ -52,11 +52,7 @@ export default function Header() {
             <a
               key={link.href}
               href={link.href}
-              className={`text-sm font-medium transition-colors duration-200 ${
-                darkTransparent
-                  ? 'text-white/88 hover:text-white'
-                  : 'text-brand-ink/70 hover:text-brand-primary'
-              }`}
+              className="text-sm font-medium text-white/70 hover:text-white transition-colors duration-200"
             >
               {link.label}
             </a>
@@ -67,22 +63,14 @@ export default function Header() {
         <div className="hidden md:flex items-center gap-4">
           <a
             href={PHONE_HREF}
-            className={`text-sm font-medium flex items-center gap-2 transition-colors duration-200 ${
-              darkTransparent
-                ? 'text-white/88 hover:text-white'
-                : 'text-brand-ink/70 hover:text-brand-primary'
-            }`}
+            className="text-sm font-medium flex items-center gap-2 text-white/70 hover:text-white transition-colors duration-200"
           >
             <Phone className="w-4 h-4" />
             {PHONE_NUMBER}
           </a>
           <a
             href="#"
-            className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 ${
-              darkTransparent
-                ? 'bg-[#D4C4A8] text-[#1A1814] hover:bg-[#C9B896] shadow-[0_2px_14px_rgba(0,0,0,0.35)] hover:-translate-y-0.5'
-                : 'bg-brand-primary hover:bg-brand-primary-dark text-white shadow-[0_2px_12px_rgba(30,58,95,0.25)] hover:-translate-y-0.5'
-            }`}
+            className="px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 bg-[#D4C4A8] text-[#1A1814] hover:bg-[#C9B896] shadow-[0_2px_14px_rgba(0,0,0,0.35)] hover:-translate-y-0.5"
           >
             Book Consultation
           </a>
@@ -90,11 +78,7 @@ export default function Header() {
 
         {/* Mobile Toggle */}
         <button
-          className={`md:hidden p-2 rounded-lg transition-colors ${
-            darkTransparent
-              ? 'text-white hover:bg-white/10'
-              : 'text-brand-ink hover:bg-brand-surface-blue'
-          }`}
+          className="md:hidden p-2 rounded-lg text-white hover:bg-white/10 transition-colors"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
           aria-expanded={mobileMenuOpen}
@@ -105,28 +89,28 @@ export default function Header() {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="absolute top-full left-0 w-full bg-white shadow-lg border-t border-gray-100 p-5 flex flex-col gap-1 md:hidden">
+        <div className="absolute top-full left-0 w-full bg-[#0D0E14]/96 backdrop-blur-md border-t border-white/[0.06] p-5 flex flex-col gap-1 md:hidden">
           {NAV_LINKS.map((link) => (
             <a
               key={link.href}
               href={link.href}
-              className="px-3 py-3 font-medium text-brand-ink rounded-lg hover:bg-brand-bg-alt transition-colors"
+              className="px-3 py-3 font-medium text-white/75 rounded-lg hover:bg-white/[0.06] hover:text-white transition-colors"
               onClick={() => setMobileMenuOpen(false)}
             >
               {link.label}
             </a>
           ))}
-          <div className="h-px bg-gray-100 my-2" />
+          <div className="h-px bg-white/[0.07] my-2" />
           <a
             href={PHONE_HREF}
-            className="px-3 py-3 font-medium text-brand-ink/70 flex items-center gap-2"
+            className="px-3 py-3 font-medium text-white/55 flex items-center gap-2"
           >
             <Phone className="w-4 h-4" />
             {PHONE_NUMBER}
           </a>
           <a
             href="#"
-            className="bg-brand-primary text-white px-5 py-3.5 rounded-xl text-sm font-semibold text-center mt-1"
+            className="bg-[#D4C4A8] text-[#1A1814] px-5 py-3.5 rounded-xl text-sm font-semibold text-center mt-1 hover:bg-[#C9B896] transition-colors"
           >
             Book Consultation
           </a>

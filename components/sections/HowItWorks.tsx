@@ -1,101 +1,106 @@
 'use client'
 
 import { motion } from 'motion/react'
-import Image from 'next/image'
-import { ArrowRight, Calendar } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { HOW_IT_WORKS_STEPS } from '@/lib/constants'
+
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
 export default function HowItWorks() {
   return (
-    <section id="approach" className="py-32 overflow-x-hidden" style={{ backgroundColor: 'var(--color-brand-bg-alt)' }}>
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          {/* Content */}
+    <section id="approach" className="py-28 sm:py-36 bg-[#F9F7F4] overflow-x-hidden">
+      <div className="max-w-5xl mx-auto px-6 sm:px-10 lg:px-12">
+
+        {/* Section header */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.6, ease: EASE }}
+          className="mb-20 sm:mb-24"
+        >
+          <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#9A9490] mb-5 block">
+            Our Process
+          </span>
+          <h2 className="font-heading font-bold text-[#1A1814] text-[clamp(28px,3.5vw,48px)] leading-[1.08] tracking-[-0.04em] mb-5">
+            A simpler path to relief.
+          </h2>
+          <p className="text-[#4A4440] text-[15px] leading-relaxed max-w-md">
+            No hospital mazes. Direct access to specialists
+            who treat your specific condition.
+          </p>
+        </motion.div>
+
+        {/* Steps — horizontal on desktop, vertical on mobile */}
+        <div className="relative">
+
+          {/* Connecting line — desktop only */}
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.5 }}
-          >
-            <span className="inline-block text-xs font-semibold uppercase tracking-widest text-brand-sky mb-4">
-              Our Process
-            </span>
-            <h2 className="text-[clamp(30px,4vw,48px)] font-heading font-bold text-brand-ink mb-5 leading-tight">
-              A simpler path to feeling better.
-            </h2>
-            <p className="text-lg text-brand-muted mb-12 leading-relaxed">
-              We've removed the friction from specialty healthcare. No endless referrals,
-              no confusing hospital mazes — just direct access to top specialists.
-            </p>
+            initial={{ scaleX: 0, opacity: 0 }}
+            whileInView={{ scaleX: 1, opacity: 1 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 1.1, ease: EASE, delay: 0.2 }}
+            className="hidden lg:block absolute top-8 left-[calc(1/6*100%)] right-[calc(1/6*100%)] h-px origin-left"
+            style={{ background: 'linear-gradient(to right, transparent, rgba(26,24,20,0.1) 15%, rgba(26,24,20,0.1) 85%, transparent)' }}
+            aria-hidden
+          />
 
-            <div className="space-y-8">
-              {HOW_IT_WORKS_STEPS.map((item, i) => (
-                <motion.div
-                  key={item.step}
-                  initial={{ opacity: 0, x: -12 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: '-40px' }}
-                  transition={{ duration: 0.4, delay: i * 0.1 }}
-                  className="flex gap-5"
-                >
-                  <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-brand-surface-blue text-brand-primary flex items-center justify-center font-heading font-bold text-base border border-brand-primary/10">
-                    {item.step}
-                  </div>
-                  <div>
-                    <h4 className="text-lg font-bold text-brand-ink mb-1.5">{item.title}</h4>
-                    <p className="text-brand-muted leading-relaxed text-sm">{item.desc}</p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-
-            <div className="mt-12">
-              <a
-                href="#"
-                className="bg-brand-accent hover:bg-brand-accent-dark text-white px-8 py-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-[0_2px_16px_rgba(91,183,166,0.35)] hover:-translate-y-0.5 inline-flex items-center gap-2"
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-8">
+            {HOW_IT_WORKS_STEPS.map((item, i) => (
+              <motion.div
+                key={item.step}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ duration: 0.55, ease: EASE, delay: i * 0.12 }}
+                className="flex flex-col"
               >
-                Start Your Journey
-                <ArrowRight className="w-4 h-4" />
-              </a>
-            </div>
-          </motion.div>
-
-          {/* Image */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.5, delay: 0.15 }}
-            className="relative"
-          >
-            <div className="absolute inset-0 bg-brand-surface-blue rounded-[3rem] transform rotate-2 scale-105 z-0" />
-            <div className="relative z-10 rounded-[3rem] overflow-hidden shadow-2xl aspect-[4/5]">
-              <Image
-                src="https://images.unsplash.com/photo-1638202993928-7267aad84c31?q=80&w=1200&auto=format&fit=crop"
-                alt="Doctor consulting with patient at True Precision Medical"
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 50vw"
-              />
-            </div>
-
-            {/* Floating card */}
-            <div className="absolute -bottom-6 -left-6 bg-white p-5 rounded-2xl shadow-xl z-20 max-w-[260px] border border-brand-primary/8">
-              <div className="flex items-center gap-3.5 mb-3">
-                <div className="w-11 h-11 rounded-xl bg-brand-surface-teal flex items-center justify-center text-brand-accent flex-shrink-0">
-                  <Calendar className="w-5 h-5" />
+                {/* Step indicator */}
+                <div className="flex items-center gap-4 lg:flex-col lg:items-start mb-6 lg:mb-8">
+                  <div
+                    className="w-16 h-16 rounded-full bg-white border border-black/[0.08] flex items-center justify-center flex-shrink-0 relative z-10"
+                    style={{ boxShadow: '0 2px 12px rgba(26,24,20,0.06), inset 0 1px 0 rgba(255,255,255,1)' }}
+                  >
+                    <span className="font-mono text-[13px] text-[#1A1814]/40 tracking-widest select-none">
+                      {item.step}
+                    </span>
+                  </div>
+                  {/* Mobile connecting line */}
+                  <div className="flex-1 h-px bg-black/[0.07] lg:hidden" />
                 </div>
-                <div>
-                  <p className="text-sm font-bold text-brand-ink">Fast Access</p>
-                  <p className="text-xs text-brand-muted">Appointments in 48h</p>
-                </div>
-              </div>
-              <p className="text-xs text-brand-ink-secondary leading-relaxed">
-                Skip the weeks of waiting. Get answers and a treatment plan this week.
-              </p>
-            </div>
-          </motion.div>
+
+                <h4 className="font-heading font-semibold text-[#1A1814] text-[18px] leading-snug tracking-[-0.02em] mb-3">
+                  {item.title}
+                </h4>
+                <p className="text-[#4A4440] text-[14px] leading-relaxed">
+                  {item.desc}
+                </p>
+              </motion.div>
+            ))}
+          </div>
         </div>
+
+        {/* CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-30px' }}
+          transition={{ duration: 0.5, ease: EASE, delay: 0.35 }}
+          className="mt-20 flex flex-col sm:flex-row items-start sm:items-center gap-5"
+        >
+          <a
+            href="#"
+            className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl text-sm font-semibold text-[#EDE6D8] bg-[#1A1814] hover:bg-[#2a2520] transition-colors duration-200"
+            style={{ boxShadow: '0 2px 12px rgba(26,24,20,0.18)' }}
+          >
+            Request a Consultation
+            <ArrowRight className="w-4 h-4" />
+          </a>
+          <span className="text-[13px] text-[#9A9490]">
+            Takes less than 5 minutes
+          </span>
+        </motion.div>
+
       </div>
     </section>
   )

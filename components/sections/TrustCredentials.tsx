@@ -15,31 +15,14 @@ function StarIcon() {
 }
 
 const CREDENTIALS = [
-  {
-    index: '01',
-    title: 'Board-Certified Specialists',
-    body: 'Every physician holds active board certification in their specialty — orthopedic surgery, neurosurgery, or interventional radiology.',
-  },
-  {
-    index: '02',
-    title: 'Fellowship-Trained',
-    body: 'Beyond board certification, each specialist completes advanced subspecialty fellowship training before joining our team.',
-  },
-  {
-    index: '03',
-    title: 'AAAHC Accredited Centers',
-    body: 'Our outpatient surgical centers meet the rigorous standards of the Accreditation Association for Ambulatory Health Care.',
-  },
-  {
-    index: '04',
-    title: 'No Hospital. No Overnight Stay.',
-    body: 'Every procedure is performed in our premium outpatient centers. You go home the same day — not a hospital room.',
-  },
+  { index: '01', title: 'Board-Certified', detail: 'Every physician holds active board certification in their specialty.' },
+  { index: '02', title: 'Fellowship-Trained', detail: 'Advanced subspecialty fellowship training beyond board certification.' },
+  { index: '03', title: 'AAAHC Accredited', detail: 'Our centers meet the rigorous AAAHC ambulatory healthcare standards.' },
+  { index: '04', title: 'Same-Day Discharge', detail: 'No hospital stays. Every procedure. You go home the same day.' },
 ]
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 const PHOTO_SPEC = 'JPG or PNG · 800 × 1067 px'
-
 
 function ProviderCard({
   provider,
@@ -121,8 +104,10 @@ function ProviderCard({
 export default function TrustCredentials() {
   const providersRef  = useRef(null)
   const statsRef      = useRef(null)
+  const credRef       = useRef(null)
   const providersInView = useInView(providersRef, { once: true, margin: '-60px' })
   const statsInView     = useInView(statsRef,     { once: true, margin: '-60px' })
+  const credInView      = useInView(credRef,      { once: true, margin: '-80px' })
   const [isTouch, setIsTouch] = useState(false)
 
   useEffect(() => {
@@ -132,20 +117,22 @@ export default function TrustCredentials() {
   return (
     <>
       {/* ── Block 1: Providers ─────────────────────────────── white */}
-      <section ref={providersRef} className="pt-24 pb-24 bg-white">
+      <section ref={providersRef} className="pt-24 pb-0 bg-white">
         <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-12">
 
+          {/* Section heading */}
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={providersInView ? { opacity: 1 } : {}}
-            transition={{ duration: 0.45, ease: EASE }}
-            className="flex items-center gap-5 mb-14"
+            initial={{ opacity: 0, y: 16 }}
+            animate={providersInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.55, ease: EASE }}
+            className="mb-14"
           >
-            <div className="flex-1 h-px bg-black/[0.06]" />
-            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#9A9490] whitespace-nowrap">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#9A9490] mb-5 block">
               Meet the Specialists
-            </p>
-            <div className="flex-1 h-px bg-black/[0.06]" />
+            </span>
+            <h2 className="font-heading font-bold text-[#1A1814] text-[clamp(28px,4vw,48px)] leading-[1.08] tracking-[-0.04em]">
+              Fellowship-trained surgeons.<br className="hidden sm:block" /> Board-certified. Focused on you.
+            </h2>
           </motion.div>
 
           {/* Mobile carousel */}
@@ -168,7 +155,7 @@ export default function TrustCredentials() {
             initial={{ opacity: 0, y: 12 }}
             animate={providersInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.45, ease: EASE, delay: 0.4 }}
-            className="flex justify-center mt-12"
+            className="flex justify-center mt-10 mb-0"
           >
             <a
               href="#"
@@ -182,51 +169,35 @@ export default function TrustCredentials() {
         </div>
       </section>
 
-      {/* ── Block 2: Credentials ───────────────────────────── cream */}
-      <section className="py-28 bg-[#F9F7F4]">
+      {/* ── Block 2: Credentials strip ──────────────────── warm cream */}
+      <section ref={credRef} className="bg-[#F9F7F4] py-16">
         <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-12">
-
           <motion.div
-            initial={{ opacity: 0, y: 14 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
+            initial={{ opacity: 0, y: 12 }}
+            animate={credInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.5, ease: EASE }}
-            className="mb-16"
+            className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-0 lg:divide-x lg:divide-black/[0.07]"
           >
-            <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-black/30 mb-4 block">
-              Why Patients Trust Us
-            </span>
-            <h2 className="font-heading font-bold text-[#1A1814] text-[clamp(28px,4vw,48px)] leading-[1.08] tracking-[-0.03em] max-w-xl">
-              Credentials that matter<br className="hidden sm:block" /> to the people who matter.
-            </h2>
-          </motion.div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {CREDENTIALS.map((cred, i) => (
               <motion.div
                 key={cred.index}
-                initial={{ opacity: 0, y: 18 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-40px' }}
-                transition={{ duration: 0.5, ease: EASE, delay: i * 0.07 }}
-                className="relative bg-white rounded-2xl p-8 border border-black/[0.05] overflow-hidden"
+                initial={{ opacity: 0, y: 10 }}
+                animate={credInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.45, ease: EASE, delay: i * 0.07 }}
+                className="lg:px-8 first:lg:pl-0 last:lg:pr-0 flex flex-col gap-2"
               >
-                {/* Aqua left accent line */}
-                <div className="absolute left-0 top-8 bottom-8 w-[3px] rounded-full bg-[#4DCCE8]/40" />
-
-                <span className="font-mono text-[11px] text-black/20 select-none block mb-5">
+                <span className="font-mono text-[11px] text-[#1A1814]/25 tracking-widest select-none">
                   {cred.index}
                 </span>
-                <h3 className="font-heading font-semibold text-[#1A1814] text-[17px] leading-snug mb-3">
+                <p className="font-heading font-semibold text-[#1A1814] text-[15px] leading-snug">
                   {cred.title}
-                </h3>
-                <p className="text-[#4A4440] text-[14px] leading-relaxed">
-                  {cred.body}
+                </p>
+                <p className="text-[13px] text-[#4A4440] leading-relaxed">
+                  {cred.detail}
                 </p>
               </motion.div>
             ))}
-          </div>
-
+          </motion.div>
         </div>
       </section>
 
@@ -236,26 +207,24 @@ export default function TrustCredentials() {
         className="relative overflow-hidden bg-[#07080C]"
         style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.05)' }}
       >
-        {/* Ambient radial glow — felt, not seen */}
+        {/* Ambient radial glow */}
         <div
           className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 80% 60% at 50% 50%, rgba(77,204,232,0.045) 0%, transparent 70%)' }}
+          style={{ background: 'radial-gradient(ellipse 80% 60% at 50% 50%, rgba(77,204,232,0.06) 0%, transparent 70%)' }}
           aria-hidden
         />
 
         <div className="relative max-w-5xl mx-auto px-6 sm:px-10 lg:px-12 pt-28 pb-12 text-center">
 
-          {/* Eyebrow */}
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             animate={statsInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.5, ease: EASE }}
-            className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/20 mb-12"
+            className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/40 mb-12"
           >
             Arizona&apos;s most trusted minimally invasive clinic
           </motion.p>
 
-          {/* Hero statement */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={statsInView ? { opacity: 1, y: 0 } : {}}
@@ -264,7 +233,7 @@ export default function TrustCredentials() {
           >
             <h2
               className="font-heading font-bold text-[#EDE6D8] leading-[1.0] tracking-[-0.04em]"
-              style={{ fontSize: 'clamp(48px, 8vw, 100px)' }}
+              style={{ fontSize: 'clamp(36px, 5vw, 64px)' }}
             >
               Zero hospital stays.
             </h2>
@@ -274,13 +243,12 @@ export default function TrustCredentials() {
             initial={{ opacity: 0, y: 12 }}
             animate={statsInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, ease: EASE, delay: 0.22 }}
-            className="font-heading font-semibold text-white/35 tracking-[-0.03em] mb-24"
-            style={{ fontSize: 'clamp(28px, 4vw, 52px)' }}
+            className="font-heading font-semibold text-white/55 tracking-[-0.03em] mb-24"
+            style={{ fontSize: 'clamp(22px, 3vw, 36px)' }}
           >
             Every procedure.
           </motion.p>
 
-          {/* Divider */}
           <motion.div
             initial={{ scaleX: 0, opacity: 0 }}
             animate={statsInView ? { scaleX: 1, opacity: 1 } : {}}
@@ -288,7 +256,6 @@ export default function TrustCredentials() {
             className="h-px bg-white/[0.07] mb-20 origin-left"
           />
 
-          {/* Three supporting stats */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-0">
 
             {/* Google rating */}
@@ -307,10 +274,10 @@ export default function TrustCredentials() {
               <div className="flex items-center gap-[3px] mb-3">
                 {[0,1,2,3,4].map(i => <StarIcon key={i} />)}
               </div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/30">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/50">
                 on Google
               </p>
-              <p className="text-[11px] text-white/20 mt-1">{GOOGLE_REVIEWS}+ verified reviews</p>
+              <p className="text-[11px] text-white/35 mt-1">{GOOGLE_REVIEWS}+ verified reviews</p>
             </motion.div>
 
             {/* No. 1 GAE */}
@@ -324,20 +291,20 @@ export default function TrustCredentials() {
                 className="font-heading font-bold text-[#EDE6D8] leading-none tracking-[-0.04em] mb-4"
                 style={{ fontSize: 'clamp(36px, 5vw, 58px)' }}
               >
-                No. 1
+                No.&thinsp;1
               </p>
               <p className="text-[13px] font-semibold text-white/50 mb-1">
                 U.S. Referral Center
               </p>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/30">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/50">
                 for GAE
               </p>
-              <p className="text-[10px] italic text-white/18 mt-2">
+              <p className="text-[10px] italic text-white/20 mt-2">
                 Genicular Artery Embolization
               </p>
             </motion.div>
 
-            {/* No general anesthesia */}
+            {/* 15,000+ procedures */}
             <motion.div
               initial={{ opacity: 0, y: 18 }}
               animate={statsInView ? { opacity: 1, y: 0 } : {}}
@@ -346,15 +313,15 @@ export default function TrustCredentials() {
             >
               <p
                 className="font-heading font-bold text-[#EDE6D8] leading-none tracking-[-0.04em] mb-4"
-                style={{ fontSize: 'clamp(28px, 3.5vw, 44px)' }}
+                style={{ fontSize: 'clamp(36px, 5vw, 58px)' }}
               >
-                Local only.
+                15,000+
               </p>
               <p className="text-[13px] font-semibold text-white/50 mb-1">
-                No general anesthesia
+                Outpatient procedures
               </p>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/30">
-                You stay awake. You go home.
+              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/50">
+                No general anesthesia
               </p>
             </motion.div>
 
@@ -362,7 +329,6 @@ export default function TrustCredentials() {
 
         </div>
 
-        {/* Bottom breathing room */}
         <div className="pb-24" />
 
       </section>
