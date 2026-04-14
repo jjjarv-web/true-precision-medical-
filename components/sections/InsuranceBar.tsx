@@ -45,8 +45,11 @@ export default function InsuranceBar() {
     <>
       <section
         ref={ref}
-        className="relative z-10 bg-[#F9F7F4] pb-32 -mt-12 rounded-t-[2rem]"
-        style={{ boxShadow: '0 -12px 48px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.55)' }}
+        className="relative z-10 -mt-12 rounded-t-[2rem] pb-40"
+        style={{
+          background: 'linear-gradient(to bottom, #F9F7F4 0%, #F9F7F4 60%, #ffffff 100%)',
+          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.55)',
+        }}
       >
         <div className="max-w-2xl mx-auto px-6 sm:px-10 text-center">
 
@@ -55,7 +58,7 @@ export default function InsuranceBar() {
             initial={{ opacity: 0, y: 16 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, ease: EASE }}
-            className="mb-10 pt-20 sm:pt-24"
+            className="mb-10 pt-28 sm:pt-32"
           >
             <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-muted/60 mb-5 block">
               Insurance & Coverage
@@ -228,6 +231,8 @@ export default function InsuranceBar() {
           </div>
 
         </div>
+
+
       </section>
     </>
   )

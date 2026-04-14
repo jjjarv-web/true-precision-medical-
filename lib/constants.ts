@@ -1,3 +1,6 @@
+export const GOOGLE_RATING   = 4.9
+export const GOOGLE_REVIEWS  = 400
+
 export type Location = {
   id: string
   name: string

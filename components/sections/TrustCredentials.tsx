@@ -1,196 +1,117 @@
 'use client'
 
-import { useRef, useState, useEffect, useCallback } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { motion, useInView } from 'motion/react'
 import Image from 'next/image'
-import { ShieldCheck, Building2, UserCheck, Zap, ArrowRight, Hand } from 'lucide-react'
-import { PROVIDERS } from '@/lib/constants'
+import { ArrowRight } from 'lucide-react'
+import { PROVIDERS, GOOGLE_RATING, GOOGLE_REVIEWS } from '@/lib/constants'
 
-const STATS = [
-  { to: 15000, decimals: 0, suffix: '+', label: 'Procedures Performed',   isZero: false },
-  { to: 4.9,   decimals: 1, suffix: '★', label: 'Average Patient Rating', isZero: false },
-  { to: 12,    decimals: 0, suffix: '',  label: 'Arizona Locations',       isZero: false },
-  { to: 0,     decimals: 0, suffix: '',  label: 'Hospital Stays Required', isZero: true  },
-]
-
-function CountUp({
-  to, decimals, suffix, delay, inView,
-}: { to: number; decimals: number; suffix: string; delay: number; inView: boolean }) {
-  const [display, setDisplay] = useState(decimals > 0 ? (0).toFixed(decimals) : '0')
-
-  useEffect(() => {
-    if (!inView) return
-    const duration = 1600
-    const delayMs  = delay * 1000
-    let start: number | null = null
-    let raf: number
-
-    function tick(ts: number) {
-      if (start === null) start = ts
-      const elapsed = ts - start - delayMs
-      if (elapsed < 0) { raf = requestAnimationFrame(tick); return }
-      const progress = Math.min(elapsed / duration, 1)
-      const eased    = 1 - Math.pow(1 - progress, 3) // ease-out cubic
-      const current  = eased * to
-      setDisplay(
-        decimals > 0
-          ? current.toFixed(decimals)
-          : Math.floor(current).toLocaleString()
-      )
-      if (progress < 1) raf = requestAnimationFrame(tick)
-      else setDisplay(decimals > 0 ? to.toFixed(decimals) : to.toLocaleString())
-    }
-    raf = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(raf)
-  }, [inView, to, decimals, delay])
-
-  return <>{display}{suffix}</>
+function StarIcon() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="#FBBC04" aria-hidden>
+      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+    </svg>
+  )
 }
 
 const CREDENTIALS = [
   {
-    icon: UserCheck,
-    title: 'Board-Certified & Fellowship-Trained',
-    body: 'Every specialist holds board certification in their discipline — orthopedic surgery, neurosurgery, or interventional radiology — and completes advanced fellowship training before joining our team.',
+    index: '01',
+    title: 'Board-Certified Specialists',
+    body: 'Every physician holds active board certification in their specialty — orthopedic surgery, neurosurgery, or interventional radiology.',
   },
   {
-    icon: Building2,
-    title: 'AAAHC Accredited Surgical Centers',
-    body: 'Our outpatient surgical centers meet the rigorous standards set by the Accreditation Association for Ambulatory Health Care — the same standard required for hospital-based procedures.',
+    index: '02',
+    title: 'Fellowship-Trained',
+    body: 'Beyond board certification, each specialist completes advanced subspecialty fellowship training before joining our team.',
   },
   {
-    icon: Zap,
+    index: '03',
+    title: 'AAAHC Accredited Centers',
+    body: 'Our outpatient surgical centers meet the rigorous standards of the Accreditation Association for Ambulatory Health Care.',
+  },
+  {
+    index: '04',
     title: 'No Hospital. No Overnight Stay.',
-    body: 'Every procedure is performed in our premium outpatient centers. You go home the same day and recover in your own bed — not a hospital room.',
+    body: 'Every procedure is performed in our premium outpatient centers. You go home the same day — not a hospital room.',
   },
 ]
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 const PHOTO_SPEC = 'JPG or PNG · 800 × 1067 px'
 
+
 function ProviderCard({
   provider,
   index,
   isTouch,
-  onFirstTap,
-  hintDismissed,
 }: {
   provider: (typeof PROVIDERS)[number]
   index: number
   isTouch: boolean
-  onFirstTap: () => void
-  hintDismissed: boolean
 }) {
-  const [flipped, setFlipped] = useState(false)
-
-  function handleTap() {
-    if (!isTouch) return
-    if (!flipped) onFirstTap()
-    setFlipped((f) => !f)
-  }
-
-  const isActive = isTouch ? flipped : false
+  const [revealed, setRevealed] = useState(false)
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 28 }}
+      initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-60px' }}
-      transition={{ duration: 0.55, ease: EASE, delay: index * 0.08 }}
-      className={isTouch ? '' : 'group'}
-      style={{ perspective: '1000px' }}
-      onClick={handleTap}
+      transition={{ duration: 0.55, ease: EASE, delay: index * 0.07 }}
+      className="group relative flex-none cursor-pointer"
+      style={{ aspectRatio: '3/4' }}
+      onClick={() => isTouch && setRevealed((r) => !r)}
     >
-      <div
-        className={`provider-flip-track relative w-full ${isTouch && flipped ? 'provider-flipped' : ''}`}
-        style={{ aspectRatio: '3/4' }}
-      >
-        {/* FRONT */}
-        <div
-          className="absolute inset-0 rounded-3xl overflow-hidden"
-          style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
-        >
-          {provider.photoUrl ? (
-            <Image
-              src={provider.photoUrl}
-              alt={provider.name}
-              fill
-              className={`object-cover object-top transition-all duration-700 ease-out
-                ${!isTouch ? 'group-hover:scale-[1.04]' : isActive ? 'scale-[1.04]' : ''}`}
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-            />
-          ) : (
-            <div className="absolute inset-0 flex flex-col items-center justify-center gap-4" style={{ backgroundColor: '#EEF4FB' }}>
-              <div className="flex flex-col items-center gap-1 opacity-30">
-                <div className="rounded-full" style={{ width: 56, height: 56, backgroundColor: '#1E3A5F' }} />
-                <div className="rounded-t-full" style={{ width: 88, height: 52, backgroundColor: '#1E3A5F', marginTop: 6 }} />
-              </div>
-              <div className="text-center px-4 mt-2">
-                <p className="text-xs font-semibold text-brand-primary/50 uppercase tracking-widest mb-1">Provider Photo</p>
-                <p className="text-xs text-brand-muted-light leading-snug">{PHOTO_SPEC}</p>
-              </div>
-            </div>
-          )}
-          <div className="absolute inset-0 pointer-events-none"
-            style={{ background: 'linear-gradient(to top, rgba(13,27,62,0.22) 0%, transparent 45%)' }}
+      <div className="absolute inset-0 rounded-2xl overflow-hidden">
+        {provider.photoUrl ? (
+          <Image
+            src={provider.photoUrl}
+            alt={provider.name}
+            fill
+            className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+            sizes="(max-width: 640px) 76vw, (max-width: 1024px) 58vw, 25vw"
           />
-          {isTouch && !hintDismissed && !flipped && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 + index * 0.08, duration: 0.4 }}
-              className="absolute bottom-4 left-0 right-0 flex items-center justify-center gap-1.5 pointer-events-none"
-            >
-              <Hand className="w-3.5 h-3.5 text-white/60" />
-              <span className="text-white/60 text-xs font-medium">Tap to learn more</span>
-            </motion.div>
-          )}
-        </div>
-
-        {/* BACK */}
-        <div
-          className="absolute inset-0 rounded-3xl flex flex-col justify-between p-8"
-          style={{
-            backfaceVisibility: 'hidden',
-            WebkitBackfaceVisibility: 'hidden',
-            transform: 'rotateY(180deg)',
-            backgroundColor: '#1E3A5F',
-          }}
-        >
-          <div>
-            <p className="text-white/50 text-xs font-semibold uppercase tracking-widest mb-5">Meet Your Specialist</p>
-            <h3 className="font-heading font-extrabold text-white text-2xl leading-tight mb-2">{provider.name}</h3>
-            <p className="text-brand-sky-light text-sm font-medium">{provider.title}</p>
+        ) : (
+          <div className="absolute inset-0 bg-[#F5F3F0] flex flex-col items-center justify-center gap-3">
+            <div className="flex flex-col items-center gap-1 opacity-20">
+              <div className="rounded-full bg-[#1A1814]" style={{ width: 52, height: 52 }} />
+              <div className="rounded-t-full bg-[#1A1814]" style={{ width: 80, height: 48, marginTop: 6 }} />
+            </div>
+            <p className="text-[11px] font-semibold text-[#1A1814]/30 uppercase tracking-widest">{PHOTO_SPEC}</p>
           </div>
-          <div className="w-12 h-px bg-white/20" />
-          <p className="text-white/70 text-sm leading-relaxed flex-1 flex items-center">
+        )}
+
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: 'linear-gradient(to top, rgba(26,24,20,0.82) 0%, rgba(26,24,20,0.20) 45%, transparent 70%)' }}
+        />
+
+        <div
+          className={`absolute inset-x-0 bottom-0 p-6 transition-all duration-[400ms] ease-out ${
+            isTouch
+              ? revealed ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'
+              : 'translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100'
+          }`}
+          style={{ background: 'linear-gradient(to top, rgba(26,24,20,0.96) 0%, rgba(26,24,20,0.75) 80%, transparent 100%)' }}
+        >
+          <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#EDE6D8]/40 mb-3">About</p>
+          <p className="text-[#EDE6D8]/75 text-sm leading-relaxed mb-4">
             {provider.bio ?? 'Fellowship-trained and board-certified specialist focused on minimally invasive care.'}
           </p>
-          <p className="text-white/40 text-xs font-medium uppercase tracking-widest">
+          <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-[#EDE6D8]/30">
             Board Certified · Fellowship Trained
           </p>
         </div>
-      </div>
 
-      {/* Below-card: name+title ↔ CTA */}
-      <div className="mt-4 px-1 relative h-14">
-        <div className={`absolute inset-0 flex flex-col justify-center transition-opacity duration-300 ${
-          isTouch ? (flipped ? 'opacity-0' : 'opacity-100') : 'group-hover:opacity-0'
-        }`}>
-          <p className="font-heading font-bold text-brand-ink text-base leading-tight">{provider.name}</p>
-          <p className="text-brand-muted text-sm mt-0.5">{provider.title}</p>
-        </div>
-        <div className={`absolute inset-0 flex items-center transition-opacity duration-300 ${
-          isTouch ? (flipped ? 'opacity-100' : 'opacity-0') : 'opacity-0 group-hover:opacity-100'
-        }`}>
-          <a
-            href="#"
-            onClick={(e) => e.stopPropagation()}
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-primary hover:text-brand-sky transition-colors duration-200"
-          >
-            Book a Consultation
-            <ArrowRight className="w-3.5 h-3.5" />
-          </a>
+        <div
+          className={`absolute inset-x-0 bottom-0 p-6 transition-opacity duration-300 ${
+            isTouch
+              ? revealed ? 'opacity-0' : 'opacity-100'
+              : 'group-hover:opacity-0'
+          }`}
+        >
+          <p className="font-heading font-semibold text-white text-lg leading-tight">{provider.name}</p>
+          <p className="text-[#4DCCE8] text-sm mt-1">{provider.title}</p>
         </div>
       </div>
     </motion.div>
@@ -198,139 +119,253 @@ function ProviderCard({
 }
 
 export default function TrustCredentials() {
-  const ref    = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-60px' })
-
-  const [isTouch, setIsTouch]               = useState(false)
-  const [hintDismissed, setHintDismissed]   = useState(false)
+  const providersRef  = useRef(null)
+  const statsRef      = useRef(null)
+  const providersInView = useInView(providersRef, { once: true, margin: '-60px' })
+  const statsInView     = useInView(statsRef,     { once: true, margin: '-60px' })
+  const [isTouch, setIsTouch] = useState(false)
 
   useEffect(() => {
     setIsTouch(window.matchMedia('(hover: none) and (pointer: coarse)').matches)
   }, [])
 
-  const handleFirstTap = useCallback(() => setHintDismissed(true), [])
-
   return (
-    <section
-      ref={ref}
-      className="py-32 bg-white"
-    >
-      <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-12">
+    <>
+      {/* ── Block 1: Providers ─────────────────────────────── white */}
+      <section ref={providersRef} className="pt-24 pb-24 bg-white">
+        <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-12">
 
-        {/* Headline */}
-        <motion.div
-          initial={{ opacity: 0, y: 14 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, ease: EASE }}
-          className="text-center mb-20"
-        >
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <ShieldCheck className="w-4 h-4 text-brand-accent" />
-            <span className="text-xs font-semibold uppercase tracking-widest text-brand-muted">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={providersInView ? { opacity: 1 } : {}}
+            transition={{ duration: 0.45, ease: EASE }}
+            className="flex items-center gap-5 mb-14"
+          >
+            <div className="flex-1 h-px bg-black/[0.06]" />
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#9A9490] whitespace-nowrap">
+              Meet the Specialists
+            </p>
+            <div className="flex-1 h-px bg-black/[0.06]" />
+          </motion.div>
+
+          {/* Mobile carousel */}
+          <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 -mx-6 px-6 pb-4 [&::-webkit-scrollbar]:hidden [scrollbar-width:none] lg:hidden">
+            {PROVIDERS.map((provider, i) => (
+              <div key={provider.id} className="snap-center flex-none w-[72vw] sm:w-[52vw]">
+                <ProviderCard provider={provider} index={i} isTouch={isTouch} />
+              </div>
+            ))}
+          </div>
+
+          {/* Desktop grid */}
+          <div className="hidden lg:grid grid-cols-4 gap-5">
+            {PROVIDERS.map((provider, i) => (
+              <ProviderCard key={provider.id} provider={provider} index={i} isTouch={isTouch} />
+            ))}
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={providersInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.45, ease: EASE, delay: 0.4 }}
+            className="flex justify-center mt-12"
+          >
+            <a
+              href="#"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-[#1A1814] hover:text-[#4DCCE8] transition-colors duration-200"
+            >
+              Meet all our specialists
+              <ArrowRight className="w-3.5 h-3.5" />
+            </a>
+          </motion.div>
+
+        </div>
+      </section>
+
+      {/* ── Block 2: Credentials ───────────────────────────── cream */}
+      <section className="py-28 bg-[#F9F7F4]">
+        <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-12">
+
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.5, ease: EASE }}
+            className="mb-16"
+          >
+            <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-black/30 mb-4 block">
               Why Patients Trust Us
             </span>
-          </div>
-          <h2 className="font-heading font-extrabold text-brand-ink text-[clamp(30px,4.5vw,54px)] leading-tight">
-            Credentials that matter<br className="hidden sm:block" /> to the people who matter.
-          </h2>
-        </motion.div>
+            <h2 className="font-heading font-bold text-[#1A1814] text-[clamp(28px,4vw,48px)] leading-[1.08] tracking-[-0.03em] max-w-xl">
+              Credentials that matter<br className="hidden sm:block" /> to the people who matter.
+            </h2>
+          </motion.div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-brand-primary/8 rounded-2xl overflow-hidden mb-20 shadow-[0_2px_40px_rgba(30,58,95,0.07)]">
-          {STATS.map((stat, i) => (
-            <motion.div
-              key={stat.label}
-              initial={{ opacity: 0, scale: 0.96, y: 10 }}
-              animate={inView ? { opacity: 1, scale: 1, y: 0 } : {}}
-              transition={{ type: 'spring', stiffness: 340, damping: 28, delay: 0.12 + i * 0.04 }}
-              className="bg-white px-8 py-10 text-center"
-            >
-              <p className="font-heading font-extrabold text-brand-ink text-[clamp(32px,4vw,48px)] leading-none mb-2">
-                {stat.isZero
-                  ? <span className="gradient-text">Zero</span>
-                  : <CountUp to={stat.to} decimals={stat.decimals} suffix={stat.suffix} delay={0.12 + i * 0.04} inView={inView} />
-                }
-              </p>
-              <p className="text-sm text-brand-muted leading-snug">{stat.label}</p>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Credential blocks */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-24">
-          {CREDENTIALS.map((cred, i) => {
-            const Icon = cred.icon
-            return (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {CREDENTIALS.map((cred, i) => (
               <motion.div
-                key={cred.title}
-                initial={{ opacity: 0, y: 16 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.5, ease: EASE, delay: 0.28 + i * 0.04 }}
-                className="flex flex-col gap-4"
+                key={cred.index}
+                initial={{ opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ duration: 0.5, ease: EASE, delay: i * 0.07 }}
+                className="relative bg-white rounded-2xl p-8 border border-black/[0.05] overflow-hidden"
               >
-                <motion.div
-                  initial={{ scale: 0, opacity: 0 }}
-                  animate={inView ? { scale: 1, opacity: 1 } : {}}
-                  transition={{ type: 'spring', stiffness: 400, damping: 20, delay: 0.32 + i * 0.04 }}
-                  className="w-11 h-11 rounded-xl bg-brand-surface-blue flex items-center justify-center"
-                >
-                  <Icon className="w-5 h-5 text-brand-sky" />
-                </motion.div>
-                <div>
-                  <h3 className="font-heading font-bold text-brand-ink text-lg mb-2 leading-snug">{cred.title}</h3>
-                  <p className="text-brand-ink-secondary leading-relaxed text-[15px]">{cred.body}</p>
-                </div>
+                {/* Aqua left accent line */}
+                <div className="absolute left-0 top-8 bottom-8 w-[3px] rounded-full bg-[#4DCCE8]/40" />
+
+                <span className="font-mono text-[11px] text-black/20 select-none block mb-5">
+                  {cred.index}
+                </span>
+                <h3 className="font-heading font-semibold text-[#1A1814] text-[17px] leading-snug mb-3">
+                  {cred.title}
+                </h3>
+                <p className="text-[#4A4440] text-[14px] leading-relaxed">
+                  {cred.body}
+                </p>
               </motion.div>
-            )
-          })}
+            ))}
+          </div>
+
         </div>
+      </section>
 
-        {/* ── Meet the team divider ─────────────────── */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.45, ease: EASE, delay: 0.42 }}
-          className="flex items-center gap-5 mb-14"
-        >
-          <div className="flex-1 h-px bg-brand-primary/8" />
-          <p className="text-xs font-semibold uppercase tracking-widest text-brand-muted whitespace-nowrap">
-            Meet the Specialists Behind the Credentials
-          </p>
-          <div className="flex-1 h-px bg-brand-primary/8" />
-        </motion.div>
-
-        {/* Provider cards — mobile: horizontal snap carousel | lg+: grid */}
-        <div className="flex overflow-x-auto snap-x snap-mandatory gap-5 -mx-6 px-6 pb-5 [&::-webkit-scrollbar]:hidden [scrollbar-width:none] lg:hidden">
-          {PROVIDERS.map((provider, i) => (
-            <div key={provider.id} className="snap-center flex-none w-[76vw] sm:w-[58vw]">
-              <ProviderCard
-                provider={provider}
-                index={i}
-                isTouch={isTouch}
-                onFirstTap={handleFirstTap}
-                hintDismissed={hintDismissed}
-              />
-            </div>
-          ))}
-        </div>
-
+      {/* ── Block 3: Stats ─────────────────────────────────── dark */}
+      <section
+        ref={statsRef}
+        className="relative overflow-hidden bg-[#07080C]"
+        style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.05)' }}
+      >
+        {/* Ambient radial glow — felt, not seen */}
         <div
-          className="hidden lg:grid gap-6"
-          style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))' }}
-        >
-          {PROVIDERS.map((provider, i) => (
-            <ProviderCard
-              key={provider.id}
-              provider={provider}
-              index={i}
-              isTouch={isTouch}
-              onFirstTap={handleFirstTap}
-              hintDismissed={hintDismissed}
-            />
-          ))}
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: 'radial-gradient(ellipse 80% 60% at 50% 50%, rgba(77,204,232,0.045) 0%, transparent 70%)' }}
+          aria-hidden
+        />
+
+        <div className="relative max-w-5xl mx-auto px-6 sm:px-10 lg:px-12 pt-28 pb-12 text-center">
+
+          {/* Eyebrow */}
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={statsInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5, ease: EASE }}
+            className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/20 mb-12"
+          >
+            Arizona&apos;s most trusted minimally invasive clinic
+          </motion.p>
+
+          {/* Hero statement */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={statsInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.7, ease: EASE, delay: 0.1 }}
+            className="mb-6"
+          >
+            <h2
+              className="font-heading font-bold text-[#EDE6D8] leading-[1.0] tracking-[-0.04em]"
+              style={{ fontSize: 'clamp(48px, 8vw, 100px)' }}
+            >
+              Zero hospital stays.
+            </h2>
+          </motion.div>
+
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            animate={statsInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, ease: EASE, delay: 0.22 }}
+            className="font-heading font-semibold text-white/35 tracking-[-0.03em] mb-24"
+            style={{ fontSize: 'clamp(28px, 4vw, 52px)' }}
+          >
+            Every procedure.
+          </motion.p>
+
+          {/* Divider */}
+          <motion.div
+            initial={{ scaleX: 0, opacity: 0 }}
+            animate={statsInView ? { scaleX: 1, opacity: 1 } : {}}
+            transition={{ duration: 0.8, ease: EASE, delay: 0.35 }}
+            className="h-px bg-white/[0.07] mb-20 origin-left"
+          />
+
+          {/* Three supporting stats */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-0">
+
+            {/* Google rating */}
+            <motion.div
+              initial={{ opacity: 0, y: 18 }}
+              animate={statsInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.55, ease: EASE, delay: 0.45 }}
+              className="flex flex-col items-center py-10 sm:pr-10"
+            >
+              <p
+                className="font-heading font-bold text-[#EDE6D8] leading-none tracking-[-0.04em] mb-4"
+                style={{ fontSize: 'clamp(36px, 5vw, 58px)' }}
+              >
+                {GOOGLE_RATING.toFixed(1)}
+              </p>
+              <div className="flex items-center gap-[3px] mb-3">
+                {[0,1,2,3,4].map(i => <StarIcon key={i} />)}
+              </div>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/30">
+                on Google
+              </p>
+              <p className="text-[11px] text-white/20 mt-1">{GOOGLE_REVIEWS}+ verified reviews</p>
+            </motion.div>
+
+            {/* No. 1 GAE */}
+            <motion.div
+              initial={{ opacity: 0, y: 18 }}
+              animate={statsInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.55, ease: EASE, delay: 0.55 }}
+              className="flex flex-col items-center py-10 sm:px-10 border-t border-white/[0.06] sm:border-t-0 sm:border-l sm:border-r sm:border-white/[0.06]"
+            >
+              <p
+                className="font-heading font-bold text-[#EDE6D8] leading-none tracking-[-0.04em] mb-4"
+                style={{ fontSize: 'clamp(36px, 5vw, 58px)' }}
+              >
+                No. 1
+              </p>
+              <p className="text-[13px] font-semibold text-white/50 mb-1">
+                U.S. Referral Center
+              </p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/30">
+                for GAE
+              </p>
+              <p className="text-[10px] italic text-white/18 mt-2">
+                Genicular Artery Embolization
+              </p>
+            </motion.div>
+
+            {/* No general anesthesia */}
+            <motion.div
+              initial={{ opacity: 0, y: 18 }}
+              animate={statsInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.55, ease: EASE, delay: 0.65 }}
+              className="flex flex-col items-center py-10 sm:pl-10 border-t border-white/[0.06] sm:border-t-0"
+            >
+              <p
+                className="font-heading font-bold text-[#EDE6D8] leading-none tracking-[-0.04em] mb-4"
+                style={{ fontSize: 'clamp(28px, 3.5vw, 44px)' }}
+              >
+                Local only.
+              </p>
+              <p className="text-[13px] font-semibold text-white/50 mb-1">
+                No general anesthesia
+              </p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/30">
+                You stay awake. You go home.
+              </p>
+            </motion.div>
+
+          </div>
+
         </div>
 
-      </div>
-    </section>
+        {/* Bottom breathing room */}
+        <div className="pb-24" />
+
+      </section>
+    </>
   )
 }
