@@ -11,6 +11,11 @@ import { SPECIALTIES } from '@/lib/constants'
 
 gsap.registerPlugin(useGSAP, ScrollTrigger)
 
+/** Top-L mock: aqua “Surgery”, cream “Reimagined” */
+const HERO_SURGERY_P1 = '#4DCCE8'
+const HERO_SURGERY_P2 = '#5E9AAE'
+const HERO_REIMAGINED = '#EDE6D8'
+
 const STAR_PATH =
   'M6 0.5l1.237 3.809H11.4L8.09 6.586l1.237 3.809L6 8.138l-3.326 2.257L3.91 6.586.6 4.309h4.163z'
 
@@ -53,55 +58,36 @@ export default function Hero() {
   useGSAP(() => {
     const tl = gsap.timeline()
 
-    // ── Phase 1: "Major Surgery" enters together ──────────────────────────────
-    tl.fromTo('.gsap-major',
-      { opacity: 0, y: 44, filter: 'blur(14px)' },
-      { opacity: 1, y: 0,  filter: 'blur(0px)', duration: 1.0, ease: 'power3.out' }
+    tl.fromTo(
+      '.gsap-h1-surgery',
+      { opacity: 0, y: 40, filter: 'blur(12px)' },
+      { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.95, ease: 'power3.out' }
     )
-    .fromTo('.gsap-surgery',
-      { opacity: 0, y: 44, filter: 'blur(14px)' },
-      { opacity: 1, y: 0,  filter: 'blur(0px)', duration: 1.0, ease: 'power3.out' },
-      '<0.1'
-    )
-
-    // ── Phase 2: Breath ───────────────────────────────────────────────────────
-    tl.to({}, { duration: 0.65 })
-
-    // ── Phase 3a: Major shrinks + strikethrough draws ─────────────────────────
-    tl.to('.gsap-major-inner',
-      { scale: 0.76, opacity: 0.18, y: 6, duration: 0.9, ease: 'power2.inOut' }
-    )
-    .to('.gsap-strike',
-      { scaleX: 1, duration: 0.7, ease: 'power2.inOut' },
-      '<'
-    )
-
-    // ── Beat — let the strike land ────────────────────────────────────────────
-    tl.to({}, { duration: 0.38 })
-
-    // ── Phase 3b: Major collapses out, Surgery drifts to center ──────────────
-    // overflow:hidden lets the width:0 collapse clip the content cleanly
-    tl.set('.gsap-major', { overflow: 'hidden' })
-      .to('.gsap-major',
-        { width: 0, marginRight: 0, opacity: 0, duration: 0.65, ease: 'power2.inOut' }
+      .fromTo(
+        '.gsap-h1-reimagined',
+        { opacity: 0, y: 36, filter: 'blur(10px)' },
+        { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.9, ease: 'power3.out' },
+        '<0.12'
+      )
+      .to({}, { duration: 0.35 })
+      .fromTo(
+        '.gsap-body-item',
+        { opacity: 0, y: 18 },
+        { opacity: 1, y: 0, duration: 0.55, ease: 'power2.out', stagger: 0.14 },
+        '-=0.15'
+      )
+      .to(
+        '.gsap-h1-surgery',
+        { color: HERO_SURGERY_P2, opacity: 0.8, scale: 0.97, duration: 2.0, ease: 'power1.inOut' },
+        3.5
+      )
+      .fromTo(
+        '.gsap-specialty-section',
+        { opacity: 0, y: 14, filter: 'blur(8px)' },
+        { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.8, ease: 'power2.inOut' },
+        3.5
       )
 
-    // ── Phase 3c: Reimagined blooms in as Major disappears ────────────────────
-    tl.fromTo('.gsap-reimagined',
-      { opacity: 0, y: 38, filter: 'blur(10px)' },
-      { opacity: 1, y: 0,  filter: 'blur(0px)', duration: 1.0, ease: 'power3.out' },
-      '<0.15'
-    )
-
-    // ── Phase 4: Body content staggered reveal ────────────────────────────────
-    tl.fromTo('.gsap-body-item',
-      { opacity: 0, y: 20 },
-      { opacity: 1, y: 0,  duration: 0.6, ease: 'power2.out', stagger: 0.18 },
-      '-=0.3'
-    )
-
-    // ── Scroll attention: pulse the "What's bringing you in?" block ───────────
-    // Fires once when the user scrolls ~50px — a nudge before they leave.
     const attentionTl = gsap.timeline({
       scrollTrigger: {
         trigger: containerRef.current,
@@ -113,135 +99,96 @@ export default function Hero() {
 
     attentionTl
       .to('.gsap-bringing-heading', {
-        scale: 1.05,
-        duration: 0.42,
+        scale: 1.04,
+        duration: 0.4,
         ease: 'power2.out',
       })
       .to('.gsap-bringing-heading', {
         scale: 1,
-        duration: 0.38,
+        duration: 0.36,
         ease: 'power2.inOut',
       })
-      .to('.gsap-pills-wrapper', {
-        y: -7,
-        duration: 0.36,
-        ease: 'power2.out',
-      }, '<0.06')
+      .to(
+        '.gsap-pills-wrapper',
+        {
+          y: -6,
+          duration: 0.34,
+          ease: 'power2.out',
+        },
+        '<0.06'
+      )
       .to('.gsap-pills-wrapper', {
         y: 0,
-        duration: 0.44,
+        duration: 0.42,
         ease: 'power2.inOut',
       })
   }, { scope: containerRef })
 
   return (
-    <section className="relative min-h-screen flex items-center bg-white">
-
-      {/* Hero background image */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
+    <section className="relative min-h-screen flex items-center bg-[#07080c] text-white">
+      {/* Background: bg-1 fades in, then bg-2 crossfades over it */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+        {/* Layer 1 — initial image */}
         <Image
-          src="/images/hero-bg-images.jpg"
+          src="/images/tpm-hero-bg-1.jpg"
           alt=""
           fill
           priority
-          className="object-cover object-center opacity-[0.22]"
+          className="object-cover object-[50%_45%] animate-[bgFadeIn_1.6s_ease-out_forwards]"
           sizes="100vw"
+          style={{ opacity: 0 }}
+        />
+        {/* Layer 2 — crossfades in over layer 1 */}
+        <Image
+          src="/images/tpm-hero-bg-2.jpg"
+          alt=""
+          fill
+          className="object-cover object-[50%_45%] animate-[bgCrossfade_2.2s_ease-in-out_3.5s_forwards]"
+          sizes="100vw"
+          style={{ opacity: 0 }}
         />
         <div
-          className="absolute inset-0"
+          className="absolute inset-0 bg-gradient-to-b from-black/72 via-black/55 to-black/80"
+          aria-hidden
+        />
+        <div
+          className="absolute inset-0 opacity-90"
           style={{
-            background: [
-              'radial-gradient(ellipse 72% 62% at 50% 42%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.45) 58%, transparent 100%)',
-              'linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(255,255,255,0.65) 30%, rgba(255,255,255,0.08) 100%)',
-            ].join(', '),
+            background:
+              'radial-gradient(ellipse 90% 70% at 50% 40%, transparent 0%, rgba(7,8,12,0.55) 70%, #07080c 100%)',
           }}
-        />
-        <div
-          className="absolute bottom-0 left-0 right-0 h-36 pointer-events-none"
-          style={{ background: 'linear-gradient(to bottom, transparent, white)' }}
+          aria-hidden
         />
       </div>
 
-      {/* Ambient glows */}
-      <div className="absolute top-0 right-0 w-[800px] h-[800px] pointer-events-none z-0"
-        style={{ background: 'radial-gradient(ellipse at 75% 5%, rgba(74,144,212,0.07) 0%, transparent 60%)' }}
-      />
-      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] pointer-events-none z-0"
-        style={{ background: 'radial-gradient(ellipse at 15% 95%, rgba(91,183,166,0.05) 0%, transparent 60%)' }}
-      />
-
       <div
         ref={containerRef}
-        className="relative z-10 w-full max-w-4xl mx-auto px-6 sm:px-10 pt-48 pb-28 text-center"
+        className="relative z-10 w-full max-w-4xl mx-auto px-6 sm:px-10 pt-44 pb-28 md:pt-48 text-center"
       >
-        {/* ── H1 ─────────────────────────────────────────────────────────────── */}
-        <h1 className="font-heading font-extrabold leading-[1.2] tracking-tight text-brand-ink text-[clamp(46px,7.5vw,92px)] mb-8">
-
-          {/* Line 1: Major Surgery */}
-          <span className="block">
-
-            {/* "Major" — outer keeps layout, inner scales/fades */}
-            <span
-              className="gsap-major inline-block"
-              style={{ opacity: 0, marginRight: '0.2em' }}
-            >
-              {/* Strikethrough lives inside inner so it moves with the text on scale */}
-              <span
-                className="gsap-major-inner relative inline-block"
-                style={{ transformOrigin: 'center center' }}
-              >
-                Major
-                <span
-                  className="gsap-strike absolute inset-x-0 pointer-events-none rounded-full"
-                  style={{
-                    top: '52%',
-                    height: '0.07em',
-                    marginTop: '-0.035em',
-                    backgroundColor: 'rgba(13,27,62,0.5)',
-                    transform: 'scaleX(0)',
-                    transformOrigin: 'left center',
-                  }}
-                />
-              </span>
-            </span>
-
-            {/* "Surgery" — enters with Major, stays at full weight */}
-            <span
-              className="gsap-surgery inline-block gradient-text py-[0.1em]"
-              style={{ opacity: 0 }}
-            >
-              Surgery
-            </span>
+        <h1 className="font-heading font-extrabold leading-[1.08] tracking-[-0.04em] text-[clamp(44px,8vw,88px)] mb-8 [text-rendering:geometricPrecision]">
+          <span className="gsap-h1-surgery block" style={{ opacity: 0, color: HERO_SURGERY_P1 }}>
+            Surgery
           </span>
-
-          {/* Line 2: Reimagined */}
-          <span className="block">
-            <span
-              className="gsap-reimagined inline-block"
-              style={{ opacity: 0 }}
-            >
-              Reimagined
-            </span>
+          <span className="gsap-h1-reimagined block mt-1" style={{ opacity: 0, color: HERO_REIMAGINED }}>
+            Reimagined
           </span>
         </h1>
 
-        {/* ── Body copy ───────────────────────────────────────────────────────── */}
         <p
-          className="gsap-body-item text-lg md:text-xl text-brand-ink-secondary leading-relaxed max-w-xl mx-auto mb-7"
+          className="gsap-body-item text-base md:text-lg text-white/72 leading-relaxed max-w-xl mx-auto mb-8 font-normal"
           style={{ opacity: 0 }}
         >
-          See why Arizona&apos;s board-certified orthopedic surgeons,
-          neurosurgeons, and interventional radiologists are redefining
-          what surgery looks like.
+          One of Arizona&apos;s leading centers for minimally invasive procedures, with
+          neurosurgeons, interventional radiologists, and orthopedic surgeons treating
+          joint pain, nerve pain, fibroids, vascular conditions, and more.
         </p>
 
-        {/* ── Google trust signal (official-style summary bar) ───────────────── */}
         <div
           className="gsap-body-item flex justify-center mb-12"
           style={{ opacity: 0 }}
         >
           <div
-            className="inline-flex items-center gap-2.5 sm:gap-3 flex-wrap justify-center rounded-xl bg-[#F9F9FB] px-4 py-2.5 sm:px-5 sm:py-3 border border-black/[0.04] shadow-[0_1px_2px_rgba(0,0,0,0.04)]"
+            className="inline-flex items-center gap-2.5 sm:gap-3 flex-wrap justify-center rounded-lg bg-white/[0.08] px-4 py-2.5 sm:px-5 sm:py-3 border border-white/[0.12] backdrop-blur-sm shadow-[0_2px_20px_rgba(0,0,0,0.25)]"
             role="group"
             aria-label="Google rating summary"
           >
@@ -249,58 +196,54 @@ export default function Hero() {
               <GoogleLogo />
               <GoogleStars />
             </div>
-            <span className="text-sm font-bold text-[#1A1C1E] tabular-nums leading-none">4.9</span>
-            <span className="text-sm text-[#5F6368] select-none leading-none" aria-hidden>
+            <span className="text-sm font-bold text-white tabular-nums leading-none">4.9</span>
+            <span className="text-sm text-white/45 select-none leading-none" aria-hidden>
               ·
             </span>
-            <span className="text-sm text-[#5F6368] leading-none">400+ reviews on Google</span>
+            <span className="text-sm text-white/65 leading-none">400+ reviews on Google</span>
           </div>
         </div>
 
-        {/* ── Consultation Selector ───────────────────────────────────────────── */}
-        <div
-          className="gsap-body-item"
-          style={{ opacity: 0 }}
-        >
-          <p className="gsap-bringing-heading font-heading font-bold text-brand-ink mb-8 text-[clamp(22px,3vw,36px)] leading-snug">
-            What&apos;s bringing you in?
+        <div className="gsap-specialty-section" style={{ opacity: 0 }}>
+          <p className="gsap-bringing-heading font-heading font-semibold text-white mb-8 text-[clamp(20px,2.8vw,32px)] leading-snug tracking-[-0.02em]">
+            What can we help you with?
           </p>
 
-          <div className="gsap-pills-wrapper flex flex-wrap justify-center gap-3 max-w-2xl mx-auto mb-12">
+          <div className="gsap-pills-wrapper grid grid-cols-2 gap-3 max-w-md sm:max-w-xl mx-auto mb-10">
             {SPECIALTIES.map((spec) => {
               const isSelected = selected === spec.id
-              const isDimmed   = selected !== null && !isSelected
+              const isDimmed = selected !== null && !isSelected
               return (
                 <motion.button
                   key={spec.id}
                   onClick={() => setSelected(isSelected ? null : spec.id)}
                   animate={{
-                    backgroundColor: isSelected ? '#1E3A5F' : 'rgba(255,255,255,0.58)',
-                    borderColor:     isSelected ? '#1E3A5F' : 'rgba(255,255,255,0.60)',
+                    backgroundColor: isSelected ? '#D4C4A8' : 'rgba(255,255,255,0.07)',
+                    borderColor: isSelected ? '#D4C4A8' : 'rgba(255,255,255,0.14)',
                     boxShadow: isSelected
-                      ? '0 8px 32px rgba(30,58,95,0.30), inset 0 1px 0 rgba(255,255,255,0.12)'
-                      : '0 2px 6px rgba(17,35,70,0.05), 0 10px 32px rgba(17,35,70,0.07), inset 0 1px 0 rgba(255,255,255,0.88), inset 0 -1px 0 rgba(255,255,255,0.22)',
-                    opacity: isDimmed ? 0.32 : 1,
-                    scale:   isDimmed ? 0.94 : 1,
-                    filter:  isDimmed ? 'blur(0.4px)' : 'blur(0px)',
+                      ? '0 6px 24px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.25)'
+                      : '0 1px 3px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.06)',
+                    opacity: isDimmed ? 0.35 : 1,
+                    scale: isDimmed ? 0.96 : 1,
+                    filter: isDimmed ? 'blur(0.3px)' : 'blur(0px)',
                   }}
                   whileHover={{
-                    y: isSelected ? 0 : -3,
-                    scale: isDimmed ? 0.94 : isSelected ? 1 : 1.02,
-                    borderColor: isSelected ? '#1E3A5F' : 'rgba(74,144,212,0.50)',
+                    y: isSelected ? 0 : -2,
+                    scale: isDimmed ? 0.96 : isSelected ? 1 : 1.02,
+                    borderColor: isSelected ? '#D4C4A8' : 'rgba(255,255,255,0.28)',
                     boxShadow: isSelected
-                      ? '0 12px 36px rgba(30,58,95,0.34), inset 0 1px 0 rgba(255,255,255,0.12)'
-                      : '0 4px 10px rgba(17,35,70,0.05), 0 18px 48px rgba(17,35,70,0.10), inset 0 1px 0 rgba(255,255,255,0.92), inset 0 -1px 0 rgba(255,255,255,0.28)',
+                      ? '0 8px 28px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.3)'
+                      : '0 4px 16px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.1)',
                     transition: { duration: 0.15, ease: 'easeOut' },
                   }}
-                  whileTap={{ scale: 0.96 }}
-                  transition={{ type: 'spring', stiffness: 360, damping: 26 }}
-                  className="px-9 py-[1.1rem] min-w-[172px] rounded-[1.6rem] border text-sm font-medium tracking-[0.01em] cursor-pointer
-                             outline-none focus-visible:ring-2 focus-visible:ring-brand-sky
-                             select-none backdrop-blur-2xl text-center"
+                  whileTap={{ scale: 0.97 }}
+                  transition={{ type: 'spring', stiffness: 380, damping: 28 }}
+                  className="px-5 py-3.5 rounded-full border text-sm font-medium tracking-[0.02em] cursor-pointer
+                             outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#07080c]
+                             select-none text-center min-h-[48px] flex items-center justify-center"
                 >
                   <motion.span
-                    animate={{ color: isSelected ? '#ffffff' : '#0D1B3E' }}
+                    animate={{ color: isSelected ? '#1A1814' : '#F4F4F5' }}
                     transition={{ duration: 0.16 }}
                   >
                     {spec.label}
@@ -315,29 +258,30 @@ export default function Hero() {
               {selected ? (
                 <motion.div
                   key="active"
-                  initial={{ opacity: 0, y: 28, scale: 0.90 }}
-                  animate={{ opacity: 1, y: 0,  scale: 1    }}
-                  exit={{    opacity: 0, y: 16,  scale: 0.94 }}
+                  initial={{ opacity: 0, y: 24, scale: 0.94 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 14, scale: 0.96 }}
                   transition={{ type: 'spring', stiffness: 360, damping: 26 }}
                   className="flex flex-col items-center gap-3"
                 >
                   <motion.a
                     href="#"
                     whileHover={{
-                      y: -3,
-                      boxShadow: '0 12px 40px rgba(30,58,95,0.38), inset 0 1px 0 rgba(255,255,255,0.16)',
+                      y: -2,
+                      boxShadow: '0 10px 36px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.35)',
                       transition: { duration: 0.15, ease: 'easeOut' },
                     }}
-                    whileTap={{ scale: 0.97 }}
+                    whileTap={{ scale: 0.98 }}
                     transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                    className="inline-flex items-center gap-2.5 bg-brand-primary text-white
-                               px-9 py-[1.1rem] rounded-[1.6rem] text-sm font-medium tracking-[0.01em]"
-                    style={{ boxShadow: '0 8px 32px rgba(30,58,95,0.30), inset 0 1px 0 rgba(255,255,255,0.12)' }}
+                    className="inline-flex items-center gap-2.5 bg-[#D4C4A8] text-[#1A1814] px-8 py-3.5 rounded-full text-sm font-semibold tracking-[0.02em]"
+                    style={{
+                      boxShadow: '0 6px 28px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.35)',
+                    }}
                   >
                     Start Your Free Virtual Consultation
                     <ArrowRight className="w-4 h-4" />
                   </motion.a>
-                  <p className="text-xs text-brand-muted tracking-wide">
+                  <p className="text-xs text-white/50 tracking-wide">
                     No referral needed&nbsp;&nbsp;·&nbsp;&nbsp;Free&nbsp;&nbsp;·&nbsp;&nbsp;Takes less than 5 minutes
                   </p>
                 </motion.div>
@@ -346,9 +290,9 @@ export default function Hero() {
                   key="idle"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  exit={{    opacity: 0 }}
+                  exit={{ opacity: 0 }}
                   transition={{ duration: 0.25 }}
-                  className="text-sm text-brand-muted-light"
+                  className="text-sm text-white/45"
                 >
                   Select a condition above to get started
                 </motion.p>

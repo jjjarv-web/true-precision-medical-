@@ -7,7 +7,7 @@ import { HOW_IT_WORKS_STEPS } from '@/lib/constants'
 
 export default function HowItWorks() {
   return (
-    <section id="approach" className="py-32" style={{ backgroundColor: 'var(--color-brand-bg-alt)' }}>
+    <section id="approach" className="py-32 overflow-x-hidden" style={{ backgroundColor: 'var(--color-brand-bg-alt)' }}>
       <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Content */}

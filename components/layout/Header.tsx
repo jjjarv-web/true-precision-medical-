@@ -2,12 +2,18 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { Phone, Menu, X } from 'lucide-react'
 import { NAV_LINKS, PHONE_NUMBER, PHONE_HREF } from '@/lib/constants'
 
 export default function Header() {
+  const pathname = usePathname()
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
+  const isHome = pathname === '/'
+  const darkTransparent = isHome && !isScrolled
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20)
@@ -18,23 +24,27 @@ export default function Header() {
   return (
     <header
       className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        isScrolled
-          ? 'bg-white/95 backdrop-blur-md shadow-[0_1px_20px_rgba(13,27,62,0.08)] py-3'
-          : 'bg-transparent py-5'
+        darkTransparent
+          ? 'bg-black/45 backdrop-blur-md py-5 border-b border-white/[0.06]'
+          : isScrolled
+            ? 'bg-white/95 backdrop-blur-md shadow-[0_1px_20px_rgba(13,27,62,0.08)] py-3'
+            : 'bg-transparent py-5'
       }`}
     >
       <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 flex justify-between items-center">
         {/* Logo */}
-        <a href="/" className="flex items-center flex-shrink-0" aria-label="True Precision Medical home">
+        <Link href="/" className="flex items-center flex-shrink-0" aria-label="True Precision Medical home">
           <Image
             src="/logo/true-precision-medical-logo.svg"
             alt="True Precision Medical"
             width={180}
             height={50}
-            className="h-10 w-auto object-contain block"
+            className={`h-10 w-auto object-contain block transition-[filter] duration-300 ${
+              darkTransparent ? 'brightness-0 invert' : ''
+            }`}
             priority
           />
-        </a>
+        </Link>
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-8" aria-label="Main navigation">
@@ -42,7 +52,11 @@ export default function Header() {
             <a
               key={link.href}
               href={link.href}
-              className="text-sm font-medium text-brand-ink/70 hover:text-brand-primary transition-colors duration-200"
+              className={`text-sm font-medium transition-colors duration-200 ${
+                darkTransparent
+                  ? 'text-white/88 hover:text-white'
+                  : 'text-brand-ink/70 hover:text-brand-primary'
+              }`}
             >
               {link.label}
             </a>
@@ -53,14 +67,22 @@ export default function Header() {
         <div className="hidden md:flex items-center gap-4">
           <a
             href={PHONE_HREF}
-            className="text-sm font-medium flex items-center gap-2 text-brand-ink/70 hover:text-brand-primary transition-colors duration-200"
+            className={`text-sm font-medium flex items-center gap-2 transition-colors duration-200 ${
+              darkTransparent
+                ? 'text-white/88 hover:text-white'
+                : 'text-brand-ink/70 hover:text-brand-primary'
+            }`}
           >
             <Phone className="w-4 h-4" />
             {PHONE_NUMBER}
           </a>
           <a
             href="#"
-            className="bg-brand-primary hover:bg-brand-primary-dark text-white px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 shadow-[0_2px_12px_rgba(30,58,95,0.25)] hover:-translate-y-0.5"
+            className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 ${
+              darkTransparent
+                ? 'bg-[#D4C4A8] text-[#1A1814] hover:bg-[#C9B896] shadow-[0_2px_14px_rgba(0,0,0,0.35)] hover:-translate-y-0.5'
+                : 'bg-brand-primary hover:bg-brand-primary-dark text-white shadow-[0_2px_12px_rgba(30,58,95,0.25)] hover:-translate-y-0.5'
+            }`}
           >
             Book Consultation
           </a>
@@ -68,7 +90,11 @@ export default function Header() {
 
         {/* Mobile Toggle */}
         <button
-          className="md:hidden p-2 text-brand-ink rounded-lg hover:bg-brand-surface-blue transition-colors"
+          className={`md:hidden p-2 rounded-lg transition-colors ${
+            darkTransparent
+              ? 'text-white hover:bg-white/10'
+              : 'text-brand-ink hover:bg-brand-surface-blue'
+          }`}
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
           aria-expanded={mobileMenuOpen}
