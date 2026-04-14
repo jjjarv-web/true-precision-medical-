@@ -15,7 +15,7 @@ const STEPS_INFO = [
   {
     n: '1',
     title: 'Submit your request',
-    desc: 'Takes less than 5 minutes.',
+    desc: 'Takes less than 2 minutes.',
   },
   {
     n: '2',

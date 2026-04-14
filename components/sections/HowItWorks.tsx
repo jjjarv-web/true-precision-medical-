@@ -97,7 +97,7 @@ export default function HowItWorks() {
             <ArrowRight className="w-4 h-4" />
           </a>
           <span className="text-[13px] text-[#9A9490]">
-            Takes less than 5 minutes
+            Takes less than 2 minutes
           </span>
         </motion.div>
 

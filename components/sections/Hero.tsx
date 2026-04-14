@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -52,7 +52,13 @@ function GoogleLogo() {
 
 export default function Hero() {
   const [selected, setSelected] = useState<string | null>(null)
+  const [idleVisible, setIdleVisible] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const t = setTimeout(() => setIdleVisible(true), 5350)
+    return () => clearTimeout(t)
+  }, [])
 
   useGSAP(() => {
     const tl = gsap.timeline()
@@ -112,12 +118,7 @@ export default function Hero() {
         { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' },
         4.9
       )
-      // Layer 3 — idle CTA hint whispers in last
-      .fromTo('.gsap-cta-idle',
-        { opacity: 0 },
-        { opacity: 1, duration: 0.6, ease: 'power1.out' },
-        5.35
-      )
+      // Layer 3 — idle CTA hint is controlled by React state (see idleVisible)
 
     const attentionTl = gsap.timeline({
       scrollTrigger: {
@@ -317,18 +318,17 @@ export default function Hero() {
                     <ArrowRight className="w-4 h-4" />
                   </motion.a>
                   <p className="text-xs text-white/50 tracking-wide">
-                    Takes less than 5 minutes
+                    Takes less than 2 minutes
                   </p>
                 </motion.div>
               ) : (
                 <motion.p
                   key="idle"
                   initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
+                  animate={{ opacity: idleVisible ? 1 : 0 }}
                   exit={{ opacity: 0 }}
-                  transition={{ duration: 0.25 }}
-                  className="gsap-cta-idle text-xs text-white/30 tracking-wide"
-                  style={{ opacity: 0 }}
+                  transition={{ duration: 0.6, ease: 'easeOut' }}
+                  className="text-xs text-white/30 tracking-wide"
                 >
                   Select a condition to get started
                 </motion.p>
