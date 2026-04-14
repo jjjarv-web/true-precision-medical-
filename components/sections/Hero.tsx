@@ -13,7 +13,6 @@ gsap.registerPlugin(useGSAP, ScrollTrigger)
 
 /** Top-L mock: aqua “Surgery”, cream “Reimagined” */
 const HERO_SURGERY_P1 = '#4DCCE8'
-const HERO_SURGERY_P2 = '#5E9AAE'
 const HERO_REIMAGINED = '#EDE6D8'
 
 const STAR_PATH =
@@ -76,11 +75,31 @@ export default function Hero() {
         { opacity: 1, y: 0, duration: 0.55, ease: 'power2.out', stagger: 0.14 },
         '-=0.15'
       )
-      .to(
-        '.gsap-h1-surgery',
-        { color: HERO_SURGERY_P2, opacity: 0.8, scale: 0.97, duration: 2.0, ease: 'power1.inOut' },
-        3.5
-      )
+      // Step 1 — blur pulses up: the dematerialization moment
+      // Step 1 — blur up: dematerialization moment
+      // switch to overlay blend so letter shapes interact with the background pixels (genuine transparency)
+      .to('.gsap-h1-surgery', {
+        filter: 'blur(8px)',
+        duration: 0.5,
+        ease: 'power2.in',
+        onStart: () => gsap.set('.gsap-h1-surgery', { mixBlendMode: 'overlay' }),
+      }, 3.5)
+      // Step 2 — glass settle: white + overlay on dark bg = letters become luminous windows into the image
+      .to('.gsap-h1-surgery', {
+        filter: 'blur(0px)',
+        color: '#ffffff',
+        opacity: 0.32,
+        scale: 0.90,
+        textShadow: 'none',
+        duration: 1.4,
+        ease: 'power2.out',
+      }, '+=0')
+      // Reimagined breathes forward as Surgery recedes — slight lag so it reads as consequence, not coordination
+      .to('.gsap-h1-reimagined', {
+        scale: 1.04,
+        duration: 1.8,
+        ease: 'power2.out',
+      }, 3.8)
       .fromTo(
         '.gsap-specialty-section',
         { opacity: 0, y: 14, filter: 'blur(8px)' },
@@ -165,7 +184,7 @@ export default function Hero() {
         ref={containerRef}
         className="relative z-10 w-full max-w-4xl mx-auto px-6 sm:px-10 pt-44 pb-28 md:pt-48 text-center"
       >
-        <h1 className="font-heading font-extrabold leading-[1.08] tracking-[-0.04em] text-[clamp(44px,8vw,88px)] mb-8 [text-rendering:geometricPrecision]">
+        <h1 className="relative font-heading font-extrabold leading-[1.08] tracking-[-0.04em] text-[clamp(44px,8vw,88px)] mb-8 [text-rendering:geometricPrecision]">
           <span className="gsap-h1-surgery block" style={{ opacity: 0, color: HERO_SURGERY_P1 }}>
             Surgery
           </span>
