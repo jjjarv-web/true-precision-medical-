@@ -89,7 +89,7 @@ export default function HowItWorks() {
           className="mt-20 flex flex-col sm:flex-row items-start sm:items-center gap-5"
         >
           <a
-            href="#"
+            href="/book"
             className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl text-sm font-semibold text-[#EDE6D8] bg-[#1A1814] hover:bg-[#2a2520] transition-colors duration-200"
             style={{ boxShadow: '0 2px 12px rgba(26,24,20,0.18)' }}
           >

@@ -67,7 +67,7 @@ export default function Header() {
             {PHONE_NUMBER}
           </a>
           <a
-            href="#"
+            href="/book"
             className="px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 bg-[#D4C4A8] text-[#1A1814] hover:bg-[#C9B896] shadow-[0_2px_14px_rgba(0,0,0,0.35)] hover:-translate-y-0.5"
           >
             Book Consultation
@@ -107,7 +107,7 @@ export default function Header() {
             {PHONE_NUMBER}
           </a>
           <a
-            href="#"
+            href="/book"
             className="bg-[#D4C4A8] text-[#1A1814] px-5 py-3.5 rounded-xl text-sm font-semibold text-center mt-1 hover:bg-[#C9B896] transition-colors"
           >
             Book Consultation
