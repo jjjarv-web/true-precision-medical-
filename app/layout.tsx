@@ -36,11 +36,20 @@ export const metadata: Metadata = {
       'Advanced care. Less invasive. Faster recovery. Board-certified specialists across 12 premium locations.',
     type: 'website',
     locale: 'en_US',
+    images: [
+      {
+        url: '/opengraph-image',
+        width: 1200,
+        height: 630,
+        alt: 'True Precision Medical | Surgery Reimagined',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'True Precision Medical',
     description: 'Advanced care. Less invasive. Faster recovery.',
+    images: ['/opengraph-image'],
   },
   robots: {
     index: true,
