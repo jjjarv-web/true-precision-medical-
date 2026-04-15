@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, FormEvent } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -11,14 +11,30 @@ import Logo from '@/components/ui/Logo'
 
 type Stage = 'questions' | 'analyzing' | 'results'
 type Answers = Record<string, string | string[]>
+type PersonalizedResult = {
+  summaryItems: string[]
+  stats: string[]
+}
+type BookingAssessmentContext = {
+  source: 'assessment'
+  capturedAt: string
+  categorySlug: string
+  categoryTitle: string
+  answers: Answers
+  responses: {
+    questionId: string
+    question: string
+    selected: string[]
+  }[]
+  personalizedSummary: string[]
+}
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
 /** Circular header image — swap `option-1` … `option-4`: public/images/assessment/option-N.jpg */
 const ASSESSMENT_AVATAR_SRC = '/images/assessment/option-1.jpg'
 
-const INPUT =
-  'w-full bg-white border border-black/[0.10] rounded-xl px-4 py-3 text-[15px] text-[#1A1814] placeholder:text-[#C4BEBB] outline-none focus:border-[#4DCCE8]/60 focus:ring-2 focus:ring-[#4DCCE8]/15 transition-all duration-200'
+const BOOKING_ASSESSMENT_CONTEXT_KEY = 'assessmentBookingContext'
 
 function Spinner() {
   return (
@@ -40,6 +56,94 @@ function Spinner() {
   )
 }
 
+
+function formatList(items: string[]) {
+  if (items.length <= 1) return items[0] ?? ''
+  if (items.length === 2) return `${items[0]} and ${items[1]}`
+  return `${items.slice(0, -1).join(', ')}, and ${items[items.length - 1]}`
+}
+
+function getAnswerLabels(config: AssessmentConfig, answers: Answers, questionId: string) {
+  const question = config.questions.find((q) => q.id === questionId)
+  if (!question) return []
+  const answerValue = answers[questionId]
+  if (!answerValue) return []
+
+  const selectedIds = Array.isArray(answerValue) ? answerValue : [answerValue]
+  return selectedIds
+    .map((id) => question.options.find((opt) => opt.id === id)?.label)
+    .filter((label): label is string => !!label)
+}
+
+function buildPersonalizedResult(config: AssessmentConfig, answers: Answers): PersonalizedResult {
+  const primaryConcern =
+    getAnswerLabels(config, answers, 'location')[0] ||
+    getAnswerLabels(config, answers, 'concern')[0] ||
+    getAnswerLabels(config, answers, 'type')[0] ||
+    ''
+  const severity =
+    getAnswerLabels(config, answers, 'severity')[0] || getAnswerLabels(config, answers, 'impact')[0] || ''
+  const duration = getAnswerLabels(config, answers, 'duration')[0] || ''
+  const radiating = getAnswerLabels(config, answers, 'radiating')[0] || ''
+  const treatments = getAnswerLabels(config, answers, 'treatments')
+  const symptoms = getAnswerLabels(config, answers, 'symptoms')
+
+  const summaryItems: string[] = []
+  if (primaryConcern) summaryItems.push(`Primary concern: ${primaryConcern}`)
+  if (severity) summaryItems.push(`Reported intensity: ${severity}`)
+  if (duration) summaryItems.push(`Timeline: ${duration}`)
+  if (radiating) {
+    summaryItems.push(
+      radiating.toLowerCase() === 'yes'
+        ? 'You noted radiating symptoms into an arm or leg.'
+        : 'You did not report radiating arm or leg symptoms.'
+    )
+  } else if (symptoms.length > 0) {
+    summaryItems.push(`Symptoms reported: ${formatList(symptoms)}`)
+  }
+  if (summaryItems.length === 0) {
+    summaryItems.push('Your care coordinator will review your answers before your consultation.')
+  }
+
+  const personalizedStats: string[] = []
+  if (primaryConcern) {
+    personalizedStats.push(`Your first consult can focus on ${primaryConcern.toLowerCase()} symptoms from day one`)
+  }
+  if (treatments.length > 0) {
+    if (treatments.some((item) => item.toLowerCase().includes('none') || item.toLowerCase().includes('nothing'))) {
+      personalizedStats.push('Since you have not tried treatment yet, your specialist can walk through options step by step')
+    } else {
+      personalizedStats.push(`We will account for prior treatments (${formatList(treatments)}) to avoid repeating dead ends`)
+    }
+  }
+
+  return {
+    summaryItems: summaryItems.slice(0, 4),
+    stats: [...personalizedStats, ...config.result.stats].slice(0, 3),
+  }
+}
+
+function buildQuestionResponses(config: AssessmentConfig, answers: Answers) {
+  return config.questions
+    .map((question) => {
+      const answerValue = answers[question.id]
+      if (!answerValue) return null
+
+      const selectedIds = Array.isArray(answerValue) ? answerValue : [answerValue]
+      const selected = selectedIds
+        .map((id) => question.options.find((opt) => opt.id === id)?.label)
+        .filter((label): label is string => !!label)
+
+      if (selected.length === 0) return null
+      return {
+        questionId: question.id,
+        question: question.text,
+        selected,
+      }
+    })
+    .filter((item): item is NonNullable<typeof item> => !!item)
+}
+
 export default function AssessmentClient({ config }: { config: AssessmentConfig }) {
   const router = useRouter()
   const [stage, setStage] = useState<Stage>('questions')
@@ -48,15 +152,10 @@ export default function AssessmentClient({ config }: { config: AssessmentConfig 
   const [answers, setAnswers] = useState<Answers>({})
   const [pendingMulti, setPendingMulti] = useState<string[]>([])
 
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
-  const [email, setEmail] = useState('')
-  const [phone, setPhone] = useState('')
-  const [formError, setFormError] = useState('')
-
   const questions = config.questions
   const totalQuestions = questions.length
   const currentQuestion = questions[questionIndex]
+  const personalizedResult = buildPersonalizedResult(config, answers)
 
   useEffect(() => {
     if (stage !== 'analyzing') return
@@ -91,18 +190,21 @@ export default function AssessmentClient({ config }: { config: AssessmentConfig 
     setTimeout(advanceQuestion, 180)
   }
 
-  function handleContactSubmit(e: FormEvent) {
-    e.preventDefault()
-    setFormError('')
-    if (!firstName.trim() || !lastName.trim() || !email.trim() || !phone.trim()) {
-      setFormError('Please fill in all fields.')
-      return
+  function handleContinueToBooking() {
+    if (typeof window !== 'undefined') {
+      const context: BookingAssessmentContext = {
+        source: 'assessment',
+        capturedAt: new Date().toISOString(),
+        categorySlug: config.slug,
+        categoryTitle: config.title,
+        answers,
+        responses: buildQuestionResponses(config, answers),
+        personalizedSummary: personalizedResult.summaryItems,
+      }
+      window.sessionStorage.setItem(BOOKING_ASSESSMENT_CONTEXT_KEY, JSON.stringify(context))
     }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
-      setFormError('Please enter a valid email address.')
-      return
-    }
-    router.push('/thank-you')
+
+    router.push('/book?from=assessment')
   }
 
   const slideVariants = {
@@ -229,8 +331,19 @@ export default function AssessmentClient({ config }: { config: AssessmentConfig 
                 </p>
               </div>
 
+              <div className="space-y-2.5 mb-7 max-w-2xl mx-auto">
+                {personalizedResult.summaryItems.map((item) => (
+                  <div
+                    key={item}
+                    className="rounded-xl border border-[#2F34F4]/15 bg-[#2F34F4]/[0.04] px-4 py-3 text-[14px] text-[#1A1814]"
+                  >
+                    {item}
+                  </div>
+                ))}
+              </div>
+
               <div className="space-y-3 mb-9 max-w-2xl mx-auto">
-                {config.result.stats.map((stat) => (
+                {personalizedResult.stats.map((stat) => (
                   <div
                     key={stat}
                     className="flex items-start gap-3 bg-white border border-black/[0.08] rounded-2xl p-4"
@@ -245,63 +358,21 @@ export default function AssessmentClient({ config }: { config: AssessmentConfig 
 
               <div className="max-w-2xl mx-auto border-t border-black/[0.08] pt-7">
                 <p className="text-[12px] font-semibold tracking-[0.14em] uppercase text-[#2F34F4] mb-2 text-center">
-                  Nearly done
+                  Recommended next step
                 </p>
-                <h3 className="font-heading font-bold text-[#111111] text-[clamp(26px,3.6vw,36px)] leading-[1.1] tracking-[-0.02em] mb-6 text-center">
-                  How can we best reach you?
+                <h3 className="font-heading font-bold text-[#111111] text-[clamp(26px,3.6vw,36px)] leading-[1.1] tracking-[-0.02em] mb-4 text-center">
+                  Explore your treatment options
                 </h3>
-
-                <form onSubmit={handleContactSubmit} className="space-y-3">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <input
-                      type="text"
-                      required
-                      placeholder="First name"
-                      autoComplete="given-name"
-                      value={firstName}
-                      onChange={(e) => setFirstName(e.target.value)}
-                      className={INPUT}
-                    />
-                    <input
-                      type="text"
-                      required
-                      placeholder="Last name"
-                      autoComplete="family-name"
-                      value={lastName}
-                      onChange={(e) => setLastName(e.target.value)}
-                      className={INPUT}
-                    />
-                  </div>
-                  <input
-                    type="email"
-                    required
-                    placeholder="Email address"
-                    autoComplete="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className={INPUT}
-                  />
-                  <input
-                    type="tel"
-                    required
-                    placeholder="Phone number"
-                    autoComplete="tel"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    className={INPUT}
-                  />
-
-                  {formError && (
-                    <p className="text-red-500 text-[13px]">{formError}</p>
-                  )}
-
-                  <button
-                    type="submit"
-                    className="w-full bg-[#2F34F4] text-white rounded-xl py-3.5 text-[15px] font-semibold hover:opacity-95 transition"
-                  >
-                    Request My Appointment
-                  </button>
-                </form>
+                <button
+                  type="button"
+                  onClick={handleContinueToBooking}
+                  className="w-full bg-[#2F34F4] text-white rounded-xl py-3.5 text-[15px] font-semibold hover:opacity-95 transition"
+                >
+                  Explore Treatment Options
+                </button>
+                <p className="text-center text-[12px] text-[#8c857f] mt-3">
+                  Takes less than a minute.
+                </p>
               </div>
             </motion.div>
           )}

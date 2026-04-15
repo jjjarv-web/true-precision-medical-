@@ -1,10 +1,10 @@
 'use client'
 
-import { useState, FormEvent } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useEffect, FormEvent } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'motion/react'
-import { ArrowRight, ArrowLeft, Sun, Sunset } from 'lucide-react'
+import { ArrowRight, Sun, Sunset } from 'lucide-react'
 import Logo from '@/components/ui/Logo'
 
 type Step = 'contact' | 'preference'
@@ -36,8 +36,24 @@ const INPUT =
 
 const LABEL = 'block text-[12px] font-semibold text-[#4A4440] mb-1.5'
 
+
+const ASSESSMENT_CONTEXT_KEY = 'assessmentBookingContext'
+
+type AssessmentContext = {
+  source: 'assessment'
+  categorySlug: string
+  categoryTitle: string
+  responses: {
+    questionId: string
+    question: string
+    selected: string[]
+  }[]
+  personalizedSummary: string[]
+}
+
 export default function BookingClient() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [step, setStep] = useState<Step>('contact')
   const [direction, setDirection] = useState<1 | -1>(1)
 
@@ -52,8 +68,35 @@ export default function BookingClient() {
   const [preferredDate, setPreferredDate] = useState('')
   const [timePreference, setTimePreference] = useState<'morning' | 'afternoon' | null>(null)
   const [error2, setError2] = useState('')
+  const [fromAssessment, setFromAssessment] = useState(false)
+  const [assessmentContext, setAssessmentContext] = useState<AssessmentContext | null>(null)
 
   const today = new Date().toISOString().split('T')[0]
+
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    const fromAssessmentRoute = searchParams.get('from') === 'assessment'
+    const rawContext = window.sessionStorage.getItem(ASSESSMENT_CONTEXT_KEY)
+    if (!fromAssessmentRoute) {
+      setFromAssessment(false)
+      setAssessmentContext(null)
+      return
+    }
+
+    setFromAssessment(true)
+    if (!rawContext) return
+
+    try {
+      const parsed = JSON.parse(rawContext) as AssessmentContext
+      if (parsed.source === 'assessment') {
+        setAssessmentContext(parsed)
+      }
+    } catch {
+      setAssessmentContext(null)
+    }
+  }, [searchParams])
 
   function handleStep1(e: FormEvent) {
     e.preventDefault()
@@ -82,6 +125,11 @@ export default function BookingClient() {
       setError2('Please complete all fields.')
       return
     }
+
+    if (typeof window !== 'undefined') {
+      window.sessionStorage.removeItem(ASSESSMENT_CONTEXT_KEY)
+    }
+
     router.push('/thank-you')
   }
 
@@ -95,10 +143,10 @@ export default function BookingClient() {
     <div className="min-h-screen bg-[#07080C] flex flex-col lg:flex-row">
 
       {/* ── Left panel — context ───────────────────────── */}
-      <div className="lg:w-[44%] flex flex-col justify-between px-8 py-10 sm:px-12 sm:py-12 lg:px-16 lg:py-16 lg:min-h-screen">
+      <div className="order-2 lg:order-1 lg:w-[44%] flex flex-col justify-between px-8 py-10 sm:px-12 sm:py-12 lg:px-16 lg:py-16 lg:min-h-screen">
         <div>
           {/* Logo / back */}
-          <Link href="/" className="inline-block mb-14 lg:mb-20">
+          <Link href="/" className="hidden lg:inline-block mb-14 lg:mb-20">
             <Logo
               variant="light"
               width={160}
@@ -146,6 +194,33 @@ export default function BookingClient() {
               </motion.div>
             ))}
           </div>
+
+          {fromAssessment && assessmentContext && (
+            <div className="mt-8 rounded-2xl border border-white/[0.12] bg-white/[0.03] p-4 max-w-md">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#4DCCE8] mb-2">
+                From your assessment
+              </p>
+              <p className="text-[15px] text-[#EDE6D8] mb-3">
+                Booking for <span className="font-semibold">{assessmentContext.categoryTitle}</span>.
+              </p>
+              {assessmentContext.personalizedSummary.slice(0, 2).map((item) => (
+                <p key={item} className="text-[13px] text-white/70 leading-relaxed mb-1 last:mb-0">
+                  {item}
+                </p>
+              ))}
+              <details className="mt-3">
+                <summary className="text-[12px] text-white/80 cursor-pointer">View your inputs</summary>
+                <div className="mt-3 space-y-2">
+                  {assessmentContext.responses.map((response) => (
+                    <div key={response.questionId} className="text-[12px] text-white/70">
+                      <p className="font-semibold text-white/90">{response.question}</p>
+                      <p>{response.selected.join(', ')}</p>
+                    </div>
+                  ))}
+                </div>
+              </details>
+            </div>
+          )}
         </div>
 
         {/* Trust strip */}
@@ -166,7 +241,15 @@ export default function BookingClient() {
       </div>
 
       {/* ── Right panel — form card ────────────────────── */}
-      <div className="flex-1 flex items-center justify-center px-6 py-10 sm:px-10 lg:px-16 lg:py-16">
+      <div className="order-1 lg:order-2 flex-1 flex flex-col items-center justify-center px-6 pt-8 pb-20 sm:px-10 sm:pt-10 sm:pb-20 lg:px-16 lg:py-16">
+        <Link href="/" className="inline-block mb-5 lg:hidden self-start">
+          <Logo
+            variant="light"
+            width={140}
+            height={38}
+            className="h-8 w-auto brightness-0 invert opacity-75"
+          />
+        </Link>
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
@@ -284,7 +367,7 @@ export default function BookingClient() {
                   <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#9A9490] mb-2">
                     Step 2 of 2
                   </p>
-                  <h2 className="font-heading font-bold text-[#1A1814] text-[20px] leading-snug tracking-[-0.03em] mb-7">
+                  <h2 className="font-heading font-bold text-[#1A1814] text-[20px] leading-snug tracking-[-0.03em] mb-4">
                     When works for you?
                   </h2>
 
@@ -356,21 +439,13 @@ export default function BookingClient() {
 
                   <button
                     type="submit"
-                    className="w-full flex items-center justify-center gap-2 bg-[#1A1814] text-[#EDE6D8] rounded-xl py-3.5 text-[15px] font-semibold tracking-[-0.01em] hover:bg-[#2a2520] active:scale-[0.99] transition-all duration-200"
+                    className="w-full flex items-center justify-center gap-2 bg-[#1A1814] text-[#EDE6D8] rounded-xl py-3.5 mb-4 text-[15px] font-semibold tracking-[-0.01em] hover:bg-[#2a2520] active:scale-[0.99] transition-all duration-200"
                     style={{ boxShadow: '0 2px 12px rgba(26,24,20,0.20)' }}
                   >
                     Submit Request
                     <ArrowRight className="w-4 h-4" />
                   </button>
 
-                  <button
-                    type="button"
-                    onClick={handleBack}
-                    className="w-full flex items-center justify-center gap-1.5 mt-3 py-2 text-[13px] text-[#9A9490] hover:text-[#4A4440] transition-colors duration-200"
-                  >
-                    <ArrowLeft className="w-3.5 h-3.5" />
-                    Back
-                  </button>
                 </motion.form>
               )}
             </AnimatePresence>
