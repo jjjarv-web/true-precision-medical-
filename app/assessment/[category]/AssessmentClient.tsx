@@ -169,7 +169,7 @@ export default function AssessmentClient({ config }: { config: AssessmentConfig 
               <p className="text-[12px] font-semibold tracking-[0.14em] uppercase text-[#2F34F4] mb-4">
                 Question {questionIndex + 1} of {totalQuestions}
               </p>
-              <h1 className="font-heading font-bold text-[#111111] text-[clamp(34px,5vw,56px)] leading-[1.05] tracking-[-0.03em] mb-8">
+              <h1 className="font-heading font-bold text-[#111111] text-[clamp(26px,3.85vw,38px)] leading-[1.12] tracking-[-0.02em] mb-7">
                 {currentQuestion.text}
               </h1>
 
