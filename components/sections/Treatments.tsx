@@ -35,7 +35,7 @@ export default function Treatments() {
           {SPECIALTIES.map((spec, i) => (
             <motion.a
               key={spec.id}
-              href="#"
+              href={`/assessment/${spec.id}`}
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-60px' }}
@@ -59,7 +59,7 @@ export default function Treatments() {
 
               {/* CTA */}
               <div className="flex items-center gap-2 text-white/25 group-hover:text-white/60 transition-colors duration-250 text-sm tracking-[0.01em]">
-                <span>Learn more</span>
+                <span>Start assessment</span>
                 <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
               </div>
 

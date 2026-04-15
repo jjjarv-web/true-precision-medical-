@@ -301,7 +301,7 @@ export default function Hero() {
                   className="flex flex-col items-center gap-3"
                 >
                   <motion.a
-                    href="/book"
+                    href={`/assessment/${selected}`}
                     whileHover={{
                       y: -2,
                       boxShadow: '0 10px 36px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.35)',

@@ -1,11 +1,11 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Phone, Menu, X } from 'lucide-react'
 import { NAV_LINKS, PHONE_NUMBER, PHONE_HREF } from '@/lib/constants'
+import Logo from '@/components/ui/Logo'
 
 export default function Header() {
   const pathname = usePathname()
@@ -34,9 +34,8 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 flex justify-between items-center">
         {/* Logo */}
         <Link href="/" className="flex items-center flex-shrink-0" aria-label="True Precision Medical home">
-          <Image
-            src="/logo/true-precision-medical-logo.svg"
-            alt="True Precision Medical"
+          <Logo
+            variant="light"
             width={180}
             height={50}
             className="h-10 w-auto object-contain block brightness-0 invert"

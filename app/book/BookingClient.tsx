@@ -3,9 +3,9 @@
 import { useState, FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import Image from 'next/image'
 import { motion, AnimatePresence } from 'motion/react'
 import { ArrowRight, ArrowLeft, Sun, Sunset } from 'lucide-react'
+import Logo from '@/components/ui/Logo'
 
 type Step = 'contact' | 'preference'
 
@@ -99,9 +99,8 @@ export default function BookingClient() {
         <div>
           {/* Logo / back */}
           <Link href="/" className="inline-block mb-14 lg:mb-20">
-            <Image
-              src="/logo/true-precision-medical-logo.svg"
-              alt="True Precision Medical"
+            <Logo
+              variant="light"
               width={160}
               height={44}
               className="h-9 w-auto brightness-0 invert opacity-75"

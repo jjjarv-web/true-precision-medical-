@@ -1,6 +1,6 @@
-import Image from 'next/image'
 import { Phone, ArrowRight } from 'lucide-react'
 import { FOOTER_COLUMNS, PHONE_NUMBER, PHONE_HREF } from '@/lib/constants'
+import Logo from '@/components/ui/Logo'
 
 function InstagramIcon() {
   return (
@@ -79,9 +79,8 @@ export default function Footer() {
           {/* Brand Column */}
           <div className="lg:col-span-2">
             <a href="/" className="inline-flex mb-6" aria-label="True Precision Medical home">
-              <Image
-                src="/logo/true-precision-medical-logo.svg"
-                alt="True Precision Medical"
+              <Logo
+                variant="light"
                 width={180}
                 height={50}
                 className="h-10 w-auto object-contain brightness-0 invert opacity-80"
