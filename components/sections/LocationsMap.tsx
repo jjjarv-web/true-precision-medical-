@@ -4,18 +4,32 @@ import dynamic from 'next/dynamic'
 import { useRef, useState } from 'react'
 import { motion, useInView, AnimatePresence } from 'motion/react'
 import { MapPin, Phone, Clock, Navigation } from 'lucide-react'
-import { LOCATIONS } from '@/lib/constants'
+import type { Location } from '@/lib/sanity'
 
 const LeafletMap = dynamic(() => import('./LeafletMap'), { ssr: false })
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
-export default function LocationsMap() {
+type Props = {
+  locations: Location[]
+}
+
+function formatCityLine(loc: Location) {
+  const suffix = [loc.state, loc.postalCode].filter(Boolean).join(' ')
+  return [loc.city, suffix].filter(Boolean).join(', ')
+}
+
+function formatStreetLine(loc: Location) {
+  return [loc.streetAddress, loc.suite].filter(Boolean).join(', ')
+}
+
+export default function LocationsMap({ locations }: Props) {
   const ref    = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-100px' })
 
   const [activeId, setActiveId] = useState<string | null>(null)
-  const active = activeId ? LOCATIONS.find((l) => l.id === activeId) ?? null : null
+
+  if (locations.length === 0) return null
 
   return (
     <section
@@ -56,12 +70,14 @@ export default function LocationsMap() {
             transition={{ duration: 0.6, ease: EASE, delay: 0.1 }}
             className="lg:col-span-2 flex flex-col gap-2"
           >
-            {LOCATIONS.map((loc, i) => {
-              const isActive = activeId === loc.id
+            {locations.map((loc, i) => {
+              const isActive = activeId === loc._id
+              const streetLine = formatStreetLine(loc)
+              const cityLine = formatCityLine(loc)
               return (
                 <motion.button
-                  key={loc.id}
-                  onClick={() => setActiveId(isActive ? null : loc.id)}
+                  key={loc._id}
+                  onClick={() => setActiveId(isActive ? null : loc._id)}
                   initial={{ opacity: 0, y: 10 }}
                   animate={inView ? { opacity: 1, y: 0 } : {}}
                   transition={{ duration: 0.45, ease: EASE, delay: 0.15 + i * 0.06 }}
@@ -91,8 +107,8 @@ export default function LocationsMap() {
                         }`}>
                           {loc.name}
                         </p>
-                        <p className="text-white/40 text-xs mt-0.5">{loc.address}</p>
-                        <p className="text-white/30 text-xs">{loc.city}</p>
+                        <p className="text-white/40 text-xs mt-0.5">{streetLine}</p>
+                        <p className="text-white/30 text-xs">{cityLine}</p>
                       </div>
                     </div>
                     <div className={`w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0 transition-all duration-200 ${
@@ -113,25 +129,33 @@ export default function LocationsMap() {
                       >
                         <div className="mt-4 ml-11 flex flex-col gap-3">
 
-                          <div className="flex items-center gap-3">
-                            <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 bg-white/[0.06]">
-                              <Phone className="w-3 h-3 text-white/40" />
+                          {loc.phone && (
+                            <div className="flex items-center gap-3">
+                              <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 bg-white/[0.06]">
+                                <Phone className="w-3 h-3 text-white/40" />
+                              </div>
+                              <a
+                                href={loc.phoneHref}
+                                onClick={(e) => e.stopPropagation()}
+                                className="text-sm text-white/50 hover:text-[#4DCCE8] transition-colors"
+                              >
+                                {loc.phone}
+                              </a>
                             </div>
-                            <a
-                              href={`tel:${loc.phone.replace(/\D/g, '')}`}
-                              onClick={(e) => e.stopPropagation()}
-                              className="text-sm text-white/50 hover:text-[#4DCCE8] transition-colors"
-                            >
-                              {loc.phone}
-                            </a>
-                          </div>
+                          )}
 
-                          <div className="flex items-center gap-3">
-                            <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 bg-white/[0.06]">
-                              <Clock className="w-3 h-3 text-white/40" />
+                          {loc.hoursSummary.length > 0 && (
+                            <div className="flex items-start gap-3">
+                              <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 bg-white/[0.06]">
+                                <Clock className="w-3 h-3 text-white/40" />
+                              </div>
+                              <div className="text-sm text-white/40 space-y-0.5 leading-snug">
+                                {loc.hoursSummary.map((line) => (
+                                  <div key={line}>{line}</div>
+                                ))}
+                              </div>
                             </div>
-                            <span className="text-sm text-white/40">{loc.hours}</span>
-                          </div>
+                          )}
 
                           <a
                             href={loc.mapsUrl}
@@ -162,7 +186,7 @@ export default function LocationsMap() {
             style={{ border: '1px solid rgba(255,255,255,0.07)', filter: 'brightness(1.35)' }}
           >
             <LeafletMap
-              locations={LOCATIONS.map(({ id, lat, lng }) => ({ id, lat, lng }))}
+              locations={locations.map(({ _id, lat, lng }) => ({ id: _id, lat, lng }))}
               activeId={activeId}
               onSelect={setActiveId}
             />

@@ -7,12 +7,13 @@ import LocationsMap from '@/components/sections/LocationsMap'
 import Treatments from '@/components/sections/Treatments'
 import HowItWorks from '@/components/sections/HowItWorks'
 import PatientStories from '@/components/sections/PatientStories'
-import { fetchInsuranceSettings, fetchSiteSettings } from '@/lib/sanity'
+import { fetchInsuranceSettings, fetchSiteSettings, fetchLocations } from '@/lib/sanity'
 
 export default async function HomePage() {
-  const [insuranceSettings, siteSettings] = await Promise.all([
+  const [insuranceSettings, siteSettings, locations] = await Promise.all([
     fetchInsuranceSettings(),
     fetchSiteSettings(),
+    fetchLocations(),
   ])
 
   return (
@@ -23,7 +24,7 @@ export default async function HomePage() {
         <Treatments />
         <InsuranceBar settings={insuranceSettings} site={siteSettings} />
         <TrustCredentials />
-        <LocationsMap />
+        <LocationsMap locations={locations} />
         <HowItWorks />
         <PatientStories />
       </main>
