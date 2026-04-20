@@ -32,7 +32,7 @@ const STEPS_INFO = [
 const TRUST = ['Board-Certified Specialists', 'AAAHC Accredited Centers', 'Same-Day Discharge']
 
 const INPUT =
-  'w-full bg-white border border-black/[0.08] rounded-xl px-4 py-3 text-[15px] text-[#1A1814] placeholder:text-[#C4BEBB] outline-none focus:border-[#4DCCE8]/60 focus:ring-2 focus:ring-[#4DCCE8]/15 transition-all duration-200'
+  'w-full bg-white border border-black/[0.08] rounded-xl px-4 py-3 text-[15px] text-[#1A1814] placeholder:text-[#C4BEBB] outline-none focus:border-[#2F34F4]/60 focus:ring-2 focus:ring-[#2F34F4]/10 transition-all duration-200'
 
 const LABEL = 'block text-[12px] font-semibold text-[#4A4440] mb-1.5'
 
@@ -113,11 +113,6 @@ export default function BookingClient() {
     setStep('preference')
   }
 
-  function handleBack() {
-    setDirection(-1)
-    setStep('contact')
-  }
-
   function handleSubmit(e: FormEvent) {
     e.preventDefault()
     setError2('')
@@ -140,10 +135,11 @@ export default function BookingClient() {
   }
 
   return (
-    <div className="min-h-screen bg-[#07080C] flex flex-col lg:flex-row">
+    <div className="min-h-screen bg-[#07080C] flex flex-col lg:items-stretch">
+      <div className="w-full max-w-[1280px] mx-auto flex flex-col lg:flex-row lg:min-h-screen">
 
       {/* ── Left panel — context ───────────────────────── */}
-      <div className="order-2 lg:order-1 lg:w-[44%] flex flex-col justify-between px-8 py-10 sm:px-12 sm:py-12 lg:px-16 lg:py-16 lg:min-h-screen">
+      <div className="order-2 lg:order-1 lg:w-[44%] flex flex-col justify-between px-8 py-10 sm:px-12 sm:py-12 lg:px-16 lg:py-16">
         <div>
           {/* Logo / back */}
           <Link href="/" className="hidden lg:inline-block mb-14 lg:mb-20">
@@ -232,7 +228,7 @@ export default function BookingClient() {
         >
           <div className="flex flex-wrap gap-x-4 gap-y-2">
             {TRUST.map((item) => (
-              <span key={item} className="text-[11px] text-white/25 font-medium">
+              <span key={item} className="text-[11px] text-white/40 font-medium">
                 {item}
               </span>
             ))}
@@ -241,8 +237,8 @@ export default function BookingClient() {
       </div>
 
       {/* ── Right panel — form card ────────────────────── */}
-      <div className="order-1 lg:order-2 flex-1 flex flex-col items-center justify-center px-6 pt-8 pb-20 sm:px-10 sm:pt-10 sm:pb-20 lg:px-16 lg:py-16">
-        <Link href="/" className="inline-block mb-5 lg:hidden self-start">
+      <div className="order-1 lg:order-2 flex-1 flex flex-col items-center justify-center px-6 pt-12 pb-20 sm:px-10 sm:pt-12 sm:pb-20 lg:px-16 lg:py-16">
+        <Link href="/" className="inline-block mb-8 lg:hidden self-start">
           <Logo
             variant="light"
             width={140}
@@ -264,10 +260,10 @@ export default function BookingClient() {
           {/* Progress bar */}
           <div className="px-8 pt-8">
             <div className="flex gap-2 mb-8">
-              <div className="h-[3px] flex-1 rounded-full bg-[#1A1814] transition-all duration-500" />
+              <div className="h-[3px] flex-1 rounded-full bg-[#2F34F4] transition-all duration-500" />
               <div
                 className={`h-[3px] flex-1 rounded-full transition-all duration-500 ${
-                  step === 'preference' ? 'bg-[#1A1814]' : 'bg-black/[0.08]'
+                  step === 'preference' ? 'bg-[#2F34F4]' : 'bg-black/[0.08]'
                 }`}
               />
             </div>
@@ -341,8 +337,8 @@ export default function BookingClient() {
 
                   <button
                     type="submit"
-                    className="w-full flex items-center justify-center gap-2 bg-[#1A1814] text-[#EDE6D8] rounded-xl py-3.5 text-[15px] font-semibold tracking-[-0.01em] hover:bg-[#2a2520] active:scale-[0.99] transition-all duration-200"
-                    style={{ boxShadow: '0 2px 12px rgba(26,24,20,0.20)' }}
+                    className="w-full flex items-center justify-center gap-2 bg-[#2F34F4] text-white rounded-xl py-3.5 text-[15px] font-semibold tracking-[-0.01em] hover:opacity-95 active:scale-[0.99] transition-all duration-200"
+                    style={{ boxShadow: '0 2px 16px rgba(47,52,244,0.28)' }}
                   >
                     Continue
                     <ArrowRight className="w-4 h-4" />
@@ -410,20 +406,20 @@ export default function BookingClient() {
                           type="button"
                           onClick={() => setTimePreference(key)}
                           className={`flex flex-col items-center gap-2 py-4 rounded-xl border text-sm font-semibold transition-all duration-200 ${
-                            timePreference === key
-                              ? 'bg-[#1A1814] border-[#1A1814] text-[#EDE6D8]'
+                              timePreference === key
+                              ? 'bg-[#2F34F4] border-[#2F34F4] text-white'
                               : 'bg-white border-black/[0.08] text-[#4A4440] hover:border-black/[0.16]'
                           }`}
                         >
                           <Icon
                             className={`w-5 h-5 transition-colors duration-200 ${
-                              timePreference === key ? 'text-[#4DCCE8]' : 'text-[#9A9490]'
+                              timePreference === key ? 'text-white/80' : 'text-[#9A9490]'
                             }`}
                           />
                           <span>{label}</span>
                           <span
                             className={`text-[11px] font-normal transition-colors duration-200 ${
-                              timePreference === key ? 'text-[#EDE6D8]/50' : 'text-[#9A9490]'
+                              timePreference === key ? 'text-white/60' : 'text-[#9A9490]'
                             }`}
                           >
                             {sub}
@@ -439,8 +435,8 @@ export default function BookingClient() {
 
                   <button
                     type="submit"
-                    className="w-full flex items-center justify-center gap-2 bg-[#1A1814] text-[#EDE6D8] rounded-xl py-3.5 mb-4 text-[15px] font-semibold tracking-[-0.01em] hover:bg-[#2a2520] active:scale-[0.99] transition-all duration-200"
-                    style={{ boxShadow: '0 2px 12px rgba(26,24,20,0.20)' }}
+                    className="w-full flex items-center justify-center gap-2 bg-[#2F34F4] text-white rounded-xl py-3.5 mb-4 text-[15px] font-semibold tracking-[-0.01em] hover:opacity-95 active:scale-[0.99] transition-all duration-200"
+                    style={{ boxShadow: '0 2px 16px rgba(47,52,244,0.28)' }}
                   >
                     Submit Request
                     <ArrowRight className="w-4 h-4" />
@@ -453,6 +449,7 @@ export default function BookingClient() {
         </motion.div>
       </div>
 
+      </div>
     </div>
   )
 }

@@ -247,7 +247,7 @@ export default function AssessmentClient({ config }: { config: AssessmentConfig 
         categoryTitle: config.title,
         answers,
         responses: buildQuestionResponses(config, answers),
-        personalizedSummary: personalizedResult.summaryItems,
+        personalizedSummary: personalizedResult.stats,
       }
       window.sessionStorage.setItem(BOOKING_ASSESSMENT_CONTEXT_KEY, JSON.stringify(context))
     }
