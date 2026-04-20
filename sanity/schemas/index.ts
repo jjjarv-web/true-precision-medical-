@@ -1,3 +1,4 @@
 import { insuranceSettings } from './insuranceSettings'
+import { siteSettings } from './siteSettings'
 
-export const schemaTypes = [insuranceSettings]
+export const schemaTypes = [siteSettings, insuranceSettings]

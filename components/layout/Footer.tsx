@@ -1,5 +1,6 @@
 import { Phone, ArrowRight } from 'lucide-react'
 import { FOOTER_COLUMNS, PHONE_NUMBER, PHONE_HREF } from '@/lib/constants'
+import type { SiteSettings } from '@/lib/sanity'
 import Logo from '@/components/ui/Logo'
 
 function InstagramIcon() {
@@ -30,7 +31,14 @@ function XIcon() {
   )
 }
 
-export default function Footer() {
+type Props = {
+  site?: SiteSettings
+}
+
+export default function Footer({ site }: Props = {}) {
+  const phone = site?.phone ?? PHONE_NUMBER
+  const phoneHref = site?.phoneHref ?? PHONE_HREF
+
   return (
     <footer className="bg-[#07080C] text-white">
 
@@ -62,11 +70,11 @@ export default function Footer() {
               <ArrowRight className="w-4 h-4" />
             </a>
             <a
-              href={PHONE_HREF}
+              href={phoneHref}
               className="inline-flex items-center gap-2 text-sm font-medium text-white/55 hover:text-white transition-colors duration-200"
             >
               <Phone className="w-4 h-4" />
-              {PHONE_NUMBER}
+              {phone}
             </a>
           </div>
         </div>
@@ -135,11 +143,11 @@ export default function Footer() {
                 {col.heading === 'Contact' && (
                   <li>
                     <a
-                      href={PHONE_HREF}
+                      href={phoneHref}
                       className="text-sm text-white/55 hover:text-white transition-colors duration-200 flex items-center gap-2"
                     >
                       <Phone className="w-3.5 h-3.5 text-[#4DCCE8] flex-shrink-0" />
-                      {PHONE_NUMBER}
+                      {phone}
                     </a>
                   </li>
                 )}

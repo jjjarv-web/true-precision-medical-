@@ -8,7 +8,7 @@ import {
   isOutOfNetwork,
   isKnownCarrier,
 } from '@/lib/insurance-data'
-import type { InsuranceSettings } from '@/lib/sanity'
+import type { InsuranceSettings, SiteSettings } from '@/lib/sanity'
 import { PHONE_NUMBER, PHONE_HREF } from '@/lib/constants'
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
@@ -25,9 +25,12 @@ const IDLE_PILLS = [
 
 type Props = {
   settings: InsuranceSettings
+  site?: SiteSettings
 }
 
-export default function InsuranceBar({ settings }: Props) {
+export default function InsuranceBar({ settings, site }: Props) {
+  const phone = site?.phone ?? PHONE_NUMBER
+  const phoneHref = site?.phoneHref ?? PHONE_HREF
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-110px' })
 
@@ -248,14 +251,14 @@ export default function InsuranceBar({ settings }: Props) {
                   </p>
                 </div>
                 <a
-                  href={PHONE_HREF}
+                  href={phoneHref}
                   className="inline-flex items-center justify-center gap-2 w-full
                              rounded-xl px-4 py-3 text-sm font-semibold text-[#EDE6D8]
                              bg-[#1A1814] hover:bg-[#2a2520] transition-colors duration-150"
                   style={{ boxShadow: '0 2px 12px rgba(26,24,20,0.18)' }}
                 >
                   <Phone className="w-4 h-4" aria-hidden="true" />
-                  Call {PHONE_NUMBER}
+                  Call {phone}
                 </a>
               </motion.div>
             )}

@@ -46,3 +46,35 @@ export const DEFAULT_INSURANCE_SETTINGS: InsuranceSettings = {
   unknownMessage:
     "We're not familiar with that carrier — call us and we'll look it up with you.",
 }
+
+export type SiteSettings = {
+  phone: string
+  phoneHref: string
+}
+
+export const DEFAULT_SITE_SETTINGS: SiteSettings = {
+  phone: '(800) 555-0199',
+  phoneHref: 'tel:+18005550199',
+}
+
+function toTelHref(phone: string): string {
+  const digits = phone.replace(/\D/g, '')
+  if (!digits) return ''
+  return digits.length === 10 ? `tel:+1${digits}` : `tel:+${digits}`
+}
+
+export async function fetchSiteSettings(): Promise<SiteSettings> {
+  const data = await sanityClient.fetch<{ phone?: string } | null>(
+    `*[_id == "siteSettings" && !(_id in path("drafts.**"))][0]{ phone }`,
+    {},
+    { next: { revalidate: 3600 } }
+  )
+
+  const phone = data?.phone?.trim()
+  if (!phone) return DEFAULT_SITE_SETTINGS
+
+  const phoneHref = toTelHref(phone)
+  if (!phoneHref) return DEFAULT_SITE_SETTINGS
+
+  return { phone, phoneHref }
+}

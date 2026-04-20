@@ -5,9 +5,16 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Phone, Menu, X } from 'lucide-react'
 import { NAV_LINKS, PHONE_NUMBER, PHONE_HREF } from '@/lib/constants'
+import type { SiteSettings } from '@/lib/sanity'
 import Logo from '@/components/ui/Logo'
 
-export default function Header() {
+type Props = {
+  site?: SiteSettings
+}
+
+export default function Header({ site }: Props = {}) {
+  const phone = site?.phone ?? PHONE_NUMBER
+  const phoneHref = site?.phoneHref ?? PHONE_HREF
   const pathname = usePathname()
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -59,11 +66,11 @@ export default function Header() {
         {/* Desktop Actions */}
         <div className="hidden md:flex items-center gap-4">
           <a
-            href={PHONE_HREF}
+            href={phoneHref}
             className="text-sm font-medium flex items-center gap-2 text-white/70 hover:text-white transition-colors duration-200"
           >
             <Phone className="w-4 h-4" />
-            {PHONE_NUMBER}
+            {phone}
           </a>
           <a
             href="/book"
@@ -99,11 +106,11 @@ export default function Header() {
           ))}
           <div className="h-px bg-white/[0.07] my-2" />
           <a
-            href={PHONE_HREF}
+            href={phoneHref}
             className="px-3 py-3 font-medium text-white/55 flex items-center gap-2"
           >
             <Phone className="w-4 h-4" />
-            {PHONE_NUMBER}
+            {phone}
           </a>
           <a
             href="/book"
