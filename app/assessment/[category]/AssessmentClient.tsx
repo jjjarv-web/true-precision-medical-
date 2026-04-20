@@ -14,6 +14,8 @@ type Answers = Record<string, string | string[]>
 type PersonalizedResult = {
   summaryItems: string[]
   stats: string[]
+  dynamicHeadline: string
+  narrativeSentence: string
 }
 type BookingAssessmentContext = {
   source: 'assessment'
@@ -75,6 +77,61 @@ function getAnswerLabels(config: AssessmentConfig, answers: Answers, questionId:
     .filter((label): label is string => !!label)
 }
 
+function deriveDynamicHeadline(
+  severity: string,
+  duration: string,
+  treatments: string[]
+): string {
+  const isSevere = severity.toLowerCase().includes('7') || severity.toLowerCase().includes('severe') || severity.toLowerCase().includes('significantly')
+  const isLong = duration.toLowerCase().includes('1+') || duration.toLowerCase().includes('year') || duration.toLowerCase().includes('12')
+  const noTreatment = treatments.length === 0 || treatments.some((t) => t.toLowerCase().includes('none') || t.toLowerCase().includes('nothing'))
+  const triedTreatments = !noTreatment && treatments.length > 0
+
+  if (isSevere && isLong && triedTreatments) return 'There\'s more we can do.'
+  if (isSevere && noTreatment) return 'You came to the right place.'
+  if (isLong && triedTreatments) return 'This is very treatable.'
+  if (!isLong) return 'You caught this early.'
+  return 'Good news.'
+}
+
+function buildNarrativeSentence(
+  primaryConcern: string,
+  severity: string,
+  duration: string,
+  radiating: string,
+  treatments: string[]
+): string {
+  const concern = primaryConcern ? primaryConcern.toLowerCase() : 'your condition'
+  const isSevere = severity.toLowerCase().includes('7') || severity.toLowerCase().includes('severe') || severity.toLowerCase().includes('significantly')
+  const isModerate = severity.toLowerCase().includes('4') || severity.toLowerCase().includes('moderate') || severity.toLowerCase().includes('noticeably')
+  const isLong = duration.toLowerCase().includes('1+') || duration.toLowerCase().includes('year') || duration.toLowerCase().includes('12')
+  const isShort = duration.toLowerCase().includes('6 months') || duration.toLowerCase().includes('< 6')
+  const hasRadiating = radiating.toLowerCase() === 'yes'
+  const noTreatment = treatments.length === 0 || treatments.some((t) => t.toLowerCase().includes('none') || t.toLowerCase().includes('nothing'))
+  const triedTreatments = !noTreatment && treatments.length > 0
+  const treatmentList = triedTreatments ? formatList(treatments.filter((t) => !t.toLowerCase().includes('none') && !t.toLowerCase().includes('nothing'))) : ''
+
+  if (isSevere && isLong && triedTreatments) {
+    return `You've been living with ${concern} pain for over a year, and ${treatmentList} hasn't fully resolved it. That pattern often points to an underlying issue that image-guided treatment can address precisely — without major surgery.`
+  }
+  if (isSevere && noTreatment) {
+    return `You're experiencing significant ${concern} pain and haven't had a specialist evaluate it yet. That's exactly where we can help — our team will find the source and walk you through the right options from day one.`
+  }
+  if (isModerate && isLong && triedTreatments) {
+    return `Persistent ${concern} pain that hasn't responded to ${treatmentList} usually has a treatable root cause. Our specialists use image-guided techniques to find and target it directly.`
+  }
+  if (hasRadiating) {
+    return `${concern.charAt(0).toUpperCase() + concern.slice(1)} pain that travels into your arm or leg is a specific signal our specialists are trained to address — often without major surgery or extended recovery.`
+  }
+  if (isShort && noTreatment) {
+    return `You're catching this early, which gives you the most options. A consultation now can prevent ${concern} pain from becoming a longer-term issue.`
+  }
+  if (triedTreatments) {
+    return `You've already tried ${treatmentList} for your ${concern} symptoms. If those haven't given you lasting relief, there are targeted approaches our specialists can offer that go further.`
+  }
+  return `Based on what you shared, your ${concern} symptoms are something our specialists see and treat every day — with approaches that are far less invasive than traditional surgery.`
+}
+
 function buildPersonalizedResult(config: AssessmentConfig, answers: Answers): PersonalizedResult {
   const primaryConcern =
     getAnswerLabels(config, answers, 'location')[0] ||
@@ -86,40 +143,31 @@ function buildPersonalizedResult(config: AssessmentConfig, answers: Answers): Pe
   const duration = getAnswerLabels(config, answers, 'duration')[0] || ''
   const radiating = getAnswerLabels(config, answers, 'radiating')[0] || ''
   const treatments = getAnswerLabels(config, answers, 'treatments')
-  const symptoms = getAnswerLabels(config, answers, 'symptoms')
 
-  const summaryItems: string[] = []
-  if (primaryConcern) summaryItems.push(`Primary concern: ${primaryConcern}`)
-  if (severity) summaryItems.push(`Reported intensity: ${severity}`)
-  if (duration) summaryItems.push(`Timeline: ${duration}`)
-  if (radiating) {
-    summaryItems.push(
-      radiating.toLowerCase() === 'yes'
-        ? 'You noted radiating symptoms into an arm or leg.'
-        : 'You did not report radiating arm or leg symptoms.'
-    )
-  } else if (symptoms.length > 0) {
-    summaryItems.push(`Symptoms reported: ${formatList(symptoms)}`)
-  }
-  if (summaryItems.length === 0) {
-    summaryItems.push('Your care coordinator will review your answers before your consultation.')
-  }
+  const isSevere = severity.toLowerCase().includes('7') || severity.toLowerCase().includes('severe') || severity.toLowerCase().includes('significantly')
+  const isLong = duration.toLowerCase().includes('1+') || duration.toLowerCase().includes('year') || duration.toLowerCase().includes('12')
+  const noTreatment = treatments.length === 0 || treatments.some((t) => t.toLowerCase().includes('none') || t.toLowerCase().includes('nothing'))
+  const triedTreatments = !noTreatment && treatments.length > 0
+  const treatmentList = triedTreatments
+    ? formatList(treatments.filter((t) => !t.toLowerCase().includes('none') && !t.toLowerCase().includes('nothing')))
+    : ''
+  const concern = primaryConcern ? primaryConcern.toLowerCase() : ''
 
-  const personalizedStats: string[] = []
-  if (primaryConcern) {
-    personalizedStats.push(`Your first consult can focus on ${primaryConcern.toLowerCase()} symptoms from day one`)
-  }
-  if (treatments.length > 0) {
-    if (treatments.some((item) => item.toLowerCase().includes('none') || item.toLowerCase().includes('nothing'))) {
-      personalizedStats.push('Since you have not tried treatment yet, your specialist can walk through options step by step')
-    } else {
-      personalizedStats.push(`We will account for prior treatments (${formatList(treatments)}) to avoid repeating dead ends`)
-    }
-  }
+  const stat1 = concern
+    ? `Most patients with ${concern} symptoms like yours avoid major surgery with our approach.`
+    : config.result.stats[0]
+
+  const stat2 = triedTreatments
+    ? `Because ${treatmentList} hasn't resolved it, your specialist will focus on what's actually driving the pain.`
+    : isSevere && isLong
+      ? `Our team regularly helps patients whose pain has persisted this long — often with same-day, outpatient procedures.`
+      : `Our specialists will review your exact situation and outline the least invasive path forward.`
 
   return {
-    summaryItems: summaryItems.slice(0, 4),
-    stats: [...personalizedStats, ...config.result.stats].slice(0, 3),
+    summaryItems: [],
+    stats: [stat1, stat2],
+    dynamicHeadline: deriveDynamicHeadline(severity, duration, treatments),
+    narrativeSentence: buildNarrativeSentence(primaryConcern, severity, duration, radiating, treatments),
   }
 }
 
@@ -220,8 +268,9 @@ export default function AssessmentClient({ config }: { config: AssessmentConfig 
           <Link href="/" className="inline-flex">
             <Logo
               variant="dark"
-              width={130}
-              height={34}
+              width={260}
+              height={68}
+              unoptimized
               className="h-8 w-auto opacity-95"
             />
           </Link>
@@ -319,59 +368,40 @@ export default function AssessmentClient({ config }: { config: AssessmentConfig 
               exit="exit"
               transition={{ duration: 0.24, ease: EASE }}
             >
-              <div className="text-center mb-7">
+              <div className="text-center mb-8">
                 <p className="text-[12px] font-semibold tracking-[0.14em] uppercase text-[#2F34F4] mb-3">
                   Your results
                 </p>
-                <h2 className="font-heading font-bold text-[#111111] text-[clamp(34px,5vw,52px)] leading-[1.05] tracking-[-0.03em] mb-4">
-                  {config.result.headline}
+                <h2 className="font-heading font-bold text-[#111111] text-[clamp(32px,5vw,48px)] leading-[1.08] tracking-[-0.03em] mb-5">
+                  {personalizedResult.dynamicHeadline}
                 </h2>
-                <p className="text-[#25211e] text-[18px] leading-relaxed max-w-2xl mx-auto">
-                  {config.result.subhead}
+                <p className="text-[#3d3834] text-[17px] leading-[1.65] max-w-xl mx-auto">
+                  {personalizedResult.narrativeSentence}
                 </p>
               </div>
 
-              <div className="space-y-2.5 mb-7 max-w-2xl mx-auto">
-                {personalizedResult.summaryItems.map((item) => (
-                  <div
-                    key={item}
-                    className="rounded-xl border border-[#2F34F4]/15 bg-[#2F34F4]/[0.04] px-4 py-3 text-[14px] text-[#1A1814]"
-                  >
-                    {item}
-                  </div>
-                ))}
-              </div>
-
-              <div className="space-y-3 mb-9 max-w-2xl mx-auto">
+              <div className="space-y-4 mb-10 max-w-xl mx-auto">
                 {personalizedResult.stats.map((stat) => (
-                  <div
-                    key={stat}
-                    className="flex items-start gap-3 bg-white border border-black/[0.08] rounded-2xl p-4"
-                  >
-                    <div className="mt-0.5 w-5 h-5 rounded-full bg-[#2F34F4] text-white flex items-center justify-center flex-shrink-0">
-                      <Check className="w-3 h-3" strokeWidth={2.8} />
-                    </div>
+                  <div key={stat} className="flex items-start gap-3.5">
+                    <Check className="w-[18px] h-[18px] text-[#2F34F4] flex-shrink-0 mt-[2px]" strokeWidth={2.5} />
                     <p className="text-[#1A1814] text-[15px] leading-snug">{stat}</p>
                   </div>
                 ))}
               </div>
 
-              <div className="max-w-2xl mx-auto border-t border-black/[0.08] pt-7">
-                <p className="text-[12px] font-semibold tracking-[0.14em] uppercase text-[#2F34F4] mb-2 text-center">
-                  Recommended next step
-                </p>
-                <h3 className="font-heading font-bold text-[#111111] text-[clamp(26px,3.6vw,36px)] leading-[1.1] tracking-[-0.02em] mb-4 text-center">
-                  Explore your treatment options
+              <div className="max-w-xl mx-auto border-t border-black/[0.07] pt-8">
+                <h3 className="font-heading font-bold text-[#111111] text-[clamp(22px,3.2vw,30px)] leading-[1.15] tracking-[-0.02em] mb-5 text-center">
+                  See what&apos;s possible for you.
                 </h3>
                 <button
                   type="button"
                   onClick={handleContinueToBooking}
-                  className="w-full bg-[#2F34F4] text-white rounded-xl py-3.5 text-[15px] font-semibold hover:opacity-95 transition"
+                  className="w-full bg-[#2F34F4] text-white rounded-xl py-4 text-[15px] font-semibold hover:opacity-95 active:scale-[0.99] transition-all"
                 >
-                  Explore Treatment Options
+                  Get My Treatment Plan
                 </button>
                 <p className="text-center text-[12px] text-[#8c857f] mt-3">
-                  Takes less than a minute.
+                  Takes less than a minute. No commitment.
                 </p>
               </div>
             </motion.div>
