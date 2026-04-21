@@ -1,11 +1,11 @@
 'use client'
 
 import { useState, useRef } from 'react'
+import { useRouter } from 'next/navigation'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { AnimatePresence, motion } from 'motion/react'
-import { ArrowRight } from 'lucide-react'
+import { motion } from 'motion/react'
 import Image from 'next/image'
 import { SPECIALTIES } from '@/lib/constants'
 
@@ -23,6 +23,7 @@ type HeroProps = {
 export default function Hero({ googleReviewRating, googleReviewCount }: HeroProps) {
   const [selected, setSelected] = useState<string | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
+  const router = useRouter()
 
   useGSAP(() => {
     const tl = gsap.timeline()
@@ -180,7 +181,10 @@ export default function Hero({ googleReviewRating, googleReviewCount }: HeroProp
               return (
                 <motion.button
                   key={spec.id}
-                  onClick={() => setSelected(isSelected ? null : spec.id)}
+                  onClick={() => {
+                    setSelected(spec.id)
+                    setTimeout(() => router.push(`/assessment/${spec.id}`), 160)
+                  }}
                   animate={{
                     backgroundColor: isSelected ? '#D4C4A8' : 'rgba(255,255,255,0.05)',
                     borderColor: isSelected ? '#D4C4A8' : 'rgba(255,255,255,0.10)',
@@ -217,41 +221,6 @@ export default function Hero({ googleReviewRating, googleReviewCount }: HeroProp
             })}
           </div>
 
-          <div className="min-h-[80px] flex flex-col items-center justify-center">
-            <AnimatePresence mode="wait">
-              {selected && (
-                <motion.div
-                  key="active"
-                  initial={{ opacity: 0, y: 24, scale: 0.94 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 14, scale: 0.96 }}
-                  transition={{ type: 'spring', stiffness: 360, damping: 26 }}
-                  className="flex flex-col items-center gap-3"
-                >
-                  <motion.a
-                    href={`/assessment/${selected}`}
-                    whileHover={{
-                      y: -2,
-                      boxShadow: '0 10px 36px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.35)',
-                      transition: { duration: 0.15, ease: 'easeOut' },
-                    }}
-                    whileTap={{ scale: 0.98 }}
-                    transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                    className="inline-flex items-center gap-2.5 bg-[#D4C4A8] text-[#1A1814] px-8 py-3.5 rounded-full text-sm font-semibold tracking-[0.02em]"
-                    style={{
-                      boxShadow: '0 6px 28px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.35)',
-                    }}
-                  >
-                    Start Your Free Virtual Assessment
-                    <ArrowRight className="w-4 h-4" />
-                  </motion.a>
-                  <p className="text-xs text-white/50 tracking-wide">
-                    Takes less than 2 minutes
-                  </p>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
 
           <p
             className="gsap-pills-entrance text-xs text-white/35 tracking-wide mt-6"
