@@ -40,6 +40,31 @@ const LABEL = 'block text-[12px] font-semibold text-[#4A4440] mb-1.5'
 
 const ASSESSMENT_CONTEXT_KEY = 'assessmentBookingContext'
 
+function digitsOnly(value: string): string {
+  return value.replace(/\D+/g, '')
+}
+
+function formatPhoneAsTyped(raw: string): string {
+  const d = digitsOnly(raw).slice(0, 10)
+  if (d.length === 0) return ''
+  if (d.length < 4) return `(${d}`
+  if (d.length < 7) return `(${d.slice(0, 3)}) ${d.slice(3)}`
+  return `(${d.slice(0, 3)}) ${d.slice(3, 6)}-${d.slice(6)}`
+}
+
+function isValidUSPhone(raw: string): boolean {
+  const d = digitsOnly(raw)
+  if (d.length !== 10) return false
+  // NANP: area code and exchange code must start with 2-9.
+  if (/^[01]/.test(d)) return false
+  if (/^[01]/.test(d.slice(3))) return false
+  // Reject all-same-digit numbers.
+  if (/^(\d)\1{9}$/.test(d)) return false
+  // Reject obvious sequential numbers (ascending or descending).
+  if (d === '1234567890' || d === '0123456789' || d === '9876543210') return false
+  return true
+}
+
 type AssessmentContext = {
   source: 'assessment'
   categorySlug: string
@@ -66,10 +91,15 @@ export default function BookingClient() {
 
   // Step 2
   const [phone, setPhone] = useState('')
+  const [phoneTouched, setPhoneTouched] = useState(false)
   const [preferredDate, setPreferredDate] = useState('')
   const [timePreference, setTimePreference] = useState<'morning' | 'afternoon' | null>(null)
   const [error2, setError2] = useState('')
   const [assessmentContext, setAssessmentContext] = useState<AssessmentContext | null>(null)
+
+  const phoneValid = isValidUSPhone(phone)
+  const phoneError = phoneTouched && phone.length > 0 && !phoneValid
+  const canSubmitStep2 = phoneValid && Boolean(preferredDate) && Boolean(timePreference)
 
   const today = new Date().toISOString().split('T')[0]
 
@@ -110,8 +140,15 @@ export default function BookingClient() {
   function handleSubmit(e: FormEvent) {
     e.preventDefault()
     setError2('')
-    if (!phone.trim() || !preferredDate || !timePreference) {
-      setError2('Please complete all fields.')
+    if (!canSubmitStep2) {
+      if (!phoneValid) {
+        setPhoneTouched(true)
+        setError2('Please enter a valid U.S. phone number.')
+      } else if (!preferredDate) {
+        setError2('Please choose a preferred date.')
+      } else if (!timePreference) {
+        setError2('Please choose a preferred time.')
+      }
       return
     }
 
@@ -366,12 +403,23 @@ export default function BookingClient() {
                     <input
                       type="tel"
                       required
+                      inputMode="tel"
                       autoComplete="tel"
+                      maxLength={14}
                       value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
+                      onChange={(e) => setPhone(formatPhoneAsTyped(e.target.value))}
+                      onBlur={() => setPhoneTouched(true)}
                       placeholder="(602) 555-0100"
-                      className={INPUT}
+                      aria-invalid={phoneError || undefined}
+                      className={`${INPUT} ${
+                        phoneError ? 'border-red-400/70 focus:border-red-400/70 focus:ring-red-400/10' : ''
+                      }`}
                     />
+                    {phoneError && (
+                      <p className="text-red-500 text-[12px] mt-1.5">
+                        Please enter a valid 10-digit U.S. phone number.
+                      </p>
+                    )}
                   </div>
 
                   <div className="mb-5">
@@ -427,8 +475,14 @@ export default function BookingClient() {
 
                   <button
                     type="submit"
-                    className="w-full flex items-center justify-center gap-2 bg-[#4DCCE8] text-[#07080C] rounded-xl py-3.5 mb-4 text-[15px] font-semibold tracking-[-0.01em] hover:opacity-90 active:scale-[0.99] transition-all duration-200"
-                    style={{ boxShadow: '0 2px 16px rgba(77,204,232,0.30)' }}
+                    disabled={!canSubmitStep2}
+                    aria-disabled={!canSubmitStep2}
+                    className={`w-full flex items-center justify-center gap-2 rounded-xl py-3.5 mb-4 text-[15px] font-semibold tracking-[-0.01em] transition-all duration-200 ${
+                      canSubmitStep2
+                        ? 'bg-[#4DCCE8] text-[#07080C] hover:opacity-90 active:scale-[0.99] cursor-pointer'
+                        : 'bg-[#E4DFD9] text-[#9A9490] cursor-not-allowed'
+                    }`}
+                    style={canSubmitStep2 ? { boxShadow: '0 2px 16px rgba(77,204,232,0.30)' } : undefined}
                   >
                     Submit Request
                     <ArrowRight className="w-4 h-4" />
