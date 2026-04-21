@@ -69,7 +69,7 @@ export default function LeafletMap({ locations, activeId, onSelect }: Props) {
       scrollWheelZoom={false}
       dragging={!L.Browser.mobile}
     >
-      <TileLayer url={TILE_URL} attribution={TILE_ATTR} />
+      <TileLayer url={TILE_URL} attribution={TILE_ATTR} detectRetina />
 
       {active && (
         <MapController lat={active.lat} lng={active.lng} zoom={11} />
