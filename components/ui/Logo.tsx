@@ -18,5 +18,5 @@ export default function Logo({
   const variantClass = variant === 'dark' ? 'brightness-0 saturate-100' : ''
   const mergedClassName = [className, variantClass].filter(Boolean).join(' ')
 
-  return <Image src={LOGO_SRC} alt={alt} className={mergedClassName} {...props} />
+  return <Image src={LOGO_SRC} alt={alt} unoptimized className={mergedClassName} {...props} />
 }

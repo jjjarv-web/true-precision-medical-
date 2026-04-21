@@ -32,7 +32,7 @@ const STEPS_INFO = [
 const TRUST = ['Board-Certified Specialists', 'AAAHC Accredited Centers', 'Same-Day Discharge']
 
 const INPUT =
-  'w-full bg-white border border-black/[0.08] rounded-xl px-4 py-3 text-[15px] text-[#1A1814] placeholder:text-[#C4BEBB] outline-none focus:border-[#4DCCE8]/60 focus:ring-2 focus:ring-[#4DCCE8]/10 transition-all duration-200'
+  'w-full min-w-0 bg-white border border-black/[0.08] rounded-xl px-4 py-3 text-[15px] text-[#1A1814] placeholder:text-[#C4BEBB] outline-none focus:border-[#4DCCE8]/60 focus:ring-2 focus:ring-[#4DCCE8]/10 transition-all duration-200'
 
 const LABEL = 'block text-[12px] font-semibold text-[#4A4440] mb-1.5'
 
@@ -374,7 +374,7 @@ export default function BookingClient() {
                     />
                   </div>
 
-                  <div className="mb-5">
+                  <div className="mb-5 overflow-hidden">
                     <label className={LABEL}>Preferred date</label>
                     <input
                       type="date"
