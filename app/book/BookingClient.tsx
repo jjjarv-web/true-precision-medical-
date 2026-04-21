@@ -375,7 +375,7 @@ export default function BookingClient() {
 
                   <div className="mb-5">
                     <label className={LABEL}>Preferred date</label>
-                    <div className="relative">
+                    <div className="relative overflow-hidden">
                       <input
                         type="date"
                         required
@@ -383,7 +383,7 @@ export default function BookingClient() {
                         min={today}
                         onChange={(e) => setPreferredDate(e.target.value)}
                         className={INPUT}
-                        style={!preferredDate ? { color: 'transparent' } : undefined}
+                        style={!preferredDate ? { color: 'transparent', maxWidth: '100%' } : { maxWidth: '100%' }}
                       />
                       {!preferredDate && (
                         <span className="absolute inset-0 flex items-center px-4 text-[15px] text-[#C4BEBB] pointer-events-none">
