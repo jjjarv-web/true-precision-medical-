@@ -3,7 +3,12 @@
 import { useCallback, useRef, useState } from 'react'
 import { motion } from 'motion/react'
 import { ArrowUpRight, ChevronDown, Star } from 'lucide-react'
-import { FEATURED_TESTIMONIALS, GOOGLE_BUSINESS_REVIEWS_URL, GOOGLE_RATING, GOOGLE_REVIEWS } from '@/lib/constants'
+import { FEATURED_TESTIMONIALS, GOOGLE_BUSINESS_REVIEWS_URL } from '@/lib/constants'
+
+type PatientStoriesProps = {
+  googleReviewRating: number
+  googleReviewCount: number
+}
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
@@ -35,7 +40,7 @@ function GoogleLogo() {
   )
 }
 
-export default function PatientStories() {
+export default function PatientStories({ googleReviewRating, googleReviewCount }: PatientStoriesProps) {
   const wallRef = useRef<HTMLDivElement>(null)
   const [expanded, setExpanded] = useState(false)
 
@@ -76,8 +81,8 @@ export default function PatientStories() {
                 <Star key={i} className="w-3 h-3 fill-[#FBBC04] text-[#FBBC04]" strokeWidth={0} />
               ))}
             </div>
-            <span className="text-sm font-semibold text-[#EDE6D8]">{GOOGLE_RATING.toFixed(1)}</span>
-            <span className="text-sm text-white/40">· {GOOGLE_REVIEWS}+ reviews</span>
+            <span className="text-sm font-semibold text-[#EDE6D8]">{googleReviewRating.toFixed(1)}</span>
+            <span className="text-sm text-white/40">· {googleReviewCount}+ reviews</span>
           </div>
         </motion.div>
 

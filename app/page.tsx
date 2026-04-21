@@ -7,26 +7,46 @@ import LocationsMap from '@/components/sections/LocationsMap'
 import Treatments from '@/components/sections/Treatments'
 import HowItWorks from '@/components/sections/HowItWorks'
 import PatientStories from '@/components/sections/PatientStories'
-import { fetchInsuranceSettings, fetchSiteSettings, fetchLocations } from '@/lib/sanity'
+import {
+  fetchInsuranceSettings,
+  fetchSiteSettings,
+  fetchLocations,
+  fetchHomepageProviders,
+  fetchProviders,
+} from '@/lib/sanity'
 
 export default async function HomePage() {
-  const [insuranceSettings, siteSettings, locations] = await Promise.all([
-    fetchInsuranceSettings(),
-    fetchSiteSettings(),
-    fetchLocations(),
-  ])
+  const [insuranceSettings, siteSettings, locations, homepageProviders, allProviders] =
+    await Promise.all([
+      fetchInsuranceSettings(),
+      fetchSiteSettings(),
+      fetchLocations(),
+      fetchHomepageProviders(),
+      fetchProviders(),
+    ])
 
   return (
     <>
       <Header site={siteSettings} />
       <main className="flex-grow">
-        <Hero />
+        <Hero
+          googleReviewRating={siteSettings.googleReviewRating}
+          googleReviewCount={siteSettings.googleReviewCount}
+        />
         <Treatments />
         <InsuranceBar settings={insuranceSettings} site={siteSettings} />
-        <TrustCredentials />
+        <TrustCredentials
+          homepageProviders={homepageProviders}
+          totalProviderCount={allProviders.length}
+          googleReviewRating={siteSettings.googleReviewRating}
+          googleReviewCount={siteSettings.googleReviewCount}
+        />
         <LocationsMap locations={locations} />
         <HowItWorks />
-        <PatientStories />
+        <PatientStories
+          googleReviewRating={siteSettings.googleReviewRating}
+          googleReviewCount={siteSettings.googleReviewCount}
+        />
       </main>
       <Footer site={siteSettings} />
     </>

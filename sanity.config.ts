@@ -32,6 +32,12 @@ export default defineConfig({
               S,
               context,
             }),
+            orderableDocumentListDeskItem({
+              type: 'provider',
+              title: 'Team members',
+              S,
+              context,
+            }),
             S.divider(),
             S.listItem()
               .title('Insurance Settings')

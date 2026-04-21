@@ -20,7 +20,8 @@ export default function Header({ site }: Props = {}) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   const isHome = pathname === '/'
-  const darkTransparent = isHome && !isScrolled
+  /** Only on the home hero at top: semi-transparent bar. Everywhere else we need a solid dark bar or white nav text is invisible on white pages. */
+  const heroTransparentHeader = isHome && !isScrolled
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20)
@@ -31,11 +32,9 @@ export default function Header({ site }: Props = {}) {
   return (
     <header
       className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        darkTransparent
+        heroTransparentHeader
           ? 'bg-black/45 backdrop-blur-md py-5 border-b border-white/[0.06]'
-          : isScrolled
-            ? 'bg-[#07080C]/92 backdrop-blur-md border-b border-white/[0.06] py-3'
-            : 'bg-transparent py-5'
+          : 'bg-[#07080C]/92 backdrop-blur-md border-b border-white/[0.06] py-3'
       }`}
     >
       <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 flex justify-between items-center">

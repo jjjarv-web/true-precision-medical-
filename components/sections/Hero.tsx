@@ -50,7 +50,12 @@ function GoogleLogo() {
   )
 }
 
-export default function Hero() {
+type HeroProps = {
+  googleReviewRating: number
+  googleReviewCount: number
+}
+
+export default function Hero({ googleReviewRating, googleReviewCount }: HeroProps) {
   const [selected, setSelected] = useState<string | null>(null)
   const [idleVisible, setIdleVisible] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -228,11 +233,15 @@ export default function Hero() {
               <GoogleLogo />
               <GoogleStars />
             </div>
-            <span className="text-sm font-bold text-white tabular-nums leading-none">4.9</span>
+            <span className="text-sm font-bold text-white tabular-nums leading-none">
+              {googleReviewRating.toFixed(1)}
+            </span>
             <span className="text-sm text-white/45 select-none leading-none" aria-hidden>
               ·
             </span>
-            <span className="text-sm text-white/65 leading-none">400+ reviews on Google</span>
+            <span className="text-sm text-white/65 leading-none">
+              {googleReviewCount}+ reviews on Google
+            </span>
           </div>
         </div>
 
