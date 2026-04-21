@@ -12,6 +12,12 @@ const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
 type Props = {
   locations: Location[]
+  /** Optional — defaults preserve homepage copy. Use on /locations to avoid duplicating the page hero. */
+  sectionEyebrow?: string
+  sectionHeadline?: string
+  sectionDescription?: string
+  /** When true, bumps top padding to clear the fixed nav and renders the headline as h1. */
+  isPageHero?: boolean
 }
 
 function formatCityLine(loc: Location) {
@@ -23,7 +29,13 @@ function formatStreetLine(loc: Location) {
   return [loc.streetAddress, loc.suite].filter(Boolean).join(', ')
 }
 
-export default function LocationsMap({ locations }: Props) {
+export default function LocationsMap({
+  locations,
+  sectionEyebrow = 'Our Locations',
+  sectionHeadline = 'Find us near you.',
+  sectionDescription = 'Most patients are seen within the week. Easy parking at every site.',
+  isPageHero = false,
+}: Props) {
   const ref    = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-100px' })
 
@@ -37,7 +49,7 @@ export default function LocationsMap({ locations }: Props) {
       className="relative bg-[#07080C]"
       style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)' }}
     >
-      <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-12 pt-24 pb-28">
+      <div className={`max-w-6xl mx-auto px-6 sm:px-10 lg:px-12 pb-28 ${isPageHero ? 'pt-44 sm:pt-52' : 'pt-24'}`}>
 
         {/* Header */}
         <motion.div
@@ -47,16 +59,25 @@ export default function LocationsMap({ locations }: Props) {
           className="mb-14"
         >
           <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/40 mb-4 block">
-            Our Locations
+            {sectionEyebrow}
           </span>
-          <h2
-            className="font-heading font-bold text-[#EDE6D8] leading-[1.05] tracking-[-0.04em]"
-            style={{ fontSize: 'clamp(28px, 4vw, 48px)' }}
-          >
-            Closer than you think.
-          </h2>
+          {isPageHero ? (
+            <h1
+              className="font-heading font-bold text-[#EDE6D8] leading-[1.04] tracking-[-0.04em]"
+              style={{ fontSize: 'clamp(38px, 6vw, 72px)' }}
+            >
+              {sectionHeadline}
+            </h1>
+          ) : (
+            <h2
+              className="font-heading font-bold text-[#EDE6D8] leading-[1.05] tracking-[-0.04em]"
+              style={{ fontSize: 'clamp(28px, 4vw, 48px)' }}
+            >
+              {sectionHeadline}
+            </h2>
+          )}
           <p className="text-white/55 text-[15px] mt-3 max-w-sm leading-relaxed">
-            Most patients are seen within the week. Easy parking at every site.
+            {sectionDescription}
           </p>
         </motion.div>
 

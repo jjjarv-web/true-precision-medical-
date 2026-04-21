@@ -35,7 +35,7 @@ export default function Treatments() {
           {SPECIALTIES.map((spec, i) => (
             <motion.a
               key={spec.id}
-              href={`/assessment/${spec.id}`}
+              href={`/treatments/${spec.id}`}
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-60px' }}

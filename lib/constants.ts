@@ -206,10 +206,10 @@ export const SPECIALTIES: Specialty[] = [
 ]
 
 export const NAV_LINKS = [
-  { label: 'Treatments', href: '#treatments' },
-  { label: 'Our Approach', href: '#approach' },
+  { label: 'Treatments', href: '/treatments' },
+  { label: 'Our Approach', href: '/our-approach' },
   { label: 'Specialists', href: '/specialists' },
-  { label: 'Locations', href: '#locations' },
+  { label: 'Locations', href: '/locations' },
 ] as const
 
 export const PHONE_NUMBER = '(800) 555-0199'
@@ -433,27 +433,231 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
   {
     heading: 'Treatments',
     links: [
-      { label: 'Orthopedics', href: '#' },
-      { label: 'Neurosurgery', href: '#' },
-      { label: 'Interventional Radiology', href: '#' },
-      { label: 'Pain Management', href: '#' },
+      { label: 'Joint Pain', href: '/treatments/joint' },
+      { label: 'Back & Neck', href: '/treatments/spine' },
+      { label: 'Nerve Pain', href: '/treatments/nerve' },
+      { label: 'Vascular & Vein', href: '/treatments/vascular' },
+      { label: "Men's Health", href: '/treatments/mens' },
+      { label: "Women's Health", href: '/treatments/womens' },
     ],
   },
   {
     heading: 'Company',
     links: [
-      { label: 'Our Approach', href: '#' },
-      { label: 'Specialists', href: '#' },
-      { label: 'Locations', href: '#' },
-      { label: 'Careers', href: '#' },
+      { label: 'Our Approach', href: '/our-approach' },
+      { label: 'Specialists', href: '/specialists' },
+      { label: 'Locations', href: '/locations' },
     ],
   },
   {
     heading: 'Contact',
     links: [
-      { label: 'Book Online', href: '#' },
+      { label: 'Book Online', href: '/book' },
       { label: 'Patient Portal', href: '#' },
       { label: 'Refer a Patient', href: '#' },
     ],
   },
 ]
+
+export type TreatmentDetail = {
+  tagline: string
+  intro: string
+  conditions: string[]
+  approaches: { name: string; desc: string }[]
+  expectations: { before: string; during: string; after: string }
+}
+
+export const TREATMENT_DETAILS: Record<string, TreatmentDetail> = {
+  joint: {
+    tagline: 'Your joints deserve better than replacement.',
+    intro:
+      "Joint pain changes everything — how you move, sleep, and think about the future. Our orthopedic specialists focus on preservation first: arthroscopic repair, targeted injections, and image-guided procedures that address the root cause before considering more invasive options.\n\nMost patients who come to us have been told surgery is their only path. Often, it isn\u2019t.",
+    conditions: [
+      'Knee osteoarthritis',
+      'Hip pain & impingement',
+      'Shoulder instability & rotator cuff',
+      'Joint degeneration',
+      'Sports injuries',
+      'Tendon & ligament damage',
+    ],
+    approaches: [
+      {
+        name: 'Genicular Artery Embolization',
+        desc: 'A catheter-based procedure that reduces blood flow to the inflamed synovial tissue driving knee pain — no incision, no general anesthesia, same-day discharge.',
+      },
+      {
+        name: 'Arthroscopic Repair',
+        desc: 'Minimally invasive surgery through tiny portals to repair torn cartilage, ligaments, or tendons with significantly less recovery time than open procedures.',
+      },
+      {
+        name: 'Image-Guided Injections',
+        desc: 'Ultrasound or fluoroscopy-guided corticosteroid, PRP, or viscosupplement injections — precision placement for maximum effect.',
+      },
+    ],
+    expectations: {
+      before: 'A dedicated consultation to review your imaging, understand your goals, and build a plan that fits your life — not a one-size-fits-all protocol.',
+      during: 'Most procedures are performed under light sedation in our outpatient center. No hospital admission, no overnight stay.',
+      after: 'Same-day discharge with a clear recovery timeline. Our team checks in to track your progress and adjust the plan if needed.',
+    },
+  },
+  spine: {
+    tagline: 'Relief without the fusion.',
+    intro:
+      "Back and neck pain can feel relentless — and the fear of major spine surgery often keeps people from seeking help. Our neurosurgeons trained in minimally invasive techniques that treat the source of pain through smaller access points, preserving healthy tissue and shortening recovery.\n\nFusion is sometimes the right answer. But it\u2019s rarely the first one.",
+    conditions: [
+      'Herniated disc',
+      'Spinal stenosis',
+      'Sciatica & radiculopathy',
+      'Neck pain & cervical conditions',
+      'Degenerative disc disease',
+      'Facet joint arthritis',
+    ],
+    approaches: [
+      {
+        name: 'Endoscopic Decompression',
+        desc: 'A state-of-the-art approach using a small tube and camera to relieve nerve pressure without the muscle disruption of traditional open surgery.',
+      },
+      {
+        name: 'Nerve Blocks & Ablation',
+        desc: 'Image-guided injections and radiofrequency procedures that interrupt pain signals at their source — effective for facet, sacroiliac, and radicular pain.',
+      },
+      {
+        name: 'Motion-Preserving Options',
+        desc: 'When surgical stabilization is needed, our surgeons prioritize techniques that protect adjacent levels and maintain natural spinal movement.',
+      },
+    ],
+    expectations: {
+      before: 'Your surgeon reviews your MRI or CT in detail with you, explains exactly what is causing your pain, and walks through every option before recommending a path.',
+      during: 'Outpatient procedures performed under local anesthetic or light sedation. Most take under two hours.',
+      after: 'Most patients go home within hours. A structured recovery protocol helps you return to normal activity as quickly as safely possible.',
+    },
+  },
+  mens: {
+    tagline: "Don't settle for symptoms you've been told to live with.",
+    intro:
+      "Men's health conditions — from an enlarged prostate to hormone imbalance — often go undertreated because the alternatives sound worse than the problem. Our interventional and urology-aligned specialists offer outpatient, catheter-based solutions that work without the side effects of traditional surgery.\n\nYou shouldn't have to choose between discomfort and a major procedure.",
+    conditions: [
+      'Benign prostatic hyperplasia (BPH)',
+      'Chronic pelvic pain',
+      'Erectile dysfunction (vascular causes)',
+      'Varicocele',
+      'Hormone optimization',
+      'Prostate conditions',
+    ],
+    approaches: [
+      {
+        name: 'Prostatic Artery Embolization (PAE)',
+        desc: 'A catheter-based procedure that reduces prostate size by restricting blood flow to the enlarged tissue — no incision, no catheter left behind, same-day discharge.',
+      },
+      {
+        name: 'Varicocele Embolization',
+        desc: 'An image-guided alternative to open surgery that seals off dilated veins causing pain, fertility issues, or hormone disruption.',
+      },
+      {
+        name: 'Targeted Vascular Evaluation',
+        desc: "For ED with vascular causes, we assess and address blood flow issues that other providers may overlook — treating the cause, not just the symptom.",
+      },
+    ],
+    expectations: {
+      before: "A detailed consultation that respects your privacy and your time. We review your history, imaging, and goals before recommending any course of action.",
+      during: 'Catheter-based procedures are performed under light sedation. No general anesthesia, no hospital stay.',
+      after: 'Most patients resume normal activity within days. Our team follows up to confirm results and answer any questions.',
+    },
+  },
+  womens: {
+    tagline: 'Preserve more. Recover faster. Stay home.',
+    intro:
+      "Women's health conditions like uterine fibroids, heavy bleeding, and pelvic pain are often treated with surgery that removes organs unnecessarily. Our interventional specialists offer uterus-preserving alternatives that are proven, outpatient, and covered by most major insurance.\n\nYou deserve options — not just a surgical date.",
+    conditions: [
+      'Uterine fibroids',
+      'Adenomyosis',
+      'Heavy menstrual bleeding',
+      'Pelvic congestion syndrome',
+      'Ovarian vein reflux',
+      'Post-menopausal conditions',
+    ],
+    approaches: [
+      {
+        name: 'Uterine Fibroid Embolization (UFE)',
+        desc: 'A catheter-based procedure that cuts off blood supply to fibroids, shrinking them naturally — without surgery, without removing the uterus, and with a much shorter recovery than hysterectomy.',
+      },
+      {
+        name: 'Pelvic Vein Embolization',
+        desc: 'Treats pelvic congestion syndrome and ovarian vein reflux — chronic pelvic pain conditions that are frequently misdiagnosed — through a minimally invasive catheter approach.',
+      },
+      {
+        name: 'Image-Guided Ablation',
+        desc: 'Targeted ablation techniques for adenomyosis and other conditions where precision matters.',
+      },
+    ],
+    expectations: {
+      before: 'A thorough consultation with imaging review. We take the time to explain every option and answer questions about recovery, fertility implications, and expected outcomes.',
+      during: 'Outpatient procedure under light sedation. No general anesthesia, no hospital admission — typically one to two hours.',
+      after: 'Most patients are home the same day and back to normal activity within one to two weeks — significantly faster than surgical alternatives.',
+    },
+  },
+  nerve: {
+    tagline: 'Target the source. Not just the symptom.',
+    intro:
+      'Chronic nerve pain is one of the most complex and undertreated conditions in medicine. Our interventional pain specialists use real-time imaging to place treatments precisely where they are needed — not guessing, not masking — addressing the signals driving your pain at their origin.\n\nYou don\'t have to manage pain forever.',
+    conditions: [
+      'Chronic radicular pain',
+      'Complex regional pain syndrome (CRPS)',
+      'Peripheral neuropathy',
+      'Post-surgical nerve pain',
+      'Trigeminal & occipital neuralgia',
+      'Facet & sacroiliac joint pain',
+    ],
+    approaches: [
+      {
+        name: 'Image-Guided Nerve Blocks',
+        desc: 'Fluoroscopy or ultrasound-guided injections that deliver medication precisely to the affected nerve — diagnostic and therapeutic in a single visit.',
+      },
+      {
+        name: 'Radiofrequency Ablation (RFA)',
+        desc: 'Uses heat energy to disrupt the nerve signals causing chronic pain. Effects typically last 9–18 months; the procedure is repeatable.',
+      },
+      {
+        name: 'Spinal Cord Stimulation',
+        desc: 'For complex, refractory nerve pain, small electrodes modify pain signals before they reach the brain — an alternative to long-term opioid management.',
+      },
+    ],
+    expectations: {
+      before: 'We start with a thorough diagnostic evaluation, review your imaging and prior treatments, and identify which interventions are most likely to produce lasting relief.',
+      during: 'Most procedures are performed under light sedation or local anesthetic in our outpatient center. Precision imaging guides every step.',
+      after: 'Many patients notice meaningful improvement within days to weeks. We track your response and adjust the protocol to build on what works.',
+    },
+  },
+  vascular: {
+    tagline: 'Smaller access. Better circulation. Home the same day.',
+    intro:
+      'Vascular conditions — varicose veins, arterial blockages, chronic venous insufficiency — are often treated with open surgery that carries real risk and long recovery. Catheter-based medicine has changed that. Our interventional radiologists treat most vascular conditions through an access point no larger than a pinhole.\n\nSame results. A fraction of the recovery.',
+    conditions: [
+      'Varicose veins & chronic venous insufficiency',
+      'Peripheral arterial disease (PAD)',
+      'Deep vein thrombosis (DVT)',
+      'Renal artery stenosis',
+      'Mesenteric ischemia',
+      'Vascular malformations',
+    ],
+    approaches: [
+      {
+        name: 'Endovenous Ablation',
+        desc: 'Laser or radiofrequency energy delivered inside the damaged vein closes it from within — eliminating varicose veins without stripping or surgical incisions.',
+      },
+      {
+        name: 'Angioplasty & Stenting',
+        desc: 'For arterial blockages, a small balloon opens the narrowed vessel and a stent holds it open — restoring blood flow without bypass surgery.',
+      },
+      {
+        name: 'Catheter-Directed Thrombolysis',
+        desc: 'For acute clot conditions, medication delivered directly to the clot site via catheter dissolves it far more effectively than systemic IV treatment.',
+      },
+    ],
+    expectations: {
+      before: 'A vascular imaging evaluation pinpoints the location and severity of the issue. We explain your options clearly and help you decide on the right intervention.',
+      during: 'Catheter-based procedures typically take one to two hours under light sedation. Most patients feel minimal discomfort during and after.',
+      after: 'Same-day discharge is standard. Recovery timelines depend on the procedure, but most patients return to full activity significantly faster than after open surgery.',
+    },
+  },
+}

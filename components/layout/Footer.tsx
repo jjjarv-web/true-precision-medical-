@@ -33,9 +33,11 @@ function XIcon() {
 
 type Props = {
   site?: SiteSettings
+  /** Overrides the conversion-band paragraph under “Ready when you are.” */
+  conversionDescription?: string
 }
 
-export default function Footer({ site }: Props = {}) {
+export default function Footer({ site, conversionDescription }: Props = {}) {
   const phone = site?.phone ?? PHONE_NUMBER
   const phoneHref = site?.phoneHref ?? PHONE_HREF
 
@@ -58,7 +60,8 @@ export default function Footer({ site }: Props = {}) {
             Ready when you are.
           </h2>
           <p className="text-white/55 text-base leading-relaxed mb-10 max-w-md mx-auto">
-            Virtual assessment available. Most major insurance plans accepted.
+            {conversionDescription ??
+              'Virtual assessment available. Most major insurance plans accepted.'}
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a
