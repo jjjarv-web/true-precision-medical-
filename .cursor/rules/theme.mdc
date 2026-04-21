@@ -1,0 +1,18 @@
+---
+description: Visual theme and color system for True Precision Medical
+alwaysApply: true
+---
+
+# Color & Theme Rules
+
+Full palette and semantic rules are documented in `/THEME.md`. Always read it before adding or changing any color.
+
+**Quick reference:**
+
+- CTAs on **dark bg** → `#D4C4A8` sand fill, `#1A1814` text
+- CTAs on **light bg** → `#4DCCE8` cyan fill, `#07080C` text
+- Accent / focus rings / progress bars → `#4DCCE8` cyan only
+- Selected states on light bg → `#1A1814` fill, `#EDE6D8` text
+- **Banned**: `#2F34F4` electric blue — do not use anywhere
+
+**Hero is frozen** — never propose color changes to `components/sections/Hero.tsx` unless the user explicitly asks.

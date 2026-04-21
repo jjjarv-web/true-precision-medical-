@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import Image from 'next/image'
 import { motion, AnimatePresence } from 'motion/react'
 import { Check } from 'lucide-react'
 import type { AssessmentConfig } from '@/lib/assessment-data'
@@ -32,9 +31,6 @@ type BookingAssessmentContext = {
 }
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
-
-/** Circular header image — swap `option-1` … `option-4`: public/images/assessment/option-N.jpg */
-const ASSESSMENT_AVATAR_SRC = '/images/assessment/option-1.jpg'
 
 const BOOKING_ASSESSMENT_CONTEXT_KEY = 'assessmentBookingContext'
 
@@ -109,7 +105,7 @@ function buildNarrativeSentence(
   const hasRadiating = radiating.toLowerCase() === 'yes'
   const noTreatment = treatments.length === 0 || treatments.some((t) => t.toLowerCase().includes('none') || t.toLowerCase().includes('nothing'))
   const triedTreatments = !noTreatment && treatments.length > 0
-  const treatmentList = triedTreatments ? formatList(treatments.filter((t) => !t.toLowerCase().includes('none') && !t.toLowerCase().includes('nothing'))) : ''
+  const treatmentList = triedTreatments ? formatList(treatments.filter((t) => !t.toLowerCase().includes('none') && !t.toLowerCase().includes('nothing')).map((t) => t.toLowerCase())) : ''
 
   if (isSevere && isLong && triedTreatments) {
     return `You've been living with ${concern} pain for over a year, and ${treatmentList} hasn't fully resolved it. That pattern often points to an underlying issue that image-guided treatment can address precisely — without major surgery.`
@@ -149,7 +145,7 @@ function buildPersonalizedResult(config: AssessmentConfig, answers: Answers): Pe
   const noTreatment = treatments.length === 0 || treatments.some((t) => t.toLowerCase().includes('none') || t.toLowerCase().includes('nothing'))
   const triedTreatments = !noTreatment && treatments.length > 0
   const treatmentList = triedTreatments
-    ? formatList(treatments.filter((t) => !t.toLowerCase().includes('none') && !t.toLowerCase().includes('nothing')))
+    ? formatList(treatments.filter((t) => !t.toLowerCase().includes('none') && !t.toLowerCase().includes('nothing')).map((t) => t.toLowerCase()))
     : ''
   const concern = primaryConcern ? primaryConcern.toLowerCase() : ''
 
@@ -204,6 +200,9 @@ export default function AssessmentClient({ config }: { config: AssessmentConfig 
   const totalQuestions = questions.length
   const currentQuestion = questions[questionIndex]
   const personalizedResult = buildPersonalizedResult(config, answers)
+  const progressPct = stage === 'questions'
+    ? ((questionIndex + 1) / totalQuestions) * 100
+    : 100
 
   useEffect(() => {
     if (stage !== 'analyzing') return
@@ -264,44 +263,40 @@ export default function AssessmentClient({ config }: { config: AssessmentConfig 
   return (
     <div className="min-h-screen bg-[#F9F7F4]">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 pb-16 pt-4 sm:pt-6">
-        <div className="flex justify-start mb-4">
+        <div className="flex items-center justify-between py-3 mb-4">
           <Link href="/" className="inline-flex">
             <Logo
               variant="dark"
-              width={260}
-              height={68}
-              unoptimized
-              className="h-8 w-auto opacity-95"
+              width={160}
+              height={44}
+              className="h-7 w-auto opacity-90"
             />
+          </Link>
+          <Link
+            href="/"
+            className="text-[13px] text-black/35 hover:text-black/60 transition-colors tracking-wide"
+          >
+            Exit
           </Link>
         </div>
 
-        <div className="flex flex-col items-center mb-8">
-          <div className="relative w-[108px] h-[108px] rounded-full overflow-hidden mb-4 border border-black/5">
-            <Image
-              src={ASSESSMENT_AVATAR_SRC}
-              alt=""
-              fill
-              className="object-cover object-center"
-              sizes="108px"
-              priority
+        <div className="mb-16">
+          <div className="w-full h-[2px] bg-black/[0.07] rounded-full overflow-hidden mb-4">
+            <motion.div
+              className="h-full bg-[#4DCCE8] rounded-full origin-left"
+              animate={{ width: `${progressPct}%` }}
+              transition={{ duration: 0.45, ease: EASE }}
             />
           </div>
-          <div className="flex gap-2">
-            {questions.map((_, i) => (
-              <div
-                key={i}
-                className="h-[5px] w-8 rounded-full transition-colors duration-300"
-                style={{
-                  background:
-                    stage === 'questions'
-                      ? i <= questionIndex
-                        ? '#2F34F4'
-                        : 'rgba(0,0,0,0.10)'
-                      : '#2F34F4',
-                }}
-              />
-            ))}
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-black/35">
+              {config.title}
+            </span>
+            {stage === 'questions' && (
+              <span className="text-[11px] text-black/30 tracking-wide">
+                {questionIndex + 1} / {totalQuestions}
+              </span>
+            )}
           </div>
         </div>
 
@@ -317,10 +312,7 @@ export default function AssessmentClient({ config }: { config: AssessmentConfig 
               transition={{ duration: 0.22, ease: EASE }}
               className="text-center"
             >
-              <p className="text-[12px] font-semibold tracking-[0.14em] uppercase text-[#2F34F4] mb-4">
-                Question {questionIndex + 1} of {totalQuestions}
-              </p>
-              <h1 className="font-heading font-bold text-[#111111] text-[clamp(26px,3.85vw,38px)] leading-[1.12] tracking-[-0.02em] mb-7">
+              <h1 className="font-heading font-bold text-[#111111] text-[clamp(24px,3.4vw,34px)] leading-[1.12] tracking-[-0.02em] mb-9">
                 {currentQuestion.text}
               </h1>
 
@@ -345,7 +337,7 @@ export default function AssessmentClient({ config }: { config: AssessmentConfig 
               transition={{ duration: 0.24, ease: EASE }}
               className="text-center pt-8"
             >
-              <p className="text-[12px] font-semibold tracking-[0.14em] uppercase text-[#2F34F4] mb-4">
+              <p className="text-[12px] font-semibold tracking-[0.14em] uppercase text-black/40 mb-4">
                 Just a moment
               </p>
               <h2 className="font-heading font-bold text-[#111111] text-[clamp(30px,4.4vw,44px)] leading-[1.08] tracking-[-0.03em] mb-3">
@@ -369,7 +361,7 @@ export default function AssessmentClient({ config }: { config: AssessmentConfig 
               transition={{ duration: 0.24, ease: EASE }}
             >
               <div className="text-center mb-8">
-                <p className="text-[12px] font-semibold tracking-[0.14em] uppercase text-[#2F34F4] mb-3">
+                <p className="text-[12px] font-semibold tracking-[0.14em] uppercase text-black/40 mb-3">
                   Your results
                 </p>
                 <h2 className="font-heading font-bold text-[#111111] text-[clamp(32px,5vw,48px)] leading-[1.08] tracking-[-0.03em] mb-5">
@@ -383,20 +375,17 @@ export default function AssessmentClient({ config }: { config: AssessmentConfig 
               <div className="space-y-4 mb-10 max-w-xl mx-auto">
                 {personalizedResult.stats.map((stat) => (
                   <div key={stat} className="flex items-start gap-3.5">
-                    <Check className="w-[18px] h-[18px] text-[#2F34F4] flex-shrink-0 mt-[2px]" strokeWidth={2.5} />
+                    <Check className="w-[18px] h-[18px] text-[#4DCCE8] flex-shrink-0 mt-[2px]" strokeWidth={2.5} />
                     <p className="text-[#1A1814] text-[15px] leading-snug">{stat}</p>
                   </div>
                 ))}
               </div>
 
-              <div className="max-w-xl mx-auto border-t border-black/[0.07] pt-8">
-                <h3 className="font-heading font-bold text-[#111111] text-[clamp(22px,3.2vw,30px)] leading-[1.15] tracking-[-0.02em] mb-5 text-center">
-                  See what&apos;s possible for you.
-                </h3>
+              <div className="max-w-xl mx-auto border-t border-black/[0.07] pt-7">
                 <button
                   type="button"
                   onClick={handleContinueToBooking}
-                  className="w-full bg-[#2F34F4] text-white rounded-xl py-4 text-[15px] font-semibold hover:opacity-95 active:scale-[0.99] transition-all"
+                  className="w-full bg-[#4DCCE8] text-[#07080C] rounded-xl py-4 text-[15px] font-semibold hover:opacity-90 active:scale-[0.99] transition-all"
                 >
                   Get My Treatment Plan
                 </button>
@@ -443,16 +432,16 @@ function OptionList({
             onClick={() => (isMulti ? onMultiToggle(opt.id) : onSingle(opt.id))}
             className="w-full rounded-2xl border px-5 py-4 text-left min-h-[74px]"
             animate={{
-              backgroundColor: selected ? '#2F34F4' : '#FFFFFF',
-              borderColor: selected ? '#2F34F4' : 'rgba(0,0,0,0.10)',
+              backgroundColor: selected ? '#F2EFE9' : '#FFFFFF',
+              borderColor: selected ? 'rgba(0,0,0,0.22)' : 'rgba(0,0,0,0.10)',
               boxShadow: selected
-                ? '0 6px 20px rgba(47,52,244,0.20)'
+                ? '0 2px 8px rgba(0,0,0,0.08)'
                 : '0 1px 2px rgba(0,0,0,0.04)',
             }}
             whileHover={{
               y: -1,
               boxShadow: selected
-                ? '0 8px 24px rgba(47,52,244,0.24)'
+                ? '0 4px 12px rgba(0,0,0,0.10)'
                 : '0 6px 20px rgba(0,0,0,0.08)',
               transition: { duration: 0.14 },
             }}
@@ -461,14 +450,14 @@ function OptionList({
           >
             <span
               className="block text-[18px] font-semibold leading-snug"
-              style={{ color: selected ? '#FFFFFF' : '#141414' }}
+              style={{ color: '#1A1814' }}
             >
               {hasSecondary ? opt.sub : opt.label}
             </span>
             {hasSecondary && (
               <span
                 className="block mt-1 text-[14px] leading-snug"
-                style={{ color: selected ? 'rgba(255,255,255,0.82)' : '#6f6964' }}
+                style={{ color: '#6f6964' }}
               >
                 {opt.label}
               </span>
@@ -484,8 +473,8 @@ function OptionList({
           onClick={onMultiConfirm}
           className="w-full rounded-2xl py-3.5 text-[15px] font-semibold transition mt-1 disabled:cursor-not-allowed"
           style={{
-            background: pendingMulti.length > 0 ? '#2F34F4' : 'rgba(0,0,0,0.07)',
-            color: pendingMulti.length > 0 ? '#FFFFFF' : '#8f8a85',
+            background: pendingMulti.length > 0 ? '#4DCCE8' : 'rgba(0,0,0,0.07)',
+            color: pendingMulti.length > 0 ? '#07080C' : '#8f8a85',
           }}
         >
           Continue

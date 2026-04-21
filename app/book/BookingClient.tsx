@@ -32,7 +32,7 @@ const STEPS_INFO = [
 const TRUST = ['Board-Certified Specialists', 'AAAHC Accredited Centers', 'Same-Day Discharge']
 
 const INPUT =
-  'w-full bg-white border border-black/[0.08] rounded-xl px-4 py-3 text-[15px] text-[#1A1814] placeholder:text-[#C4BEBB] outline-none focus:border-[#2F34F4]/60 focus:ring-2 focus:ring-[#2F34F4]/10 transition-all duration-200'
+  'w-full bg-white border border-black/[0.08] rounded-xl px-4 py-3 text-[15px] text-[#1A1814] placeholder:text-[#C4BEBB] outline-none focus:border-[#4DCCE8]/60 focus:ring-2 focus:ring-[#4DCCE8]/10 transition-all duration-200'
 
 const LABEL = 'block text-[12px] font-semibold text-[#4A4440] mb-1.5'
 
@@ -260,10 +260,10 @@ export default function BookingClient() {
           {/* Progress bar */}
           <div className="px-8 pt-8">
             <div className="flex gap-2 mb-8">
-              <div className="h-[3px] flex-1 rounded-full bg-[#2F34F4] transition-all duration-500" />
+              <div className="h-[3px] flex-1 rounded-full bg-[#4DCCE8] transition-all duration-500" />
               <div
                 className={`h-[3px] flex-1 rounded-full transition-all duration-500 ${
-                  step === 'preference' ? 'bg-[#2F34F4]' : 'bg-black/[0.08]'
+                  step === 'preference' ? 'bg-[#4DCCE8]' : 'bg-black/[0.08]'
                 }`}
               />
             </div>
@@ -337,8 +337,8 @@ export default function BookingClient() {
 
                   <button
                     type="submit"
-                    className="w-full flex items-center justify-center gap-2 bg-[#2F34F4] text-white rounded-xl py-3.5 text-[15px] font-semibold tracking-[-0.01em] hover:opacity-95 active:scale-[0.99] transition-all duration-200"
-                    style={{ boxShadow: '0 2px 16px rgba(47,52,244,0.28)' }}
+                    className="w-full flex items-center justify-center gap-2 bg-[#4DCCE8] text-[#07080C] rounded-xl py-3.5 text-[15px] font-semibold tracking-[-0.01em] hover:opacity-90 active:scale-[0.99] transition-all duration-200"
+                    style={{ boxShadow: '0 2px 16px rgba(77,204,232,0.30)' }}
                   >
                     Continue
                     <ArrowRight className="w-4 h-4" />
@@ -407,19 +407,19 @@ export default function BookingClient() {
                           onClick={() => setTimePreference(key)}
                           className={`flex flex-col items-center gap-2 py-4 rounded-xl border text-sm font-semibold transition-all duration-200 ${
                               timePreference === key
-                              ? 'bg-[#2F34F4] border-[#2F34F4] text-white'
+                              ? 'bg-[#4DCCE8] border-[#4DCCE8] text-[#07080C]'
                               : 'bg-white border-black/[0.08] text-[#4A4440] hover:border-black/[0.16]'
                           }`}
                         >
                           <Icon
                             className={`w-5 h-5 transition-colors duration-200 ${
-                              timePreference === key ? 'text-white/80' : 'text-[#9A9490]'
+                              timePreference === key ? 'text-[#07080C]/70' : 'text-[#9A9490]'
                             }`}
                           />
                           <span>{label}</span>
                           <span
                             className={`text-[11px] font-normal transition-colors duration-200 ${
-                              timePreference === key ? 'text-white/60' : 'text-[#9A9490]'
+                              timePreference === key ? 'text-[#07080C]/55' : 'text-[#9A9490]'
                             }`}
                           >
                             {sub}
@@ -435,8 +435,8 @@ export default function BookingClient() {
 
                   <button
                     type="submit"
-                    className="w-full flex items-center justify-center gap-2 bg-[#2F34F4] text-white rounded-xl py-3.5 mb-4 text-[15px] font-semibold tracking-[-0.01em] hover:opacity-95 active:scale-[0.99] transition-all duration-200"
-                    style={{ boxShadow: '0 2px 16px rgba(47,52,244,0.28)' }}
+                    className="w-full flex items-center justify-center gap-2 bg-[#4DCCE8] text-[#07080C] rounded-xl py-3.5 mb-4 text-[15px] font-semibold tracking-[-0.01em] hover:opacity-90 active:scale-[0.99] transition-all duration-200"
+                    style={{ boxShadow: '0 2px 16px rgba(77,204,232,0.30)' }}
                   >
                     Submit Request
                     <ArrowRight className="w-4 h-4" />
