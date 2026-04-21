@@ -94,7 +94,7 @@ export default function Footer({ site, conversionDescription }: Props = {}) {
                 variant="light"
                 width={180}
                 height={50}
-                className="h-10 w-auto object-contain brightness-0 invert opacity-80"
+                className="h-10 w-auto object-contain opacity-80"
               />
             </a>
             <p className="text-white/45 mb-8 max-w-sm leading-relaxed text-sm">

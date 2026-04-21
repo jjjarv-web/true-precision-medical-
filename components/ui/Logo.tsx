@@ -7,7 +7,11 @@ type LogoProps = Omit<ImageProps, 'src' | 'alt'> & {
   alt?: string
 }
 
-const LOGO_SRC = '/logo/true-precision-medical-logo.svg'
+// light = white logo for dark backgrounds; dark = dark-ink logo for light backgrounds
+const LOGO_SRCS: Record<LogoVariant, string> = {
+  light: '/logo/true-precision-medical-dark-bg@2x.png',
+  dark: '/logo/true-precision-medical-light-bg@2x.png',
+}
 
 export default function Logo({
   variant = 'light',
@@ -15,8 +19,5 @@ export default function Logo({
   className,
   ...props
 }: LogoProps) {
-  const variantClass = variant === 'dark' ? 'brightness-0 saturate-100' : ''
-  const mergedClassName = [className, variantClass].filter(Boolean).join(' ')
-
-  return <Image src={LOGO_SRC} alt={alt} unoptimized className={mergedClassName} {...props} />
+  return <Image src={LOGO_SRCS[variant]} alt={alt} className={className} {...props} />
 }

@@ -72,7 +72,6 @@ export default function BookingClient() {
 
   const today = new Date().toISOString().split('T')[0]
 
-
   useEffect(() => {
     if (typeof window === 'undefined') return
 
@@ -141,7 +140,7 @@ export default function BookingClient() {
               variant="light"
               width={160}
               height={44}
-              className="h-9 w-auto brightness-0 invert opacity-75"
+              className="h-9 w-auto opacity-75"
             />
           </Link>
 
@@ -237,7 +236,7 @@ export default function BookingClient() {
             variant="light"
             width={140}
             height={38}
-            className="h-8 w-auto brightness-0 invert opacity-75"
+            className="h-8 w-auto opacity-75"
           />
         </Link>
         <motion.div
@@ -374,16 +373,24 @@ export default function BookingClient() {
                     />
                   </div>
 
-                  <div className="mb-5 overflow-hidden">
+                  <div className="mb-5">
                     <label className={LABEL}>Preferred date</label>
-                    <input
-                      type="date"
-                      required
-                      value={preferredDate}
-                      min={today}
-                      onChange={(e) => setPreferredDate(e.target.value)}
-                      className={INPUT}
-                    />
+                    <div className="relative">
+                      <input
+                        type="date"
+                        required
+                        value={preferredDate}
+                        min={today}
+                        onChange={(e) => setPreferredDate(e.target.value)}
+                        className={INPUT}
+                        style={!preferredDate ? { color: 'transparent' } : undefined}
+                      />
+                      {!preferredDate && (
+                        <span className="absolute inset-0 flex items-center px-4 text-[15px] text-[#C4BEBB] pointer-events-none">
+                          Select a date
+                        </span>
+                      )}
+                    </div>
                   </div>
 
                   <div className="mb-7">
