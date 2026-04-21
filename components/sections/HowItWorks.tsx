@@ -2,9 +2,7 @@
 
 import { motion } from 'motion/react'
 import { ArrowRight } from 'lucide-react'
-import { HOW_IT_WORKS_STEPS } from '@/lib/constants'
-
-const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
+import { EASE, HOW_IT_WORKS_STEPS } from '@/lib/constants'
 
 export default function HowItWorks() {
   return (

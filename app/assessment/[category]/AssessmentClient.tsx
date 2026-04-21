@@ -1,17 +1,17 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'motion/react'
 import { Check } from 'lucide-react'
 import type { AssessmentConfig } from '@/lib/assessment-data'
 import Logo from '@/components/ui/Logo'
+import { EASE } from '@/lib/constants'
 
 type Stage = 'questions' | 'analyzing' | 'results'
 type Answers = Record<string, string | string[]>
 type PersonalizedResult = {
-  summaryItems: string[]
   stats: string[]
   dynamicHeadline: string
   narrativeSentence: string
@@ -30,7 +30,6 @@ type BookingAssessmentContext = {
   personalizedSummary: string[]
 }
 
-const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
 const BOOKING_ASSESSMENT_CONTEXT_KEY = 'assessmentBookingContext'
 
@@ -73,40 +72,78 @@ function getAnswerLabels(config: AssessmentConfig, answers: Answers, questionId:
     .filter((label): label is string => !!label)
 }
 
-function deriveDynamicHeadline(
-  severity: string,
-  duration: string,
-  treatments: string[]
-): string {
-  const isSevere = severity.toLowerCase().includes('7') || severity.toLowerCase().includes('severe') || severity.toLowerCase().includes('significantly')
-  const isLong = duration.toLowerCase().includes('1+') || duration.toLowerCase().includes('year') || duration.toLowerCase().includes('12')
-  const noTreatment = treatments.length === 0 || treatments.some((t) => t.toLowerCase().includes('none') || t.toLowerCase().includes('nothing'))
-  const triedTreatments = !noTreatment && treatments.length > 0
-
-  if (isSevere && isLong && triedTreatments) return 'There\'s more we can do.'
-  if (isSevere && noTreatment) return 'You came to the right place.'
-  if (isLong && triedTreatments) return 'This is very treatable.'
-  if (!isLong) return 'You caught this early.'
-  return 'Good news.'
+function cleanTreatments(treatments: string[]): string[] {
+  return treatments
+    .filter((t) => !t.toLowerCase().includes('none') && !t.toLowerCase().includes('nothing'))
+    .map((t) => t.toLowerCase())
 }
 
-function buildNarrativeSentence(
-  primaryConcern: string,
-  severity: string,
-  duration: string,
-  radiating: string,
+type ParsedAnswers = {
+  concern: string
+  severity: string
+  duration: string
+  radiating: string
   treatments: string[]
-): string {
-  const concern = primaryConcern ? primaryConcern.toLowerCase() : 'your condition'
-  const isSevere = severity.toLowerCase().includes('7') || severity.toLowerCase().includes('severe') || severity.toLowerCase().includes('significantly')
-  const isModerate = severity.toLowerCase().includes('4') || severity.toLowerCase().includes('moderate') || severity.toLowerCase().includes('noticeably')
-  const isLong = duration.toLowerCase().includes('1+') || duration.toLowerCase().includes('year') || duration.toLowerCase().includes('12')
-  const isShort = duration.toLowerCase().includes('6 months') || duration.toLowerCase().includes('< 6')
+  isSevere: boolean
+  isModerate: boolean
+  isLong: boolean
+  isShort: boolean
+  hasRadiating: boolean
+  noTreatment: boolean
+  triedTreatments: boolean
+  treatmentList: string
+}
+
+function parseAnswers(config: AssessmentConfig, answers: Answers): ParsedAnswers {
+  const primaryConcern =
+    getAnswerLabels(config, answers, 'location')[0] ||
+    getAnswerLabels(config, answers, 'concern')[0] ||
+    getAnswerLabels(config, answers, 'type')[0] ||
+    ''
+  const severity =
+    getAnswerLabels(config, answers, 'severity')[0] || getAnswerLabels(config, answers, 'impact')[0] || ''
+  const duration = getAnswerLabels(config, answers, 'duration')[0] || ''
+  const radiating = getAnswerLabels(config, answers, 'radiating')[0] || ''
+  const treatments = getAnswerLabels(config, answers, 'treatments')
+
+  const sev = severity.toLowerCase()
+  const dur = duration.toLowerCase()
+  const isSevere = sev.includes('7') || sev.includes('severe') || sev.includes('significantly')
+  const isModerate = sev.includes('4') || sev.includes('moderate') || sev.includes('noticeably')
+  const isLong = dur.includes('1+') || dur.includes('year') || dur.includes('12')
+  const isShort = dur.includes('6 months') || dur.includes('< 6')
   const hasRadiating = radiating.toLowerCase() === 'yes'
   const noTreatment = treatments.length === 0 || treatments.some((t) => t.toLowerCase().includes('none') || t.toLowerCase().includes('nothing'))
   const triedTreatments = !noTreatment && treatments.length > 0
-  const treatmentList = triedTreatments ? formatList(treatments.filter((t) => !t.toLowerCase().includes('none') && !t.toLowerCase().includes('nothing')).map((t) => t.toLowerCase())) : ''
+  const treatmentList = triedTreatments ? formatList(cleanTreatments(treatments)) : ''
 
+  return {
+    concern: primaryConcern ? primaryConcern.toLowerCase() : 'your condition',
+    severity,
+    duration,
+    radiating,
+    treatments,
+    isSevere,
+    isModerate,
+    isLong,
+    isShort,
+    hasRadiating,
+    noTreatment,
+    triedTreatments,
+    treatmentList,
+  }
+}
+
+function deriveDynamicHeadline(p: ParsedAnswers): string {
+  if (p.isSevere && p.isLong && p.triedTreatments) return "There's more we can do."
+  if (p.isSevere && p.noTreatment) return 'You came to the right place.'
+  if (p.isLong && p.triedTreatments) return 'This is very treatable.'
+  if (!p.isLong) return 'You caught this early.'
+  return 'Good news.'
+}
+
+function buildNarrativeSentence(p: ParsedAnswers): string {
+  const { concern, isSevere, isModerate, isLong, isShort, hasRadiating, noTreatment, triedTreatments, treatmentList } = p
   if (isSevere && isLong && triedTreatments) {
     return `You've been living with ${concern} pain for over a year, and ${treatmentList} hasn't fully resolved it. That pattern often points to an underlying issue that image-guided treatment can address precisely — without major surgery.`
   }
@@ -129,41 +166,23 @@ function buildNarrativeSentence(
 }
 
 function buildPersonalizedResult(config: AssessmentConfig, answers: Answers): PersonalizedResult {
-  const primaryConcern =
-    getAnswerLabels(config, answers, 'location')[0] ||
-    getAnswerLabels(config, answers, 'concern')[0] ||
-    getAnswerLabels(config, answers, 'type')[0] ||
-    ''
-  const severity =
-    getAnswerLabels(config, answers, 'severity')[0] || getAnswerLabels(config, answers, 'impact')[0] || ''
-  const duration = getAnswerLabels(config, answers, 'duration')[0] || ''
-  const radiating = getAnswerLabels(config, answers, 'radiating')[0] || ''
-  const treatments = getAnswerLabels(config, answers, 'treatments')
-
-  const isSevere = severity.toLowerCase().includes('7') || severity.toLowerCase().includes('severe') || severity.toLowerCase().includes('significantly')
-  const isLong = duration.toLowerCase().includes('1+') || duration.toLowerCase().includes('year') || duration.toLowerCase().includes('12')
-  const noTreatment = treatments.length === 0 || treatments.some((t) => t.toLowerCase().includes('none') || t.toLowerCase().includes('nothing'))
-  const triedTreatments = !noTreatment && treatments.length > 0
-  const treatmentList = triedTreatments
-    ? formatList(treatments.filter((t) => !t.toLowerCase().includes('none') && !t.toLowerCase().includes('nothing')).map((t) => t.toLowerCase()))
-    : ''
-  const concern = primaryConcern ? primaryConcern.toLowerCase() : ''
+  const p = parseAnswers(config, answers)
+  const concern = p.concern === 'your condition' ? '' : p.concern
 
   const stat1 = concern
     ? `Most patients with ${concern} symptoms like yours avoid major surgery with our approach.`
     : config.result.stats[0]
 
-  const stat2 = triedTreatments
-    ? `Because ${treatmentList} hasn't resolved it, your specialist will focus on what's actually driving the pain.`
-    : isSevere && isLong
+  const stat2 = p.triedTreatments
+    ? `Because ${p.treatmentList} hasn't resolved it, your specialist will focus on what's actually driving the pain.`
+    : p.isSevere && p.isLong
       ? `Our team regularly helps patients whose pain has persisted this long — often with same-day, outpatient procedures.`
       : `Our specialists will review your exact situation and outline the least invasive path forward.`
 
   return {
-    summaryItems: [],
     stats: [stat1, stat2],
-    dynamicHeadline: deriveDynamicHeadline(severity, duration, treatments),
-    narrativeSentence: buildNarrativeSentence(primaryConcern, severity, duration, radiating, treatments),
+    dynamicHeadline: deriveDynamicHeadline(p),
+    narrativeSentence: buildNarrativeSentence(p),
   }
 }
 
@@ -192,14 +211,13 @@ export default function AssessmentClient({ config }: { config: AssessmentConfig 
   const router = useRouter()
   const [stage, setStage] = useState<Stage>('questions')
   const [questionIndex, setQuestionIndex] = useState(0)
-  const [direction, setDirection] = useState<1 | -1>(1)
   const [answers, setAnswers] = useState<Answers>({})
   const [pendingMulti, setPendingMulti] = useState<string[]>([])
 
   const questions = config.questions
   const totalQuestions = questions.length
   const currentQuestion = questions[questionIndex]
-  const personalizedResult = buildPersonalizedResult(config, answers)
+  const personalizedResult = useMemo(() => buildPersonalizedResult(config, answers), [config, answers])
   const progressPct = stage === 'questions'
     ? ((questionIndex + 1) / totalQuestions) * 100
     : 100
@@ -212,7 +230,6 @@ export default function AssessmentClient({ config }: { config: AssessmentConfig 
 
   function advanceQuestion() {
     if (questionIndex < totalQuestions - 1) {
-      setDirection(1)
       setQuestionIndex((i) => i + 1)
     } else {
       setStage('analyzing')
@@ -238,26 +255,23 @@ export default function AssessmentClient({ config }: { config: AssessmentConfig 
   }
 
   function handleContinueToBooking() {
-    if (typeof window !== 'undefined') {
-      const context: BookingAssessmentContext = {
-        source: 'assessment',
-        capturedAt: new Date().toISOString(),
-        categorySlug: config.slug,
-        categoryTitle: config.title,
-        answers,
-        responses: buildQuestionResponses(config, answers),
-        personalizedSummary: personalizedResult.stats,
-      }
-      window.sessionStorage.setItem(BOOKING_ASSESSMENT_CONTEXT_KEY, JSON.stringify(context))
+    const context: BookingAssessmentContext = {
+      source: 'assessment',
+      capturedAt: new Date().toISOString(),
+      categorySlug: config.slug,
+      categoryTitle: config.title,
+      answers,
+      responses: buildQuestionResponses(config, answers),
+      personalizedSummary: personalizedResult.stats,
     }
-
+    sessionStorage.setItem(BOOKING_ASSESSMENT_CONTEXT_KEY, JSON.stringify(context))
     router.push('/book?from=assessment')
   }
 
   const slideVariants = {
-    enter: (d: number) => ({ opacity: 0, x: d > 0 ? 18 : -18 }),
+    enter: { opacity: 0, x: 18 },
     center: { opacity: 1, x: 0 },
-    exit: (d: number) => ({ opacity: 0, x: d > 0 ? -18 : 18 }),
+    exit: { opacity: 0, x: -18 },
   }
 
   return (
@@ -300,11 +314,10 @@ export default function AssessmentClient({ config }: { config: AssessmentConfig 
           </div>
         </div>
 
-        <AnimatePresence mode="wait" custom={direction}>
+        <AnimatePresence mode="wait">
           {stage === 'questions' && (
             <motion.div
               key={`q-${questionIndex}`}
-              custom={direction}
               variants={slideVariants}
               initial="enter"
               animate="center"
@@ -329,7 +342,6 @@ export default function AssessmentClient({ config }: { config: AssessmentConfig 
           {stage === 'analyzing' && (
             <motion.div
               key="analyzing"
-              custom={1}
               variants={slideVariants}
               initial="enter"
               animate="center"
@@ -353,7 +365,6 @@ export default function AssessmentClient({ config }: { config: AssessmentConfig 
           {stage === 'results' && (
             <motion.div
               key="results"
-              custom={1}
               variants={slideVariants}
               initial="enter"
               animate="center"

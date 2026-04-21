@@ -4,6 +4,7 @@ import { useRef } from 'react'
 import { motion, useInView } from 'motion/react'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
+import { EASE } from '@/lib/constants'
 import type { Provider } from '@/lib/constants'
 import ProviderCard from '@/components/providers/ProviderCard'
 
@@ -29,8 +30,6 @@ const CREDENTIALS = [
   { index: '03', title: 'AAAHC Accredited', detail: 'Our centers meet the rigorous AAAHC ambulatory healthcare standards.' },
   { index: '04', title: 'Same-Day Discharge', detail: 'No hospital stays. Every procedure. You go home the same day.' },
 ]
-
-const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
 export default function TrustCredentials({
   homepageProviders,

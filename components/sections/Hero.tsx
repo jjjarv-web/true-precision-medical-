@@ -83,25 +83,11 @@ export default function Hero({ googleReviewRating, googleReviewCount }: HeroProp
     })
 
     attentionTl
-      .to('.gsap-bringing-heading', {
-        scale: 1.04,
-        duration: 0.4,
+      .to('.gsap-pills-wrapper', {
+        y: -6,
+        duration: 0.34,
         ease: 'power2.out',
       })
-      .to('.gsap-bringing-heading', {
-        scale: 1,
-        duration: 0.36,
-        ease: 'power2.inOut',
-      })
-      .to(
-        '.gsap-pills-wrapper',
-        {
-          y: -6,
-          duration: 0.34,
-          ease: 'power2.out',
-        },
-        '<0.06'
-      )
       .to('.gsap-pills-wrapper', {
         y: 0,
         duration: 0.42,
@@ -193,7 +179,6 @@ export default function Hero({ googleReviewRating, googleReviewCount }: HeroProp
                       : '0 1px 3px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.04)',
                     opacity: isDimmed ? 0.35 : 1,
                     scale: isDimmed ? 0.96 : 1,
-                    filter: isDimmed ? 'blur(0.3px)' : 'blur(0px)',
                   }}
                   whileHover={{
                     y: isSelected ? 0 : -2,

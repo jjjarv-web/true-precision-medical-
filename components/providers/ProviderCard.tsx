@@ -3,9 +3,8 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion } from 'motion/react'
+import { EASE } from '@/lib/constants'
 import type { Provider } from '@/lib/constants'
-
-const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
 function defaultBioTeaser(): string {
   return 'Focused on clear communication and coordinated, patient-centered care.'

@@ -3,14 +3,12 @@
 import { useCallback, useRef, useState } from 'react'
 import { motion } from 'motion/react'
 import { ArrowUpRight, ChevronDown, Star } from 'lucide-react'
-import { FEATURED_TESTIMONIALS, GOOGLE_BUSINESS_REVIEWS_URL } from '@/lib/constants'
+import { EASE, FEATURED_TESTIMONIALS, GOOGLE_BUSINESS_REVIEWS_URL } from '@/lib/constants'
 
 type PatientStoriesProps = {
   googleReviewRating: number
   googleReviewCount: number
 }
-
-const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
 function initialsFromName(name: string) {
   const parts = name.replace(/\./g, '').trim().split(/\s+/)

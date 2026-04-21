@@ -1,3 +1,6 @@
+/** Shared Framer Motion cubic-bezier ease used across all animated components. */
+export const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
+
 /** Default Google stats when Site Settings fields are unset (see `fetchSiteSettings`). */
 export const GOOGLE_RATING = 4.9
 export const GOOGLE_REVIEWS = 400

@@ -1,11 +1,10 @@
 'use client'
 
 import { motion } from 'motion/react'
+import { EASE } from '@/lib/constants'
 import { Phone, MapPin, Clock, Navigation, ArrowRight } from 'lucide-react'
 import LocationsMap from '@/components/sections/LocationsMap'
 import type { Location, SiteSettings } from '@/lib/sanity'
-
-const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
 function LocationCard({ loc, index }: { loc: Location; index: number }) {
   const streetLine = [loc.streetAddress, loc.suite].filter(Boolean).join(', ')

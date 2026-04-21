@@ -1,14 +1,13 @@
 'use client'
 
 import dynamic from 'next/dynamic'
+import { EASE } from '@/lib/constants'
 import { useRef, useState } from 'react'
 import { motion, useInView, AnimatePresence } from 'motion/react'
 import { MapPin, Phone, Clock, Navigation } from 'lucide-react'
 import type { Location } from '@/lib/sanity'
 
 const LeafletMap = dynamic(() => import('./LeafletMap'), { ssr: false })
-
-const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
 type Props = {
   locations: Location[]

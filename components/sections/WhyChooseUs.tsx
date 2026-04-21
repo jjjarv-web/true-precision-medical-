@@ -2,9 +2,7 @@
 
 import { motion } from 'motion/react'
 import { ScanLine, Building2, Award, type LucideIcon } from 'lucide-react'
-import { WHY_FEATURES } from '@/lib/constants'
-
-const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
+import { EASE, WHY_FEATURES } from '@/lib/constants'
 
 const ICONS: Record<(typeof WHY_FEATURES)[number]['icon'], LucideIcon> = {
   'scan-line': ScanLine,

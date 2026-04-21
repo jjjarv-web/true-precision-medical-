@@ -9,9 +9,7 @@ import {
   isKnownCarrier,
 } from '@/lib/insurance-data'
 import type { InsuranceSettings, SiteSettings } from '@/lib/sanity'
-import { PHONE_NUMBER, PHONE_HREF } from '@/lib/constants'
-
-const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
+import { EASE, PHONE_NUMBER, PHONE_HREF } from '@/lib/constants'
 
 type MatchState = 'idle' | 'pass' | 'fail' | 'unknown'
 

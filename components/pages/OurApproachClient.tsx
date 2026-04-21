@@ -3,10 +3,8 @@
 import { motion } from 'motion/react'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
-import { HOW_IT_WORKS_STEPS, WHY_FEATURES } from '@/lib/constants'
+import { EASE, HOW_IT_WORKS_STEPS, WHY_FEATURES } from '@/lib/constants'
 import type { SiteSettings } from '@/lib/sanity'
-
-const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
 const CREDENTIALS = [
   { index: '01', title: 'Board-Certified', detail: 'Every physician holds active board certification in their specialty.' },

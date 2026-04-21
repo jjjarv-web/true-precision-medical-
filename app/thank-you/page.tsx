@@ -30,7 +30,7 @@ export default async function ThankYouPage() {
               Please keep your phone nearby in case our team calls from an unfamiliar number.
             </div>
             <div className="rounded-xl border border-black/[0.08] px-4 py-3 text-[14px] text-[#1A1814]">
-              Need immediate help? Call our office directly to speak with a coordinator.
+              Our team is available Monday–Friday, 8am–5pm. You can reach us at the number below.
             </div>
           </div>
 

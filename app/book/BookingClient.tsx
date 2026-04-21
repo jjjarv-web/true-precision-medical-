@@ -6,10 +6,10 @@ import Link from 'next/link'
 import { motion, AnimatePresence } from 'motion/react'
 import { ArrowRight, Sun, Sunset } from 'lucide-react'
 import Logo from '@/components/ui/Logo'
+import { EASE } from '@/lib/constants'
 
 type Step = 'contact' | 'preference'
 
-const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
 const STEPS_INFO = [
   {
@@ -68,7 +68,6 @@ export default function BookingClient() {
   const [preferredDate, setPreferredDate] = useState('')
   const [timePreference, setTimePreference] = useState<'morning' | 'afternoon' | null>(null)
   const [error2, setError2] = useState('')
-  const [fromAssessment, setFromAssessment] = useState(false)
   const [assessmentContext, setAssessmentContext] = useState<AssessmentContext | null>(null)
 
   const today = new Date().toISOString().split('T')[0]
@@ -77,22 +76,17 @@ export default function BookingClient() {
   useEffect(() => {
     if (typeof window === 'undefined') return
 
-    const fromAssessmentRoute = searchParams.get('from') === 'assessment'
-    const rawContext = window.sessionStorage.getItem(ASSESSMENT_CONTEXT_KEY)
-    if (!fromAssessmentRoute) {
-      setFromAssessment(false)
+    if (searchParams.get('from') !== 'assessment') {
       setAssessmentContext(null)
       return
     }
 
-    setFromAssessment(true)
+    const rawContext = window.sessionStorage.getItem(ASSESSMENT_CONTEXT_KEY)
     if (!rawContext) return
 
     try {
       const parsed = JSON.parse(rawContext) as AssessmentContext
-      if (parsed.source === 'assessment') {
-        setAssessmentContext(parsed)
-      }
+      if (parsed.source === 'assessment') setAssessmentContext(parsed)
     } catch {
       setAssessmentContext(null)
     }
@@ -191,7 +185,7 @@ export default function BookingClient() {
             ))}
           </div>
 
-          {fromAssessment && assessmentContext && (
+          {assessmentContext && (
             <div className="mt-8 rounded-2xl border border-white/[0.12] bg-white/[0.03] p-4 max-w-md">
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#4DCCE8] mb-2">
                 From your assessment

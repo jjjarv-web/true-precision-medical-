@@ -3,9 +3,7 @@
 import { motion } from 'motion/react'
 import Link from 'next/link'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
-import { SPECIALTIES, type TreatmentDetail } from '@/lib/constants'
-
-const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
+import { EASE, SPECIALTIES, type TreatmentDetail } from '@/lib/constants'
 
 type Props = {
   slug: string
