@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { motion, AnimatePresence } from 'motion/react'
 import { ArrowRight, Sun, Sunset } from 'lucide-react'
 import Logo from '@/components/ui/Logo'
+import DatePicker from '@/components/ui/DatePicker'
 import { EASE } from '@/lib/constants'
 
 type Step = 'contact' | 'preference'
@@ -375,22 +376,12 @@ export default function BookingClient() {
 
                   <div className="mb-5">
                     <label className={LABEL}>Preferred date</label>
-                    <div className="relative overflow-hidden">
-                      <input
-                        type="date"
-                        required
-                        value={preferredDate}
-                        min={today}
-                        onChange={(e) => setPreferredDate(e.target.value)}
-                        className={INPUT}
-                        style={!preferredDate ? { color: 'transparent', maxWidth: '100%' } : { maxWidth: '100%' }}
-                      />
-                      {!preferredDate && (
-                        <span className="absolute inset-0 flex items-center px-4 text-[15px] text-[#C4BEBB] pointer-events-none">
-                          Select a date
-                        </span>
-                      )}
-                    </div>
+                    <DatePicker
+                      value={preferredDate}
+                      onChange={setPreferredDate}
+                      minDate={today}
+                      placeholder="Select a date"
+                    />
                   </div>
 
                   <div className="mb-7">

@@ -32,3 +32,4 @@ next-env.d.ts
 *.pem
 .vercel
 .env*.local
+.cursor/
