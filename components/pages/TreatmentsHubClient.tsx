@@ -28,7 +28,7 @@ export default function TreatmentsHubClient() {
             transition={{ duration: 0.7, ease: EASE, delay: 0.08 }}
             className="font-heading font-bold text-[#EDE6D8] text-[clamp(38px,6vw,72px)] leading-[1.04] tracking-[-0.04em] max-w-3xl"
           >
-            Every condition.<br className="hidden sm:block" /> One standard of care.
+            Explore treatments.
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 16 }}

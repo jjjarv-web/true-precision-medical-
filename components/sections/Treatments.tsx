@@ -23,7 +23,7 @@ export default function Treatments() {
             Specialty Areas
           </span>
           <h2 className="font-heading font-bold text-[clamp(30px,4vw,52px)] text-[#EDE6D8] leading-[1.08] tracking-[-0.04em]">
-            Every condition.<br className="hidden sm:block" /> One standard of care.
+            Explore treatments.
           </h2>
         </motion.div>
 
@@ -59,7 +59,7 @@ export default function Treatments() {
 
               {/* CTA */}
               <div className="flex items-center gap-2 text-white/25 group-hover:text-white/60 transition-colors duration-250 text-sm tracking-[0.01em]">
-                <span>Start assessment</span>
+                <span>Learn more</span>
                 <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
               </div>
 
