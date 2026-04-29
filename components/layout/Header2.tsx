@@ -42,17 +42,11 @@ export default function Header2({ site }: Props = {}) {
     ? 'bg-white/92 backdrop-blur-md shadow-[0_1px_0_rgba(14,14,14,0.07)] py-3'
     : 'bg-transparent py-5'
 
-  const navOpacity = scrolled ? 0.78 : 1
-
   return (
     <>
       <header
-        className={`fixed top-0 w-full z-50 transition-all duration-300 ${barClass}`}
-        style={{ opacity: navOpacity }}
-        onMouseEnter={() => { /* noop — CSS handles hover */ }}
+        className={`fixed top-0 w-full z-50 transition-all duration-300 ${barClass} ${scrolled ? 'opacity-[0.78] hover:opacity-100' : ''}`}
       >
-        {/* Hover restores full opacity */}
-        <style>{`header:hover { opacity: 1 !important; }`}</style>
 
         <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 flex justify-between items-center">
 
