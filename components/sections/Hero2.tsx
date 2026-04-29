@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import Link from 'next/link'
 import {
   PersonStanding,
   Activity,
@@ -10,8 +11,10 @@ import {
   AlignCenter,
   Brain,
   ArrowRight,
-  Play,
+  MessageCircle,
+  Phone,
 } from 'lucide-react'
+import { PHONE_NUMBER, PHONE_HREF } from '@/lib/constants'
 
 const BG   = '#F9F7F4'
 const GOLD = '#B8AA82'  // ARC's warm sand-gold
@@ -125,7 +128,7 @@ export default function Hero2() {
 
               {/* Headline — ARC: semibold, tight tracking, near-[0.98] leading */}
               <h1
-                className="font-heading font-semibold leading-[0.98] tracking-[-0.06em] mb-6"
+                className="font-heading font-semibold leading-[1.08] tracking-[-0.06em] mb-6"
                 style={{ fontSize: 'clamp(46px, 4vw, 62px)', color: '#0E0E0E' }}
               >
                 <span className="block">Target the source.</span>
@@ -142,10 +145,12 @@ export default function Hero2() {
                 pain&mdash;so you can move better, feel better, and live better.
               </p>
 
-              {/* CTAs — ARC style */}
-              <div className="flex items-center gap-5 flex-wrap">
-                <button
-                  type="button"
+              {/* CTAs */}
+              <div className="flex items-center gap-4 flex-wrap">
+
+                {/* Primary — Start Free Assessment */}
+                <Link
+                  href="/assessment"
                   className="inline-flex items-center gap-3 rounded-full px-8 py-4 text-[15px] font-medium
                              tracking-tight text-white select-none
                              shadow-[0_2px_8px_rgba(0,0,0,0.10)]
@@ -154,23 +159,41 @@ export default function Hero2() {
                   style={{ backgroundColor: '#0E0E0E' }}
                 >
                   <ArrowRight className="w-[15px] h-[15px]" aria-hidden />
-                  Explore Treatments
-                </button>
+                  Start Free Assessment
+                </Link>
 
-                <button
-                  type="button"
-                  className="inline-flex items-center gap-3 text-[15px] font-medium tracking-tight
-                             transition-all duration-200 select-none hover:opacity-80"
+                {/* Secondary — Text Us (mobile) */}
+                <a
+                  href={`sms:${PHONE_HREF.replace('tel:', '')}?body=Hi%2C%20I%27d%20like%20to%20connect%20with%20True%20Precision%20Medical.`}
+                  className="sm:hidden inline-flex items-center gap-2.5 text-[15px] font-medium tracking-tight
+                             transition-all duration-200 select-none hover:opacity-75"
                   style={{ color: 'rgba(14,14,14,0.60)' }}
                 >
                   <span
                     className="w-9 h-9 rounded-full border flex items-center justify-center flex-shrink-0"
                     style={{ borderColor: 'rgba(14,14,14,0.18)' }}
                   >
-                    <Play className="w-[11px] h-[11px] fill-current ml-0.5" style={{ color: '#0E0E0E' }} />
+                    <MessageCircle className="w-[15px] h-[15px]" style={{ color: '#0E0E0E' }} />
                   </span>
-                  How It Works
-                </button>
+                  Text Us
+                </a>
+
+                {/* Secondary — Text or call (desktop) */}
+                <a
+                  href={PHONE_HREF}
+                  className="hidden sm:inline-flex items-center gap-2.5 text-[15px] font-medium tracking-tight
+                             transition-all duration-200 select-none hover:opacity-75"
+                  style={{ color: 'rgba(14,14,14,0.60)' }}
+                >
+                  <span
+                    className="w-9 h-9 rounded-full border flex items-center justify-center flex-shrink-0"
+                    style={{ borderColor: 'rgba(14,14,14,0.18)' }}
+                  >
+                    <Phone className="w-[14px] h-[14px]" style={{ color: '#0E0E0E' }} />
+                  </span>
+                  {PHONE_NUMBER}
+                </a>
+
               </div>
 
             </div>
