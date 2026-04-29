@@ -99,3 +99,79 @@ h1, h2, h3, h4, h5, h6 {
   0%   { opacity: 0; }
   100% { opacity: 1; }
 }
+
+/* ─────────────────────────────────────────────────
+   HERO2 — light-theme split hero (ARC-inspired)
+   .hero2-slides-wrapper  — opacity/filter shell for all slides
+   .hero2-slide           — individual crossfading image
+   .hero2-fade            — left warm wash for text legibility
+   .hero2-content         — copy block, left-anchored
+   ───────────────────────────────────────────────── */
+
+/* Wrapper applies opacity + filter to all slides together */
+.hero2-slides-wrapper {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  pointer-events: none;
+  opacity: 0.38;
+  filter: saturate(0.72) contrast(0.92);
+}
+
+/* Mobile: each slide fills viewport as soft backdrop */
+.hero2-slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 62% top;
+  transition: opacity 0.9s ease-in-out;
+}
+
+.hero2-fade {
+  background: linear-gradient(
+    90deg,
+    #F9F7F4 0%,
+    #F9F7F4 30%,
+    rgba(249, 247, 244, 0.65) 55%,
+    rgba(249, 247, 244, 0) 88%
+  );
+}
+
+.hero2-content {
+  /* Mobile: tighter top padding so text + image both fit in viewport */
+  padding: 120px 24px 28px 24px;
+}
+
+/* Desktop: slides anchor to right edge of 1440px container */
+@media (min-width: 1024px) {
+  .hero2-slides-wrapper {
+    opacity: 0.55;
+    filter: saturate(0.85) contrast(0.95);
+  }
+
+  .hero2-slide {
+    inset: auto;
+    width: auto;
+    height: 110%;
+    top: -5%;
+    right: -3%;
+    object-fit: unset;
+    object-position: unset;
+  }
+
+  .hero2-fade {
+    background: linear-gradient(
+      90deg,
+      #F9F7F4 0%,
+      #F9F7F4 34%,
+      rgba(249, 247, 244, 0.52) 54%,
+      rgba(249, 247, 244, 0) 72%
+    );
+  }
+
+  .hero2-content {
+    padding: 16vh 0 0 clamp(48px, 5vw, 96px);
+  }
+}
