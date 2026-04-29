@@ -6,7 +6,7 @@ import { EASE, SPECIALTIES } from '@/lib/constants'
 
 export default function Treatments() {
   return (
-    <section id="treatments" className="bg-[#07080c] pt-0 pb-28 sm:pb-32">
+    <section id="treatments" className="bg-[#07080c] pt-24 sm:pt-32 pb-20 sm:pb-24">
       <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-12">
 
         {/* Section header */}
@@ -38,27 +38,44 @@ export default function Treatments() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-60px' }}
               transition={{ duration: 0.6, ease: EASE, delay: i * 0.10 }}
-              className="group relative flex flex-col gap-5 p-8 bg-[#07080c] cursor-pointer transition-colors duration-300 hover:bg-white/[0.04]"
+              className="group relative flex flex-col p-8 bg-[#07080c] cursor-pointer transition-colors duration-300 hover:bg-white/[0.04] min-h-[300px] overflow-hidden"
             >
-              {/* Index */}
-              <span className="font-mono text-[11px] text-white/18 tracking-widest select-none">
-                {String(i + 1).padStart(2, '0')}
-              </span>
+              {/* Anatomical background image */}
+              <div className="absolute inset-x-0 bottom-0 h-[58%] pointer-events-none select-none">
+                <img
+                  src={spec.img}
+                  alt=""
+                  aria-hidden="true"
+                  className="absolute inset-0 w-full h-full object-cover object-top grayscale opacity-[0.09] group-hover:opacity-[0.18] transition-opacity duration-500"
+                />
+                <div
+                  className="absolute inset-0"
+                  style={{ background: 'linear-gradient(to bottom, #07080c 0%, #07080c 15%, transparent 100%)' }}
+                />
+              </div>
 
-              {/* Condition name */}
-              <h3 className="font-heading font-semibold text-white text-xl tracking-[-0.025em] leading-snug">
-                {spec.label}
-              </h3>
+              {/* Card content */}
+              <div className="relative z-10 flex flex-col gap-5 flex-1">
+                {/* Index */}
+                <span className="font-mono text-[11px] text-white/18 tracking-widest select-none">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
 
-              {/* Description */}
-              <p className="text-sm text-white/40 leading-relaxed flex-1">
-                {spec.desc}
-              </p>
+                {/* Condition name */}
+                <h3 className="font-heading font-semibold text-white text-xl tracking-[-0.025em] leading-snug">
+                  {spec.label}
+                </h3>
 
-              {/* CTA */}
-              <div className="flex items-center gap-2 text-white/25 group-hover:text-white/60 transition-colors duration-250 text-sm tracking-[0.01em]">
-                <span>Learn more</span>
-                <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+                {/* Description */}
+                <p className="text-sm text-white/40 leading-relaxed flex-1">
+                  {spec.desc}
+                </p>
+
+                {/* CTA */}
+                <div className="flex items-center gap-2 text-white/25 group-hover:text-white/60 transition-colors duration-250 text-sm tracking-[0.01em]">
+                  <span>Learn more</span>
+                  <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+                </div>
               </div>
 
               {/* Hover top-border accent */}

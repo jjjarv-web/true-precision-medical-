@@ -55,7 +55,7 @@ export default function PatientStories({ googleReviewRating, googleReviewCount }
   }, [])
 
   return (
-    <section id="patient-stories" className="bg-[#07080C] py-24 sm:py-32">
+    <section id="patient-stories" className="bg-[#07080C] py-28 sm:py-36">
       <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-12">
 
         <motion.div

@@ -50,7 +50,7 @@ export default function TrustCredentials({
     <>
       {/* ── Block 1: Providers ─────────────────────────────── white */}
       {homepageProviders.length > 0 && (
-        <section ref={providersRef} className="pt-24 pb-16 sm:pb-20 bg-white overflow-hidden">
+        <section ref={providersRef} className="pt-28 sm:pt-36 pb-24 sm:pb-32 bg-white overflow-hidden">
           <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-12">
 
             {/* Section heading */}
@@ -124,7 +124,11 @@ export default function TrustCredentials({
       )}
 
       {/* ── Block 2: Credentials strip ──────────────────── warm cream */}
-      <section ref={credRef} className="bg-[#F9F7F4] py-16">
+      <section
+        ref={credRef}
+        className="py-28 sm:py-36"
+        style={{ background: 'linear-gradient(180deg, #FDFCFA 0%, #F9F7F4 100%)' }}
+      >
         <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-12">
           <motion.div
             initial={{ opacity: 0, y: 12 }}
@@ -168,7 +172,7 @@ export default function TrustCredentials({
           aria-hidden
         />
 
-        <div className="relative max-w-5xl mx-auto px-6 sm:px-10 lg:px-12 pt-28 pb-12 text-center">
+        <div className="relative max-w-5xl mx-auto px-6 sm:px-10 lg:px-12 pt-28 sm:pt-36 pb-24 sm:pb-32 text-center">
 
           <motion.p
             initial={{ opacity: 0, y: 10 }}
@@ -283,7 +287,7 @@ export default function TrustCredentials({
 
         </div>
 
-        <div className="pb-24" />
+        <div className="pb-8" />
 
       </section>
     </>

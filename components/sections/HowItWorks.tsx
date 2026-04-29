@@ -6,7 +6,11 @@ import { EASE, HOW_IT_WORKS_STEPS } from '@/lib/constants'
 
 export default function HowItWorks() {
   return (
-    <section id="approach" className="py-28 sm:py-36 bg-[#F9F7F4] overflow-x-hidden">
+    <section
+      id="approach"
+      className="py-28 sm:py-36 overflow-x-hidden"
+      style={{ background: 'linear-gradient(180deg, #FDFCFA 0%, #F9F7F4 100%)' }}
+    >
       <div className="max-w-5xl mx-auto px-6 sm:px-10 lg:px-12">
 
         {/* Section header */}

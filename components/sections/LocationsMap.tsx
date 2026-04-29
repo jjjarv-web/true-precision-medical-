@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic'
 import { EASE } from '@/lib/constants'
 import { useRef, useState } from 'react'
 import { motion, useInView, AnimatePresence } from 'motion/react'
-import { MapPin, Phone, Clock, Navigation } from 'lucide-react'
+import { MapPin, Phone, Clock, Navigation, ChevronRight } from 'lucide-react'
 import type { Location } from '@/lib/sanity'
 
 const LeafletMap = dynamic(() => import('./LeafletMap'), { ssr: false })
@@ -45,10 +45,10 @@ export default function LocationsMap({
   return (
     <section
       ref={ref}
-      className="relative bg-[#07080C]"
-      style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)' }}
+      className="relative"
+      style={{ background: 'linear-gradient(180deg, #FDFCFA 0%, #F9F7F4 100%)', isolation: 'isolate' }}
     >
-      <div className={`max-w-6xl mx-auto px-6 sm:px-10 lg:px-12 pb-28 ${isPageHero ? 'pt-44 sm:pt-52' : 'pt-24'}`}>
+      <div className={`max-w-6xl mx-auto px-6 sm:px-10 lg:px-12 pb-28 sm:pb-36 ${isPageHero ? 'pt-44 sm:pt-52' : 'pt-28 sm:pt-36'}`}>
 
         {/* Header */}
         <motion.div
@@ -57,25 +57,25 @@ export default function LocationsMap({
           transition={{ duration: 0.5, ease: EASE }}
           className="mb-14"
         >
-          <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/40 mb-4 block">
+          <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#9A9490] mb-4 block">
             {sectionEyebrow}
           </span>
           {isPageHero ? (
             <h1
-              className="font-heading font-bold text-[#EDE6D8] leading-[1.04] tracking-[-0.04em]"
+              className="font-heading font-bold text-[#1A1814] leading-[1.04] tracking-[-0.04em]"
               style={{ fontSize: 'clamp(38px, 6vw, 72px)' }}
             >
               {sectionHeadline}
             </h1>
           ) : (
             <h2
-              className="font-heading font-bold text-[#EDE6D8] leading-[1.05] tracking-[-0.04em]"
+              className="font-heading font-bold text-[#1A1814] leading-[1.05] tracking-[-0.04em]"
               style={{ fontSize: 'clamp(28px, 4vw, 48px)' }}
             >
               {sectionHeadline}
             </h2>
           )}
-          <p className="text-white/55 text-[15px] mt-3 max-w-sm leading-relaxed">
+          <p className="text-[#4A4440] text-[15px] mt-3 max-w-sm leading-relaxed">
             {sectionDescription}
           </p>
         </motion.div>
@@ -101,38 +101,39 @@ export default function LocationsMap({
                   initial={{ opacity: 0, y: 10 }}
                   animate={inView ? { opacity: 1, y: 0 } : {}}
                   transition={{ duration: 0.45, ease: EASE, delay: 0.15 + i * 0.06 }}
-                  className={`relative w-full text-left rounded-2xl border px-5 py-4 transition-all duration-200 outline-none focus-visible:ring-1 focus-visible:ring-[#4DCCE8]/50 ${
+                  className={`relative w-full text-left rounded-2xl border px-6 py-5 transition-all duration-250 outline-none focus-visible:ring-2 focus-visible:ring-[#4DCCE8]/40 ${
                     isActive
-                      ? 'bg-white/[0.12] border-[#4DCCE8]/30'
-                      : 'bg-white/[0.07] border-white/[0.12] hover:bg-white/[0.10] hover:border-white/[0.18]'
+                      ? 'bg-white border-[#4DCCE8]/45 shadow-[0_2px_6px_rgba(0,0,0,0.05),0_8px_28px_rgba(77,204,232,0.11)]'
+                      : 'bg-white border-black/[0.07] shadow-[0_1px_2px_rgba(0,0,0,0.05),0_4px_14px_rgba(0,0,0,0.05)] hover:border-[#4DCCE8]/30 hover:shadow-[0_2px_8px_rgba(0,0,0,0.07),0_10px_28px_rgba(0,0,0,0.07)]'
                   }`}
                 >
                   {/* Aqua left accent */}
-                  {isActive && (
-                    <div className="absolute left-0 top-4 bottom-4 w-[3px] rounded-full bg-[#4DCCE8]" />
-                  )}
+                  <div className={`absolute left-0 top-5 bottom-5 w-[3px] rounded-full transition-all duration-250 ${
+                    isActive ? 'bg-[#4DCCE8] opacity-100' : 'bg-transparent opacity-0'
+                  }`} />
 
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex items-start gap-3 min-w-0">
-                      <div className={`mt-0.5 w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-200 ${
-                        isActive ? 'bg-[#4DCCE8]/15' : 'bg-white/[0.05]'
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-3.5 min-w-0">
+                      <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-200 ${
+                        isActive ? 'bg-[#4DCCE8]/12' : 'bg-black/[0.04]'
                       }`}>
-                        <MapPin className={`w-3.5 h-3.5 transition-colors duration-200 ${
-                          isActive ? 'text-[#4DCCE8]' : 'text-white/30'
+                        <MapPin className={`w-4 h-4 transition-colors duration-200 ${
+                          isActive ? 'text-[#4DCCE8]' : 'text-[#9A9490]'
                         }`} />
                       </div>
                       <div className="min-w-0">
-                        <p className={`font-heading font-semibold text-sm leading-tight transition-colors duration-200 ${
-                          isActive ? 'text-[#EDE6D8]' : 'text-white/70'
+                        <p className={`font-heading font-semibold text-[15px] leading-tight transition-colors duration-200 ${
+                          isActive ? 'text-[#1A1814]' : 'text-[#2E2B28]'
                         }`}>
                           {loc.name}
                         </p>
-                        <p className="text-white/40 text-xs mt-0.5">{streetLine}</p>
-                        <p className="text-white/30 text-xs">{cityLine}</p>
+                        <p className="text-[#9A9490] text-xs mt-1 leading-relaxed">
+                          {streetLine}{cityLine ? `, ${cityLine}` : ''}
+                        </p>
                       </div>
                     </div>
-                    <div className={`w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0 transition-all duration-200 ${
-                      isActive ? 'bg-[#4DCCE8]' : 'bg-white/15'
+                    <ChevronRight className={`w-4 h-4 flex-shrink-0 transition-all duration-200 ${
+                      isActive ? 'text-[#4DCCE8] rotate-90' : 'text-black/20'
                     }`} />
                   </div>
 
@@ -147,17 +148,17 @@ export default function LocationsMap({
                         transition={{ duration: 0.26, ease: EASE }}
                         className="overflow-hidden"
                       >
-                        <div className="mt-4 ml-11 flex flex-col gap-3">
+                        <div className="mt-4 pt-4 border-t border-black/[0.06] flex flex-col gap-3">
 
                           {loc.phone && (
                             <div className="flex items-center gap-3">
-                              <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 bg-white/[0.06]">
-                                <Phone className="w-3 h-3 text-white/40" />
+                              <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 bg-black/[0.04]">
+                                <Phone className="w-3 h-3 text-[#9A9490]" />
                               </div>
                               <a
                                 href={loc.phoneHref}
                                 onClick={(e) => e.stopPropagation()}
-                                className="text-sm text-white/50 hover:text-[#4DCCE8] transition-colors"
+                                className="text-sm text-[#4A4440] hover:text-[#4DCCE8] transition-colors font-medium"
                               >
                                 {loc.phone}
                               </a>
@@ -166,10 +167,10 @@ export default function LocationsMap({
 
                           {loc.hoursSummary.length > 0 && (
                             <div className="flex items-start gap-3">
-                              <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 bg-white/[0.06]">
-                                <Clock className="w-3 h-3 text-white/40" />
+                              <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 bg-black/[0.04]">
+                                <Clock className="w-3 h-3 text-[#9A9490]" />
                               </div>
-                              <div className="text-sm text-white/40 space-y-0.5 leading-snug">
+                              <div className="text-sm text-[#9A9490] space-y-0.5 leading-snug">
                                 {loc.hoursSummary.map((line) => (
                                   <div key={line}>{line}</div>
                                 ))}
@@ -182,7 +183,7 @@ export default function LocationsMap({
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={(e) => e.stopPropagation()}
-                            className="mt-1 w-full flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-[#07080C] bg-[#4DCCE8] hover:bg-[#6DD8EE] transition-colors duration-150"
+                            className="mt-1 w-full flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold text-[#07080C] bg-[#4DCCE8] hover:bg-[#6DD8EE] transition-colors duration-150"
                           >
                             <Navigation className="w-3.5 h-3.5" />
                             Get Directions
@@ -203,7 +204,7 @@ export default function LocationsMap({
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, ease: EASE, delay: 0.18 }}
             className="lg:col-span-3 relative rounded-2xl overflow-hidden min-h-[480px]"
-            style={{ border: '1px solid rgba(255,255,255,0.07)', filter: 'brightness(1.35)' }}
+            style={{ boxShadow: '0 4px 32px rgba(0,0,0,0.08)' }}
           >
             <LeafletMap
               locations={locations.map(({ _id, lat, lng }) => ({ id: _id, lat, lng }))}
@@ -211,8 +212,21 @@ export default function LocationsMap({
               onSelect={setActiveId}
             />
 
+            {/* Edge fade — blends map into section background */}
+            <div
+              className="absolute inset-0 pointer-events-none z-[999]"
+              style={{
+                background: `
+                  linear-gradient(to right,  #F9F7F4 0%, transparent 8%),
+                  linear-gradient(to left,   #F9F7F4 0%, transparent 8%),
+                  linear-gradient(to bottom, #FDFCFA 0%, transparent 8%),
+                  linear-gradient(to top,    #F9F7F4 0%, transparent 8%)
+                `,
+              }}
+            />
+
             {/* Attribution overlay — bottom right */}
-            <div className="absolute bottom-2 right-2 z-[1000] text-[9px] text-white/20 pointer-events-none select-none">
+            <div className="absolute bottom-2 right-2 z-[1000] text-[9px] text-black/20 pointer-events-none select-none">
               © OpenStreetMap · CARTO
             </div>
           </motion.div>
