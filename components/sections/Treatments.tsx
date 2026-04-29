@@ -27,7 +27,7 @@ export default function Treatments() {
 
         {/* Card grid — gap-px on parent acts as razor-thin divider lines */}
         <div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px"
           style={{ background: 'rgba(255,255,255,0.07)' }}
         >
           {SPECIALTIES.map((spec, i) => (

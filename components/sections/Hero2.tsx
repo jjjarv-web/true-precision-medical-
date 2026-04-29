@@ -29,13 +29,13 @@ const IMAGES: Record<string, string> = {
 }
 
 const CONDITIONS = [
-  { id: 'knee',      label: 'Knee',               treatment: 'GAE & PNS',  Icon: PersonStanding },
-  { id: 'shoulder',  label: 'Shoulder',            treatment: 'Embo & PNS', Icon: Activity },
-  { id: 'plantar',   label: 'Plantar Fascia',      treatment: 'Embo',       Icon: Footprints },
-  { id: 'wrist',     label: 'Wrist',               treatment: 'Embo',       Icon: Hand },
-  { id: 'neuro',     label: 'Neuropathy',          treatment: 'PNS',        Icon: Zap },
-  { id: 'back',      label: 'Back & Neck',         treatment: 'PNS',        Icon: AlignCenter },
-  { id: 'occipital', label: 'Occipital Neuralgia', treatment: 'PNS',        Icon: Brain },
+  { id: 'knee',      label: 'Knee',               treatment: 'GAE & PNS',  Icon: PersonStanding, annotation: 'No surgery required'       },
+  { id: 'shoulder',  label: 'Shoulder',            treatment: 'Embo & PNS', Icon: Activity,       annotation: 'Non-surgical'               },
+  { id: 'plantar',   label: 'Plantar Fascia',      treatment: 'Embo',       Icon: Footprints,     annotation: 'Fast recovery'              },
+  { id: 'wrist',     label: 'Wrist',               treatment: 'Embo',       Icon: Hand,           annotation: 'Image-guided precision'     },
+  { id: 'neuro',     label: 'Neuropathy',          treatment: 'PNS',        Icon: Zap,            annotation: 'Minimally invasive'         },
+  { id: 'back',      label: 'Back & Neck',         treatment: 'PNS',        Icon: AlignCenter,    annotation: 'Same-day procedure'         },
+  { id: 'occipital', label: 'Occipital Neuralgia', treatment: 'PNS',        Icon: Brain,          annotation: 'Lasting results'            },
 ]
 
 export default function Hero2() {
@@ -63,13 +63,13 @@ export default function Hero2() {
 
   return (
     <section
-      className="flex flex-col min-h-screen overflow-hidden"
+      className="flex flex-col min-h-screen lg:h-screen overflow-hidden"
       style={{ backgroundColor: BG }}
     >
 
       {/* ── Text + desktop image area ───────────────────────────── */}
-      <div className="relative lg:min-h-screen overflow-hidden">
-        <div className="relative lg:min-h-screen max-w-[1440px] mx-auto">
+      <div className="relative z-10 shrink-0 lg:flex-1 lg:overflow-hidden">
+        <div className="relative lg:h-full max-w-[1440px] mx-auto">
 
           {/* LAYER 1 — cycling images: desktop only */}
           <div className="hero2-slides-wrapper hidden lg:block" aria-hidden="true">
@@ -87,6 +87,31 @@ export default function Hero2() {
 
           {/* LAYER 2 — left warm wash: desktop only */}
           <div aria-hidden className="hero2-fade pointer-events-none absolute inset-0 z-[1] hidden lg:block" />
+
+          {/* LAYER 2.5 — per-condition annotation: desktop only */}
+          <div
+            className="hidden lg:block absolute z-[2] pointer-events-none"
+            style={{ right: '5%', top: '52%', transform: 'translateY(-50%)' }}
+            aria-hidden="true"
+          >
+            {CONDITIONS.map(({ id, annotation }, i) => (
+              <div
+                key={id}
+                className="flex items-center gap-3 transition-opacity duration-700"
+                style={{ opacity: i === active ? 1 : 0, position: i === 0 ? 'relative' : 'absolute', top: 0, left: 0 }}
+              >
+                {/* Horizontal rule */}
+                <div style={{ width: 28, height: 1, backgroundColor: 'rgba(14,14,14,0.28)', flexShrink: 0 }} />
+                {/* Label */}
+                <span
+                  className="text-[10px] font-medium uppercase tracking-[0.22em] whitespace-nowrap"
+                  style={{ color: 'rgba(14,14,14,0.50)' }}
+                >
+                  {annotation}
+                </span>
+              </div>
+            ))}
+          </div>
 
           {/* LAYER 3 — copy */}
           <div className="hero2-content relative z-[2]">
@@ -123,8 +148,8 @@ export default function Hero2() {
                   type="button"
                   className="inline-flex items-center gap-3 rounded-full px-8 py-4 text-[15px] font-medium
                              tracking-tight text-white select-none
-                             shadow-[0_18px_34px_rgba(0,0,0,0.18),inset_0_1px_0_rgba(255,255,255,0.12)]
-                             transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_22px_40px_rgba(0,0,0,0.24)]
+                             shadow-[0_2px_8px_rgba(0,0,0,0.10)]
+                             transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_4px_14px_rgba(0,0,0,0.14)]
                              active:scale-[0.98]"
                   style={{ backgroundColor: '#0E0E0E' }}
                 >
@@ -170,10 +195,10 @@ export default function Hero2() {
             }}
           />
         ))}
-        {/* Top fade — blends into hero copy bg */}
+        {/* Top fade — blends into hero copy bg, tall enough to cover button shadow */}
         <div
-          className="absolute inset-x-0 top-0 h-20 z-10 pointer-events-none"
-          style={{ background: `linear-gradient(to bottom, ${BG} 0%, transparent 100%)` }}
+          className="absolute inset-x-0 top-0 h-36 z-10 pointer-events-none"
+          style={{ background: `linear-gradient(to bottom, ${BG} 0%, ${BG} 20%, transparent 100%)` }}
           aria-hidden
         />
         {/* Bottom fade — blends into chips bar */}

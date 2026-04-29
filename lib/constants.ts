@@ -171,40 +171,52 @@ export type Specialty = {
 
 export const SPECIALTIES: Specialty[] = [
   {
-    id: 'joint',
-    label: 'Joint Pain',
-    desc: 'Knee, hip, and shoulder preservation and minimally invasive repair.',
-    img: '/images/joint-pain.jpg',
+    id: 'knee',
+    label: 'Knee Pain',
+    desc: 'Genicular artery embolization and peripheral nerve stimulation for knee osteoarthritis and chronic knee pain — without replacement surgery.',
+    img: '/images/hero/hero-knee.png',
+  },
+  {
+    id: 'shoulder',
+    label: 'Shoulder Pain',
+    desc: 'Image-guided embolization and nerve stimulation to reduce shoulder inflammation and chronic pain, preserving your joint without open surgery.',
+    img: '/images/hero/hero-shoulder.png',
+  },
+  {
+    id: 'wrist',
+    label: 'Wrist Pain',
+    desc: 'Targeted embolization for chronic wrist tendinopathy and pain — a minimally invasive alternative to surgery with same-day discharge.',
+    img: '/images/hero/hero-wrist.png',
+  },
+  {
+    id: 'foot',
+    label: 'Foot Pain',
+    desc: 'Embolization therapy for plantar fasciitis and chronic heel pain that hasn\'t responded to conservative treatment.',
+    img: '/images/hero/hero-plantar-fascia.png',
   },
   {
     id: 'spine',
-    label: 'Back & Neck',
-    desc: 'Advanced neurosurgery and pain management without major fusion.',
-    img: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=800&auto=format&fit=crop',
+    label: 'Back & Neck Pain',
+    desc: 'Peripheral nerve stimulation and image-guided interventions for spine-related pain — meaningful relief without major fusion surgery.',
+    img: '/images/hero/hero-back-neck.png',
   },
   {
-    id: 'mens',
-    label: "Men's Health",
-    desc: 'Targeted treatments for conditions affecting men\'s quality of life and vitality.',
-    img: 'https://images.unsplash.com/photo-1537368910025-700350fe46c7?q=80&w=800&auto=format&fit=crop',
+    id: 'neuropathy',
+    label: 'Neuropathy',
+    desc: 'Peripheral nerve stimulation to treat chronic nerve pain, numbness, and tingling — targeting the source for lasting relief.',
+    img: '/images/hero/hero-neuropathy.png',
   },
   {
-    id: 'womens',
-    label: "Women's Health",
-    desc: 'Compassionate, specialized care for conditions unique to women\'s health.',
-    img: 'https://images.unsplash.com/photo-1594824476967-48c8b964273f?q=80&w=800&auto=format&fit=crop',
+    id: 'neuralgia',
+    label: 'Headache & Neuralgia',
+    desc: 'Occipital nerve stimulation and targeted nerve blocks for chronic headaches, occipital neuralgia, and treatment-resistant head pain.',
+    img: '/images/hero/hero-occipital.png',
   },
   {
-    id: 'nerve',
-    label: 'Nerve Pain',
-    desc: 'Image-guided, targeted treatments for nerve and chronic pain conditions.',
-    img: 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?q=80&w=800&auto=format&fit=crop',
-  },
-  {
-    id: 'vascular',
-    label: 'Vascular & Vein',
-    desc: 'Minimally invasive vascular treatments for healthier circulation and vein health.',
-    img: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=800&auto=format&fit=crop',
+    id: 'fibroids',
+    label: 'Uterine Fibroids',
+    desc: 'Uterine fibroid embolization (UFE) — a uterus-preserving, outpatient alternative to hysterectomy with a significantly shorter recovery.',
+    img: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=800&auto=format&fit=crop',
   },
 ]
 
@@ -436,12 +448,12 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
   {
     heading: 'Treatments',
     links: [
-      { label: 'Joint Pain', href: '/treatments/joint' },
-      { label: 'Back & Neck', href: '/treatments/spine' },
-      { label: 'Nerve Pain', href: '/treatments/nerve' },
-      { label: 'Vascular & Vein', href: '/treatments/vascular' },
-      { label: "Men's Health", href: '/treatments/mens' },
-      { label: "Women's Health", href: '/treatments/womens' },
+      { label: 'Knee Pain', href: '/treatments/knee' },
+      { label: 'Shoulder Pain', href: '/treatments/shoulder' },
+      { label: 'Back & Neck Pain', href: '/treatments/spine' },
+      { label: 'Neuropathy', href: '/treatments/neuropathy' },
+      { label: 'Headache & Neuralgia', href: '/treatments/neuralgia' },
+      { label: 'Uterine Fibroids', href: '/treatments/fibroids' },
     ],
   },
   {
@@ -471,6 +483,208 @@ export type TreatmentDetail = {
 }
 
 export const TREATMENT_DETAILS: Record<string, TreatmentDetail> = {
+  knee: {
+    tagline: 'Relieve knee pain without replacement.',
+    intro:
+      "Knee pain from osteoarthritis or chronic inflammation can be debilitating — but joint replacement isn't your only option. Our interventional specialists use genicular artery embolization (GAE) and peripheral nerve stimulation (PNS) to reduce pain and improve function without surgery.\n\nMost patients treated with GAE experience significant pain reduction within weeks, with same-day discharge.",
+    conditions: [
+      'Knee osteoarthritis',
+      'Chronic knee inflammation',
+      'Knee pain after prior surgery',
+      'Knee synovitis',
+      'Degenerative knee disease',
+      'Sports-related knee injury',
+    ],
+    approaches: [
+      {
+        name: 'Genicular Artery Embolization (GAE)',
+        desc: 'A catheter-based procedure that reduces blood flow to the inflamed synovial tissue driving knee pain — no incision, no general anesthesia, same-day discharge.',
+      },
+      {
+        name: 'Peripheral Nerve Stimulation (PNS)',
+        desc: 'A small lead placed near the genicular nerves delivers gentle electrical impulses that interrupt pain signals before they reach the brain.',
+      },
+      {
+        name: 'Image-Guided Injections',
+        desc: 'Ultrasound or fluoroscopy-guided corticosteroid, PRP, or viscosupplement injections — precision placement for maximum effect with minimal side effects.',
+      },
+    ],
+    expectations: {
+      before: 'A dedicated consultation to review your imaging, understand your pain history, and recommend the most appropriate intervention for your anatomy and goals.',
+      during: 'Procedures are performed under light sedation in our outpatient center. No hospital admission, no overnight stay.',
+      after: 'Same-day discharge with a clear recovery timeline. Most patients notice meaningful improvement within 2–4 weeks.',
+    },
+  },
+  shoulder: {
+    tagline: 'Restore shoulder function. Skip the open surgery.',
+    intro:
+      "Chronic shoulder pain from tendinopathy, calcific tendinitis, or persistent inflammation can significantly limit daily life. Our embolization and nerve stimulation approaches target the source of pain with precision — preserving your joint and avoiding the lengthy recovery of traditional surgery.",
+    conditions: [
+      'Shoulder tendinopathy',
+      'Calcific tendinitis',
+      'Chronic shoulder inflammation',
+      'Rotator cuff related pain',
+      'Post-operative shoulder pain',
+    ],
+    approaches: [
+      {
+        name: 'Shoulder Embolization',
+        desc: 'Catheter-based embolization reduces abnormal blood vessel growth in inflamed shoulder tissue — addressing the root cause of chronic tendon pain.',
+      },
+      {
+        name: 'Peripheral Nerve Stimulation (PNS)',
+        desc: 'Targeted nerve stimulation near the suprascapular or axillary nerves interrupts pain signals and provides sustained relief for chronic shoulder pain.',
+      },
+      {
+        name: 'Image-Guided Injections',
+        desc: 'Ultrasound-guided injection of anti-inflammatory agents directly into the affected bursa or tendon sheath for precise, targeted relief.',
+      },
+    ],
+    expectations: {
+      before: 'We review your imaging and pain history, explain what is driving your symptoms, and discuss all minimally invasive options available.',
+      during: 'Outpatient procedures performed under local anesthetic or light sedation. Most take under two hours.',
+      after: 'Same-day discharge. Most patients notice improvement within weeks, with continued progress over 1–3 months.',
+    },
+  },
+  wrist: {
+    tagline: 'Targeted relief for chronic wrist pain.',
+    intro:
+      "Chronic wrist pain from tendinopathy or post-injury inflammation can interfere with everything from work to daily tasks. Embolization offers a minimally invasive path to pain relief without open surgery — same-day discharge, no general anesthesia.",
+    conditions: [
+      'Wrist tendinopathy',
+      "De Quervain's tenosynovitis",
+      'Chronic wrist inflammation',
+      'Post-injury wrist pain',
+      'Carpal-related inflammation',
+    ],
+    approaches: [
+      {
+        name: 'Wrist Embolization',
+        desc: 'Catheter-based embolization reduces abnormal neovascularization in inflamed wrist tendons — treating the root cause of chronic pain with same-day discharge.',
+      },
+      {
+        name: 'Image-Guided Injections',
+        desc: 'Ultrasound-guided corticosteroid or PRP injections placed precisely at the site of inflammation for targeted, effective relief.',
+      },
+    ],
+    expectations: {
+      before: 'A consultation to review your history and imaging and confirm embolization is the right approach for your condition.',
+      during: 'Outpatient procedure under local anesthetic. Typically under an hour.',
+      after: 'Same-day discharge. Most patients return to normal activity within days to weeks.',
+    },
+  },
+  foot: {
+    tagline: 'Step forward without foot pain.',
+    intro:
+      "Plantar fasciitis and chronic heel pain are among the most common and frustrating conditions — often resistant to months of conservative care. Embolization targets the abnormal blood vessel growth driving your pain, offering meaningful relief where other treatments have failed.",
+    conditions: [
+      'Plantar fasciitis',
+      'Chronic heel pain',
+      'Plantar fascia tendinopathy',
+      'Foot pain unresponsive to conservative care',
+    ],
+    approaches: [
+      {
+        name: 'Plantar Fascia Embolization',
+        desc: 'A catheter-based procedure that reduces abnormal neovascularization in the plantar fascia — addressing the inflammatory process driving chronic heel pain.',
+      },
+      {
+        name: 'Image-Guided Injections',
+        desc: 'Ultrasound-guided corticosteroid or PRP injections delivered precisely to the plantar fascia insertion point for immediate pain management.',
+      },
+    ],
+    expectations: {
+      before: 'We review your imaging and prior treatment history to confirm you are a good candidate for embolization.',
+      during: 'Outpatient procedure under local anesthetic. Typically 30–60 minutes.',
+      after: 'Same-day discharge. Significant pain relief is typically achieved within 4–8 weeks.',
+    },
+  },
+  neuropathy: {
+    tagline: 'Interrupt the pain signal. Restore your quality of life.',
+    intro:
+      "Peripheral neuropathy — numbness, burning, tingling, or chronic nerve pain — often worsens over time with medication alone. Peripheral nerve stimulation (PNS) delivers gentle electrical impulses directly to the affected nerves, interrupting pain signals before they reach the brain.\n\nIt's not masking the pain. It's changing how your nervous system processes it.",
+    conditions: [
+      'Peripheral neuropathy',
+      'Diabetic neuropathy',
+      'Chemotherapy-induced neuropathy',
+      'Chronic nerve pain in hands or feet',
+      'Small fiber neuropathy',
+    ],
+    approaches: [
+      {
+        name: 'Peripheral Nerve Stimulation (PNS)',
+        desc: 'A thin lead placed near the affected peripheral nerve delivers precisely calibrated electrical pulses that modulate pain signals — providing lasting relief without systemic medication side effects.',
+      },
+      {
+        name: 'Image-Guided Nerve Blocks',
+        desc: 'Diagnostic and therapeutic nerve blocks to confirm the pain pathway and provide immediate relief while longer-term solutions are planned.',
+      },
+    ],
+    expectations: {
+      before: 'A thorough evaluation of your neuropathy type, severity, and prior treatments to confirm PNS is appropriate for your specific nerve distribution.',
+      during: 'Lead placement is performed under light sedation with imaging guidance. A trial period allows you to evaluate the benefit before permanent implantation.',
+      after: 'Most patients experience significant improvement during the trial. Permanent implantation is a brief outpatient procedure with minimal downtime.',
+    },
+  },
+  neuralgia: {
+    tagline: 'Break the cycle of chronic head pain.',
+    intro:
+      "Occipital neuralgia and chronic headaches can be relentless — shooting pain from the base of the skull, pressure behind the eyes, sensitivity to light. When medications and injections provide only temporary relief, peripheral nerve stimulation (PNS) offers a more durable solution by directly modulating the nerve signals driving your pain.",
+    conditions: [
+      'Occipital neuralgia',
+      'Chronic migraine',
+      'Cervicogenic headache',
+      'Post-traumatic headache',
+      'Trigeminal neuralgia',
+      'Cluster headache',
+    ],
+    approaches: [
+      {
+        name: 'Occipital Nerve Stimulation (PNS)',
+        desc: 'Leads placed near the greater and lesser occipital nerves deliver electrical pulses that block pain signals — providing sustained headache relief without ongoing medication.',
+      },
+      {
+        name: 'Occipital Nerve Blocks',
+        desc: 'Image-guided injection of local anesthetic and corticosteroid around the occipital nerve — both diagnostic and therapeutic for acute relief.',
+      },
+      {
+        name: 'Radiofrequency Ablation',
+        desc: 'For appropriate candidates, heat energy disrupts the nerve fibers transmitting pain signals — effects typically last 9–18 months.',
+      },
+    ],
+    expectations: {
+      before: 'We review your headache history, prior treatments, and imaging to determine the best approach for your specific pain pattern.',
+      during: 'Nerve blocks and stimulation lead placement are outpatient procedures under local anesthetic or light sedation.',
+      after: 'Many patients notice significant improvement within days to weeks. Stimulation parameters can be adjusted to optimize relief.',
+    },
+  },
+  fibroids: {
+    tagline: 'Preserve your uterus. End the symptoms.',
+    intro:
+      "Uterine fibroids are the leading cause of hysterectomy in the United States — but surgery is rarely your only option. Uterine fibroid embolization (UFE) shrinks fibroids by cutting off their blood supply, resolving symptoms without removing the uterus.\n\nCovered by most major insurance. Outpatient. Home the same day.",
+    conditions: [
+      'Uterine fibroids',
+      'Heavy or prolonged menstrual bleeding',
+      'Pelvic pressure and pain',
+      'Frequent urination from fibroid bulk',
+      'Anemia from fibroid-related blood loss',
+    ],
+    approaches: [
+      {
+        name: 'Uterine Fibroid Embolization (UFE)',
+        desc: 'A catheter-based procedure that delivers tiny particles to the uterine arteries feeding your fibroids — cutting off their blood supply. Fibroids shrink over months, relieving symptoms without surgery or organ removal.',
+      },
+      {
+        name: 'Pre-Procedure Imaging Review',
+        desc: 'A detailed MRI or ultrasound review confirms fibroid size, location, and number — ensuring UFE is appropriate and planning the optimal approach for your anatomy.',
+      },
+    ],
+    expectations: {
+      before: 'A consultation with imaging review to confirm you are a good candidate for UFE and discuss what to expect during and after the procedure.',
+      during: 'UFE is performed under light sedation through a small catheter, typically taking 45–90 minutes in our outpatient suite.',
+      after: 'Most patients go home the same day. Cramping and fatigue are common for the first few days. Symptom improvement typically occurs within 1–3 months as fibroids shrink.',
+    },
+  },
   joint: {
     tagline: 'Your joints deserve better than replacement.',
     intro:

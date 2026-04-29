@@ -14,20 +14,31 @@ type Props = {
 export default function TreatmentDetailClient({ slug, specLabel, detail }: Props) {
   const paragraphs = detail.intro.split('\n\n')
   const others = SPECIALTIES.filter((s) => s.id !== slug)
+  const heroImg = SPECIALTIES.find((s) => s.id === slug)?.img
 
   return (
     <main className="flex-grow">
 
-      {/* ── Hero ────────────────────────────── dark */}
-      <section className="relative bg-[#07080C] overflow-hidden">
-        <div
-          className="absolute inset-0 pointer-events-none"
-          aria-hidden
-          style={{
-            background:
-              'radial-gradient(ellipse 65% 55% at 65% 40%, rgba(77,204,232,0.07) 0%, transparent 70%)',
-          }}
-        />
+      {/* ── Hero ────────────────────────────── light (ARC-style) */}
+      <section className="relative overflow-hidden" style={{ backgroundColor: '#F9F7F4' }}>
+
+        {/* Anatomical image — full bg, washed; right-anchored on desktop */}
+        {heroImg && (
+          <div className="absolute inset-0 pointer-events-none" aria-hidden>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={heroImg}
+              alt=""
+              className="absolute inset-0 w-full h-full object-cover object-[62%_top] lg:inset-auto lg:right-0 lg:bottom-0 lg:h-[110%] lg:w-auto lg:object-contain lg:object-right-bottom"
+              style={{ opacity: 0.45, filter: 'saturate(0.85) contrast(0.95)' }}
+            />
+            {/* Mobile: top + bottom fade */}
+            <div className="absolute inset-x-0 bottom-0 h-24 lg:hidden" style={{ background: 'linear-gradient(to top, #F9F7F4 0%, transparent 100%)' }} />
+            {/* Desktop: left-to-right gradient */}
+            <div className="absolute inset-0 hidden lg:block" style={{ background: 'linear-gradient(90deg, #F9F7F4 0%, #F9F7F4 34%, rgba(249,247,244,0.52) 58%, transparent 76%)' }} />
+          </div>
+        )}
+
         <div className="relative max-w-6xl mx-auto px-6 sm:px-10 lg:px-12 pt-44 pb-36 sm:pt-52 sm:pb-44">
 
           <motion.div
@@ -37,7 +48,8 @@ export default function TreatmentDetailClient({ slug, specLabel, detail }: Props
           >
             <Link
               href="/treatments"
-              className="inline-flex items-center gap-2 text-[13px] font-medium text-white/30 hover:text-white/60 transition-colors mb-14"
+              className="inline-flex items-center gap-2 text-[13px] font-medium transition-colors mb-14"
+              style={{ color: 'rgba(14,14,14,0.40)' }}
             >
               <ArrowLeft className="w-3.5 h-3.5" aria-hidden />
               All Treatments
@@ -48,7 +60,8 @@ export default function TreatmentDetailClient({ slug, specLabel, detail }: Props
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: EASE, delay: 0.05 }}
-            className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#4DCCE8]/60 mb-7"
+            className="text-[11px] font-medium uppercase tracking-[0.34em] mb-5"
+            style={{ color: 'rgba(14,14,14,0.40)' }}
           >
             {specLabel}
           </motion.p>
@@ -57,8 +70,8 @@ export default function TreatmentDetailClient({ slug, specLabel, detail }: Props
             initial={{ opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.75, ease: EASE, delay: 0.12 }}
-            className="font-heading font-bold text-[#EDE6D8] leading-[1.04] tracking-[-0.04em] max-w-3xl"
-            style={{ fontSize: 'clamp(34px, 5vw, 66px)' }}
+            className="font-heading font-semibold leading-[0.98] tracking-[-0.06em] max-w-2xl"
+            style={{ fontSize: 'clamp(34px, 5vw, 62px)', color: '#0E0E0E' }}
           >
             {detail.tagline}
           </motion.h1>
@@ -67,17 +80,17 @@ export default function TreatmentDetailClient({ slug, specLabel, detail }: Props
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: EASE, delay: 0.26 }}
-            className="mt-14 flex flex-col sm:flex-row items-start sm:items-center gap-5"
+            className="mt-10 flex flex-col sm:flex-row items-start sm:items-center gap-5"
           >
             <Link
               href={`/assessment/${slug}`}
-              className="group inline-flex items-center gap-2.5 bg-[#D4C4A8] text-[#1A1814] px-8 py-4 rounded-full text-sm font-semibold tracking-[0.02em] hover:bg-[#C9B896] transition-colors duration-200"
-              style={{ boxShadow: '0 6px 28px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.35)' }}
+              className="group inline-flex items-center gap-2.5 rounded-full px-8 py-4 text-[15px] font-medium tracking-tight text-white select-none shadow-[0_2px_8px_rgba(0,0,0,0.10)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_4px_14px_rgba(0,0,0,0.14)] active:scale-[0.98]"
+              style={{ backgroundColor: '#0E0E0E' }}
             >
               Start Free Assessment
               <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5" />
             </Link>
-            <span className="text-[13px] text-white/30">Takes less than 2 minutes</span>
+            <span className="text-[13px]" style={{ color: 'rgba(14,14,14,0.40)' }}>Takes less than 2 minutes</span>
           </motion.div>
         </div>
       </section>
