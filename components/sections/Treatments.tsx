@@ -3,6 +3,9 @@
 import { motion } from 'motion/react'
 import { ArrowRight } from 'lucide-react'
 import { EASE, SPECIALTIES } from '@/lib/constants'
+import Link from 'next/link'
+
+const MOBILE_FEATURED = new Set(['knee', 'shoulder', 'spine', 'neuropathy'])
 
 export default function Treatments() {
   return (
@@ -27,7 +30,7 @@ export default function Treatments() {
 
         {/* Card grid — gap-px on parent acts as razor-thin divider lines */}
         <div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px"
+          className="grid grid-cols-2 lg:grid-cols-3 gap-px"
           style={{ background: 'rgba(255,255,255,0.07)' }}
         >
           {SPECIALTIES.map((spec, i) => (
@@ -38,7 +41,7 @@ export default function Treatments() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-60px' }}
               transition={{ duration: 0.6, ease: EASE, delay: i * 0.10 }}
-              className="group relative flex flex-col p-8 bg-[#07080c] cursor-pointer transition-colors duration-300 hover:bg-white/[0.04] min-h-[300px] overflow-hidden"
+              className={`group relative flex flex-col p-5 sm:p-8 bg-[#07080c] cursor-pointer transition-colors duration-300 hover:bg-white/[0.04] min-h-[220px] sm:min-h-[300px] overflow-hidden${MOBILE_FEATURED.has(spec.id) ? '' : ' hidden lg:flex'}`}
             >
               {/* Anatomical background image */}
               {spec.img && (
@@ -84,6 +87,17 @@ export default function Treatments() {
               <div className="absolute top-0 inset-x-0 h-px bg-[#4DCCE8] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </motion.a>
           ))}
+        </div>
+
+        {/* Mobile-only: View all link */}
+        <div className="lg:hidden mt-6 flex justify-center">
+          <Link
+            href="/treatments"
+            className="inline-flex items-center gap-2 text-[13px] font-medium text-white/40 hover:text-white/70 transition-colors duration-200"
+          >
+            View all treatments
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
         </div>
 
       </div>
