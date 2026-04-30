@@ -1019,6 +1019,80 @@ const uterineFibroids: AssessmentConfig = {
   },
 }
 
+const peripheralArterialDisease: AssessmentConfig = {
+  categoryId: 'pad',
+  slug: 'pad',
+  title: 'Peripheral Arterial Disease',
+  color: '#4DCCE8',
+  questions: [
+    {
+      id: 'symptoms',
+      text: 'Which symptoms are you experiencing?',
+      layout: 'grid-2',
+      multiSelect: true,
+      options: [
+        { id: 'cramping', label: 'Leg cramping or pain when walking' },
+        { id: 'rest-pain', label: 'Foot or leg pain at rest' },
+        { id: 'wounds', label: 'Non-healing wounds or sores' },
+        { id: 'coldness', label: 'Coldness or numbness in legs or feet' },
+      ],
+    },
+    {
+      id: 'impact',
+      text: 'How much are your symptoms affecting your daily life?',
+      layout: 'grid-3',
+      options: [
+        { id: 'mild', label: 'Mildly', sub: 'Manageable' },
+        { id: 'moderate', label: 'Moderately', sub: 'Noticeable' },
+        { id: 'severe', label: 'Significantly', sub: 'Major impact' },
+      ],
+    },
+    {
+      id: 'duration',
+      text: 'How long have you been experiencing this?',
+      layout: 'grid-3',
+      options: [
+        { id: 'short', label: '< 6 months' },
+        { id: 'medium', label: '6 – 12 months' },
+        { id: 'long', label: '1+ year' },
+      ],
+    },
+    {
+      id: 'radiating',
+      text: 'Does the pain or discomfort travel down your leg or into your foot?',
+      layout: 'grid-3',
+      options: [
+        { id: 'yes', label: 'Yes' },
+        { id: 'sometimes', label: 'Sometimes' },
+        { id: 'no', label: 'No' },
+      ],
+    },
+    {
+      id: 'treatments',
+      text: 'What treatments have you already tried?',
+      layout: 'grid-2',
+      multiSelect: true,
+      options: [
+        { id: 'medication', label: 'Blood thinners or medication' },
+        { id: 'lifestyle', label: 'Exercise or lifestyle changes' },
+        { id: 'surgery', label: 'Prior surgery or procedure' },
+        { id: 'none', label: 'Nothing yet' },
+      ],
+    },
+  ],
+  result: {
+    headline: 'Minimally Invasive Care Is Available.',
+    subhead:
+      'Based on your answers, endovascular treatment may restore blood flow and relieve your symptoms — without open bypass surgery.',
+    body: 'Our interventional specialists use angioplasty, stenting, and atherectomy to open blocked arteries through a pinhole access point. Most patients go home the same day with significantly improved circulation.',
+    stats: [
+      'Performed through an access point smaller than a pencil tip',
+      'Same-day or next-morning discharge',
+      'Most patients notice improved circulation within days',
+    ],
+  },
+}
+
 // ─────────────────────────────────────────────
 // REGISTRY
 // ─────────────────────────────────────────────
@@ -1032,6 +1106,7 @@ export const ASSESSMENT_CONFIGS: AssessmentConfig[] = [
   neuropathy,
   neuralgia,
   uterineFibroids,
+  peripheralArterialDisease,
   // Broader category flows (kept for backward compatibility)
   jointPain,
   mensHealth,
