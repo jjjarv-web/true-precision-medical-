@@ -34,7 +34,7 @@ export default async function SpecialistsIndexPage() {
             <span className="block mb-5 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#9A9490]">
               Our Specialists
             </span>
-            <h1 className="font-heading font-bold text-[#1A1814] text-[clamp(32px,5vw,56px)] leading-[1.05] tracking-[-0.04em] max-w-3xl">
+            <h1 className="font-heading font-semibold text-[#1A1814] text-[clamp(30px,4.5vw,52px)] leading-[1.02] tracking-[-0.04em] max-w-3xl">
               Fellowship-trained. Board-certified. Focused on you.
             </h1>
             <p className="mt-6 max-w-2xl text-[15px] leading-relaxed text-[#4A4440]">

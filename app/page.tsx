@@ -1,6 +1,6 @@
-import Header from '@/components/layout/Header'
+import Header2 from '@/components/layout/Header2'
 import Footer from '@/components/layout/Footer'
-import Hero from '@/components/sections/Hero'
+import Hero2 from '@/components/sections/Hero2'
 import InsuranceBar from '@/components/sections/InsuranceBar'
 import TrustCredentials from '@/components/sections/TrustCredentials'
 import LocationsMap from '@/components/sections/LocationsMap'
@@ -27,12 +27,9 @@ export default async function HomePage() {
 
   return (
     <>
-      <Header site={siteSettings} />
+      <Header2 site={siteSettings} />
       <main className="flex-grow">
-        <Hero
-          googleReviewRating={siteSettings.googleReviewRating}
-          googleReviewCount={siteSettings.googleReviewCount}
-        />
+        <Hero2 />
         <Treatments />
         <InsuranceBar settings={insuranceSettings} site={siteSettings} />
         <TrustCredentials

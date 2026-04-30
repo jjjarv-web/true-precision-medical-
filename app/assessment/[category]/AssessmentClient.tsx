@@ -4,17 +4,18 @@ import { useState, useEffect, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'motion/react'
-import { Check } from 'lucide-react'
 import type { AssessmentConfig } from '@/lib/assessment-data'
 import Logo from '@/components/ui/Logo'
 import { EASE } from '@/lib/constants'
 
 type Stage = 'questions' | 'analyzing' | 'results'
 type Answers = Record<string, string | string[]>
+type AnswerRecapItem = { label: string; value: string }
 type PersonalizedResult = {
-  stats: string[]
   dynamicHeadline: string
   narrativeSentence: string
+  insights: string[]
+  answerRecap: AnswerRecapItem[]
 }
 type BookingAssessmentContext = {
   source: 'assessment'
@@ -79,7 +80,7 @@ function cleanTreatments(treatments: string[]): string[] {
 }
 
 type ParsedAnswers = {
-  concern: string
+  conditionLabel: string   // e.g. "Knee Pain", "Neuropathy" — from config.title
   severity: string
   duration: string
   radiating: string
@@ -95,13 +96,10 @@ type ParsedAnswers = {
 }
 
 function parseAnswers(config: AssessmentConfig, answers: Answers): ParsedAnswers {
-  const primaryConcern =
-    getAnswerLabels(config, answers, 'location')[0] ||
-    getAnswerLabels(config, answers, 'concern')[0] ||
-    getAnswerLabels(config, answers, 'type')[0] ||
-    ''
   const severity =
-    getAnswerLabels(config, answers, 'severity')[0] || getAnswerLabels(config, answers, 'impact')[0] || ''
+    getAnswerLabels(config, answers, 'severity')[0] ||
+    getAnswerLabels(config, answers, 'impact')[0] ||
+    ''
   const duration = getAnswerLabels(config, answers, 'duration')[0] || ''
   const radiating = getAnswerLabels(config, answers, 'radiating')[0] || ''
   const treatments = getAnswerLabels(config, answers, 'treatments')
@@ -111,14 +109,16 @@ function parseAnswers(config: AssessmentConfig, answers: Answers): ParsedAnswers
   const isSevere = sev.includes('7') || sev.includes('severe') || sev.includes('significantly')
   const isModerate = sev.includes('4') || sev.includes('moderate') || sev.includes('noticeably')
   const isLong = dur.includes('1+') || dur.includes('year') || dur.includes('12')
-  const isShort = dur.includes('6 months') || dur.includes('< 6')
+  const isShort = dur.includes('< 6') || dur.includes('6 months')
   const hasRadiating = radiating.toLowerCase() === 'yes'
-  const noTreatment = treatments.length === 0 || treatments.some((t) => t.toLowerCase().includes('none') || t.toLowerCase().includes('nothing'))
+  const noTreatment =
+    treatments.length === 0 ||
+    treatments.some((t) => t.toLowerCase().includes('none') || t.toLowerCase().includes('nothing'))
   const triedTreatments = !noTreatment && treatments.length > 0
   const treatmentList = triedTreatments ? formatList(cleanTreatments(treatments)) : ''
 
   return {
-    concern: primaryConcern ? primaryConcern.toLowerCase() : 'your condition',
+    conditionLabel: config.title,
     severity,
     duration,
     radiating,
@@ -135,54 +135,77 @@ function parseAnswers(config: AssessmentConfig, answers: Answers): ParsedAnswers
 }
 
 function deriveDynamicHeadline(p: ParsedAnswers): string {
-  if (p.isSevere && p.isLong && p.triedTreatments) return "There's more we can do."
+  if (p.isSevere && p.isLong && p.triedTreatments) return 'We may have an answer for you.'
   if (p.isSevere && p.noTreatment) return 'You came to the right place.'
-  if (p.isLong && p.triedTreatments) return 'This is very treatable.'
-  if (!p.isLong) return 'You caught this early.'
-  return 'Good news.'
+  if (p.isLong && p.triedTreatments) return 'There may be more that can be done.'
+  if (p.isShort && p.noTreatment) return 'You have good options ahead.'
+  if (!p.isLong) return 'Let\'s find the right approach.'
+  return 'Our team would like to learn more.'
 }
 
 function buildNarrativeSentence(p: ParsedAnswers): string {
-  const { concern, isSevere, isModerate, isLong, isShort, hasRadiating, noTreatment, triedTreatments, treatmentList } = p
+  const { conditionLabel, isSevere, isModerate, isLong, isShort, hasRadiating, noTreatment, triedTreatments, treatmentList } = p
+  const c = conditionLabel.toLowerCase()
+
   if (isSevere && isLong && triedTreatments) {
-    return `You've been living with ${concern} pain for over a year, and ${treatmentList} hasn't fully resolved it. That pattern often points to an underlying issue that image-guided treatment can address precisely — without major surgery.`
+    return `You've been managing ${c} for over a year, and ${treatmentList} hasn't fully resolved it. That pattern often points to an underlying issue that image-guided treatment can address precisely — without major surgery.`
   }
   if (isSevere && noTreatment) {
-    return `You're experiencing significant ${concern} pain and haven't had a specialist evaluate it yet. That's exactly where we can help — our team will find the source and walk you through the right options from day one.`
+    return `You're experiencing significant ${c} symptoms and haven't had a specialist evaluate them yet. Our team can help identify the source and walk you through the right options from day one.`
   }
   if (isModerate && isLong && triedTreatments) {
-    return `Persistent ${concern} pain that hasn't responded to ${treatmentList} usually has a treatable root cause. Our specialists use image-guided techniques to find and target it directly.`
+    return `${c} that hasn't responded to ${treatmentList} often has a root cause that conservative care can't fully reach. Our specialists use image-guided techniques to target it directly.`
   }
   if (hasRadiating) {
-    return `${concern.charAt(0).toUpperCase() + concern.slice(1)} pain that travels into your arm or leg is a specific signal our specialists are trained to address — often without major surgery or extended recovery.`
+    return `${c} that travels into your arm or leg is a specific signal our specialists are trained to address — often without major surgery or extended recovery.`
   }
   if (isShort && noTreatment) {
-    return `You're catching this early, which gives you the most options. A consultation now can prevent ${concern} pain from becoming a longer-term issue.`
+    return `You're addressing this relatively early, which means you have the most options available. A consultation now can help you avoid a longer-term problem.`
   }
   if (triedTreatments) {
-    return `You've already tried ${treatmentList} for your ${concern} symptoms. If those haven't given you lasting relief, there are targeted approaches our specialists can offer that go further.`
+    return `You've already tried ${treatmentList} for your ${c} symptoms. When those haven't provided lasting relief, there are more targeted approaches our specialists can offer.`
   }
-  return `Based on what you shared, your ${concern} symptoms are something our specialists see and treat every day — with approaches that are far less invasive than traditional surgery.`
+  return `Based on what you shared, your ${c} symptoms are something our specialists see and treat regularly — with approaches that are far less invasive than traditional surgery.`
+}
+
+function buildAnswerRecap(config: AssessmentConfig, answers: Answers): AnswerRecapItem[] {
+  const items: AnswerRecapItem[] = []
+
+  const severity = getAnswerLabels(config, answers, 'severity')[0] || getAnswerLabels(config, answers, 'impact')[0]
+  if (severity) items.push({ label: 'Pain level', value: severity })
+
+  const duration = getAnswerLabels(config, answers, 'duration')[0]
+  if (duration) items.push({ label: 'Duration', value: duration })
+
+  const treatments = getAnswerLabels(config, answers, 'treatments')
+  const cleanedTreatments = cleanTreatments(treatments)
+  if (cleanedTreatments.length > 0) {
+    items.push({ label: 'Previously tried', value: formatList(cleanedTreatments) })
+  } else if (treatments.length > 0) {
+    items.push({ label: 'Prior treatment', value: 'None yet' })
+  }
+
+  return items
 }
 
 function buildPersonalizedResult(config: AssessmentConfig, answers: Answers): PersonalizedResult {
   const p = parseAnswers(config, answers)
-  const concern = p.concern === 'your condition' ? '' : p.concern
 
-  const stat1 = concern
-    ? `Most patients with ${concern} symptoms like yours avoid major surgery with our approach.`
-    : config.result.stats[0]
-
-  const stat2 = p.triedTreatments
-    ? `Because ${p.treatmentList} hasn't resolved it, your specialist will focus on what's actually driving the pain.`
+  const insight1 = p.triedTreatments
+    ? `Because ${p.treatmentList} hasn't fully resolved it, your specialist can focus on what's actually driving the symptoms — not just managing them.`
     : p.isSevere && p.isLong
-      ? `Our team regularly helps patients whose pain has persisted this long — often with same-day, outpatient procedures.`
-      : `Our specialists will review your exact situation and outline the least invasive path forward.`
+      ? `Our team regularly works with patients who've been dealing with this for a long time — there are minimally invasive options that don't require major surgery.`
+      : `Our specialists will review your specific situation and walk you through the least invasive path forward.`
+
+  const insight2 = p.isLong
+    ? `Most patients with a similar history avoid major surgery with our image-guided approach — and go home the same day.`
+    : `Getting evaluated now gives you the most options and the best chance at a straightforward, non-surgical solution.`
 
   return {
-    stats: [stat1, stat2],
     dynamicHeadline: deriveDynamicHeadline(p),
     narrativeSentence: buildNarrativeSentence(p),
+    insights: [insight1, insight2],
+    answerRecap: buildAnswerRecap(config, answers),
   }
 }
 
@@ -262,7 +285,7 @@ export default function AssessmentClient({ config }: { config: AssessmentConfig 
       categoryTitle: config.title,
       answers,
       responses: buildQuestionResponses(config, answers),
-      personalizedSummary: personalizedResult.stats,
+      personalizedSummary: personalizedResult.insights,
     }
     sessionStorage.setItem(BOOKING_ASSESSMENT_CONTEXT_KEY, JSON.stringify(context))
     router.push('/book?from=assessment')
@@ -325,7 +348,7 @@ export default function AssessmentClient({ config }: { config: AssessmentConfig 
               transition={{ duration: 0.22, ease: EASE }}
               className="text-center"
             >
-              <h1 className="font-heading font-bold text-[#111111] text-[clamp(24px,3.4vw,34px)] leading-[1.12] tracking-[-0.02em] mb-9">
+              <h1 className="font-heading font-semibold text-[#111111] text-[clamp(24px,3.4vw,34px)] leading-[1.06] tracking-[-0.03em] mb-9">
                 {currentQuestion.text}
               </h1>
 
@@ -352,7 +375,7 @@ export default function AssessmentClient({ config }: { config: AssessmentConfig 
               <p className="text-[12px] font-semibold tracking-[0.14em] uppercase text-black/40 mb-4">
                 Just a moment
               </p>
-              <h2 className="font-heading font-bold text-[#111111] text-[clamp(30px,4.4vw,44px)] leading-[1.08] tracking-[-0.03em] mb-3">
+              <h2 className="font-heading font-semibold text-[#111111] text-[clamp(28px,4vw,42px)] leading-[1.04] tracking-[-0.04em] mb-3">
                 We&apos;re analyzing your answers
               </h2>
               <p className="text-[#58514b] text-[17px] mb-9">This may take a few seconds</p>
@@ -369,41 +392,98 @@ export default function AssessmentClient({ config }: { config: AssessmentConfig 
               initial="enter"
               animate="center"
               exit="exit"
-              transition={{ duration: 0.24, ease: EASE }}
+              transition={{ duration: 0.28, ease: EASE }}
+              className="max-w-xl mx-auto"
             >
-              <div className="text-center mb-8">
-                <p className="text-[12px] font-semibold tracking-[0.14em] uppercase text-black/40 mb-3">
-                  Your results
+              {/* Headline */}
+              <div className="mb-7">
+                <p className="text-[11px] font-semibold tracking-[0.20em] uppercase text-[#9A9490] mb-4">
+                  Your assessment summary
                 </p>
-                <h2 className="font-heading font-bold text-[#111111] text-[clamp(32px,5vw,48px)] leading-[1.08] tracking-[-0.03em] mb-5">
+                <h2
+                  className="font-heading font-semibold text-[#0E0E0E] leading-[1.04] tracking-[-0.04em] mb-4"
+                  style={{ fontSize: 'clamp(26px, 4vw, 38px)' }}
+                >
                   {personalizedResult.dynamicHeadline}
                 </h2>
-                <p className="text-[#3d3834] text-[17px] leading-[1.65] max-w-xl mx-auto">
+                <p className="text-[#4A4440] text-[16px] leading-[1.7]">
                   {personalizedResult.narrativeSentence}
                 </p>
               </div>
 
-              <div className="space-y-4 mb-10 max-w-xl mx-auto">
-                {personalizedResult.stats.map((stat) => (
-                  <div key={stat} className="flex items-start gap-3.5">
-                    <Check className="w-[18px] h-[18px] text-[#4DCCE8] flex-shrink-0 mt-[2px]" strokeWidth={2.5} />
-                    <p className="text-[#1A1814] text-[15px] leading-snug">{stat}</p>
+              {/* Answer recap — echoes their selections back */}
+              {personalizedResult.answerRecap.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, ease: EASE, delay: 0.15 }}
+                  className="rounded-2xl border border-black/[0.07] bg-white mb-6 overflow-hidden"
+                  style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 14px rgba(0,0,0,0.04)' }}
+                >
+                  <div className="px-5 py-3 border-b border-black/[0.05]">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#9A9490]">
+                      Based on what you told us
+                    </p>
+                  </div>
+                  <div className="divide-y divide-black/[0.05]">
+                    {personalizedResult.answerRecap.map(({ label, value }) => (
+                      <div key={label} className="flex items-center justify-between px-5 py-3.5">
+                        <span className="text-[13px] text-[#9A9490]">{label}</span>
+                        <span className="text-[13px] font-medium text-[#1A1814] text-right max-w-[60%]">
+                          {value}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+
+              {/* Insights */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, ease: EASE, delay: 0.25 }}
+                className="space-y-3 mb-8"
+              >
+                {personalizedResult.insights.map((insight, i) => (
+                  <div
+                    key={i}
+                    className="flex items-start gap-3.5 rounded-xl px-4 py-3.5 bg-white border border-black/[0.06]"
+                    style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.03)' }}
+                  >
+                    <span
+                      className="w-1.5 h-1.5 rounded-full bg-[#B8AA82] flex-shrink-0 mt-[7px]"
+                    />
+                    <p className="text-[14px] text-[#4A4440] leading-[1.65]">{insight}</p>
                   </div>
                 ))}
-              </div>
+              </motion.div>
 
-              <div className="max-w-xl mx-auto border-t border-black/[0.07] pt-7">
+              {/* CTA */}
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, ease: EASE, delay: 0.35 }}
+                className="border-t border-black/[0.07] pt-7"
+              >
                 <button
                   type="button"
                   onClick={handleContinueToBooking}
-                  className="w-full bg-[#4DCCE8] text-[#07080C] rounded-xl py-4 text-[15px] font-semibold hover:opacity-90 active:scale-[0.99] transition-all"
+                  className="w-full rounded-xl py-4 text-[15px] font-semibold tracking-[-0.01em]
+                             transition-all duration-200 active:scale-[0.99]
+                             hover:opacity-90"
+                  style={{
+                    background: '#1A1814',
+                    color: '#EDE6D8',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.14), 0 8px 24px rgba(0,0,0,0.08)',
+                  }}
                 >
-                  Get My Treatment Plan
+                  Request My Consultation
                 </button>
-                <p className="text-center text-[12px] text-[#8c857f] mt-3">
-                  Takes less than a minute. No commitment.
+                <p className="text-center text-[12px] text-[#B8B2AE] mt-3 leading-relaxed">
+                  Free · No commitment · Our team reviews every submission
                 </p>
-              </div>
+              </motion.div>
             </motion.div>
           )}
         </AnimatePresence>

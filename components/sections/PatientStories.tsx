@@ -55,7 +55,7 @@ export default function PatientStories({ googleReviewRating, googleReviewCount }
   }, [])
 
   return (
-    <section id="patient-stories" className="bg-[#07080C] py-24 sm:py-32">
+    <section id="patient-stories" className="bg-[#07080C] py-28 sm:py-36">
       <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-12">
 
         <motion.div
@@ -68,7 +68,7 @@ export default function PatientStories({ googleReviewRating, googleReviewCount }
           <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/40 mb-5 block">
             Patient Stories
           </span>
-          <h2 className="font-heading font-bold text-[#EDE6D8] text-[clamp(26px,4vw,48px)] leading-[1.08] tracking-[-0.04em] mb-6">
+          <h2 className="font-heading font-semibold text-[#EDE6D8] text-[clamp(26px,3.8vw,44px)] leading-[1.04] tracking-[-0.04em] mb-6">
             Real outcomes. Real people.
           </h2>
           {/* Compact Google trust badge */}

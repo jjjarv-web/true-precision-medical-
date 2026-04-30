@@ -96,7 +96,7 @@ export default async function ProviderDetailPage({ params }: PageProps) {
                 <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#9A9490]">
                   {provider.title}
                 </p>
-                <h1 className="font-heading font-bold text-[#1A1814] text-[clamp(32px,4.5vw,52px)] leading-[1.05] tracking-[-0.035em]">
+                <h1 className="font-heading font-semibold text-[#1A1814] text-[clamp(30px,4.2vw,48px)] leading-[1.02] tracking-[-0.04em]">
                   {provider.name}
                 </h1>
 

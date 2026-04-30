@@ -50,7 +50,7 @@ export default function TrustCredentials({
     <>
       {/* ── Block 1: Providers ─────────────────────────────── white */}
       {homepageProviders.length > 0 && (
-        <section ref={providersRef} className="pt-24 pb-16 sm:pb-20 bg-white overflow-hidden">
+        <section ref={providersRef} className="pt-28 sm:pt-36 pb-24 sm:pb-32 bg-white overflow-hidden">
           <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-12">
 
             {/* Section heading */}
@@ -63,7 +63,7 @@ export default function TrustCredentials({
               <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#9A9490] mb-5 block">
                 Meet the Specialists
               </span>
-              <h2 className="font-heading font-bold text-[#1A1814] text-[clamp(28px,4vw,48px)] leading-[1.08] tracking-[-0.04em]">
+              <h2 className="font-heading font-semibold text-[#1A1814] text-[clamp(26px,3.8vw,44px)] leading-[1.04] tracking-[-0.04em]">
                 Fellowship-trained surgeons.<br className="hidden sm:block" /> Board-certified. Focused on you.
               </h2>
             </motion.div>
@@ -124,7 +124,11 @@ export default function TrustCredentials({
       )}
 
       {/* ── Block 2: Credentials strip ──────────────────── warm cream */}
-      <section ref={credRef} className="bg-[#F9F7F4] py-16">
+      <section
+        ref={credRef}
+        className="py-28 sm:py-36"
+        style={{ background: 'linear-gradient(180deg, #FDFCFA 0%, #F9F7F4 100%)' }}
+      >
         <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-12">
           <motion.div
             initial={{ opacity: 0, y: 12 }}
@@ -168,7 +172,7 @@ export default function TrustCredentials({
           aria-hidden
         />
 
-        <div className="relative max-w-5xl mx-auto px-6 sm:px-10 lg:px-12 pt-28 pb-12 text-center">
+        <div className="relative max-w-5xl mx-auto px-6 sm:px-10 lg:px-12 pt-28 sm:pt-36 pb-24 sm:pb-32 text-center">
 
           <motion.p
             initial={{ opacity: 0, y: 10 }}
@@ -186,8 +190,8 @@ export default function TrustCredentials({
             className="mb-6"
           >
             <h2
-              className="font-heading font-bold text-[#EDE6D8] leading-[1.0] tracking-[-0.04em]"
-              style={{ fontSize: 'clamp(36px, 5vw, 64px)' }}
+              className="font-heading font-semibold text-[#EDE6D8] leading-[1.0] tracking-[-0.05em]"
+              style={{ fontSize: 'clamp(34px, 4.5vw, 58px)' }}
             >
               Zero hospital stays.
             </h2>
@@ -283,7 +287,7 @@ export default function TrustCredentials({
 
         </div>
 
-        <div className="pb-24" />
+        <div className="pb-8" />
 
       </section>
     </>

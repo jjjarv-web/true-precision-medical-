@@ -5,11 +5,11 @@ import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 
-const TILE_URL  = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+const TILE_URL  = 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
 const TILE_ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
 
 const DEFAULT_CENTER: [number, number] = [33.5, -111.98]
-const DEFAULT_ZOOM = 9
+const DEFAULT_ZOOM = 10
 
 function createPin(active: boolean) {
   const size = active ? 16 : 10
@@ -63,7 +63,7 @@ export default function LeafletMap({ locations, activeId, onSelect }: Props) {
     <MapContainer
       center={DEFAULT_CENTER}
       zoom={DEFAULT_ZOOM}
-      style={{ height: '100%', width: '100%', background: '#07080C' }}
+      style={{ height: '100%', width: '100%', background: '#F9F7F4' }}
       zoomControl={false}
       attributionControl={false}
       scrollWheelZoom={false}

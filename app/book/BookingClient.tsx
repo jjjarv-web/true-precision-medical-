@@ -4,30 +4,17 @@ import { useState, useEffect, FormEvent } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'motion/react'
-import { ArrowRight, Sun, Sunset } from 'lucide-react'
+import { ArrowRight, Sun, Sunset, CheckCircle2 } from 'lucide-react'
 import Logo from '@/components/ui/Logo'
 import DatePicker from '@/components/ui/DatePicker'
 import { EASE } from '@/lib/constants'
 
 type Step = 'contact' | 'preference'
 
-
 const STEPS_INFO = [
-  {
-    n: '1',
-    title: 'Submit your request',
-    desc: 'Takes less than 2 minutes.',
-  },
-  {
-    n: '2',
-    title: 'We confirm your visit',
-    desc: 'A care coordinator contacts you within 48 hours to finalize your appointment.',
-  },
-  {
-    n: '3',
-    title: 'Your consultation',
-    desc: 'Meet your specialist at one of our premium outpatient centers.',
-  },
+  { n: '1', title: 'Submit your request',    desc: 'Takes less than 2 minutes.' },
+  { n: '2', title: 'We confirm your visit',  desc: 'A care coordinator contacts you within 48 hours.' },
+  { n: '3', title: 'Your consultation',      desc: 'Meet your specialist at one of our outpatient centers.' },
 ]
 
 const TRUST = ['Board-Certified Specialists', 'AAAHC Accredited Centers', 'Same-Day Discharge']
@@ -36,7 +23,6 @@ const INPUT =
   'w-full min-w-0 bg-white border border-black/[0.08] rounded-xl px-4 py-3 text-[15px] text-[#1A1814] placeholder:text-[#C4BEBB] outline-none focus:border-[#4DCCE8]/60 focus:ring-2 focus:ring-[#4DCCE8]/10 transition-all duration-200'
 
 const LABEL = 'block text-[12px] font-semibold text-[#4A4440] mb-1.5'
-
 
 const ASSESSMENT_CONTEXT_KEY = 'assessmentBookingContext'
 
@@ -55,12 +41,9 @@ function formatPhoneAsTyped(raw: string): string {
 function isValidUSPhone(raw: string): boolean {
   const d = digitsOnly(raw)
   if (d.length !== 10) return false
-  // NANP: area code and exchange code must start with 2-9.
   if (/^[01]/.test(d)) return false
   if (/^[01]/.test(d.slice(3))) return false
-  // Reject all-same-digit numbers.
   if (/^(\d)\1{9}$/.test(d)) return false
-  // Reject obvious sequential numbers (ascending or descending).
   if (d === '1234567890' || d === '0123456789' || d === '9876543210') return false
   return true
 }
@@ -85,35 +68,29 @@ export default function BookingClient() {
 
   // Step 1
   const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
-  const [email, setEmail] = useState('')
-  const [error1, setError1] = useState('')
+  const [lastName, setLastName]   = useState('')
+  const [email, setEmail]         = useState('')
+  const [error1, setError1]       = useState('')
 
   // Step 2
-  const [phone, setPhone] = useState('')
-  const [phoneTouched, setPhoneTouched] = useState(false)
-  const [preferredDate, setPreferredDate] = useState('')
+  const [phone, setPhone]                   = useState('')
+  const [phoneTouched, setPhoneTouched]     = useState(false)
+  const [preferredDate, setPreferredDate]   = useState('')
   const [timePreference, setTimePreference] = useState<'morning' | 'afternoon' | null>(null)
-  const [error2, setError2] = useState('')
+  const [error2, setError2]                 = useState('')
   const [assessmentContext, setAssessmentContext] = useState<AssessmentContext | null>(null)
 
-  const phoneValid = isValidUSPhone(phone)
-  const phoneError = phoneTouched && phone.length > 0 && !phoneValid
+  const phoneValid    = isValidUSPhone(phone)
+  const phoneError    = phoneTouched && phone.length > 0 && !phoneValid
   const canSubmitStep2 = phoneValid && Boolean(preferredDate) && Boolean(timePreference)
 
   const today = new Date().toISOString().split('T')[0]
 
   useEffect(() => {
     if (typeof window === 'undefined') return
-
-    if (searchParams.get('from') !== 'assessment') {
-      setAssessmentContext(null)
-      return
-    }
-
+    if (searchParams.get('from') !== 'assessment') { setAssessmentContext(null); return }
     const rawContext = window.sessionStorage.getItem(ASSESSMENT_CONTEXT_KEY)
     if (!rawContext) return
-
     try {
       const parsed = JSON.parse(rawContext) as AssessmentContext
       if (parsed.source === 'assessment') setAssessmentContext(parsed)
@@ -141,156 +118,91 @@ export default function BookingClient() {
     e.preventDefault()
     setError2('')
     if (!canSubmitStep2) {
-      if (!phoneValid) {
-        setPhoneTouched(true)
-        setError2('Please enter a valid U.S. phone number.')
-      } else if (!preferredDate) {
-        setError2('Please choose a preferred date.')
-      } else if (!timePreference) {
-        setError2('Please choose a preferred time.')
-      }
+      if (!phoneValid)      { setPhoneTouched(true); setError2('Please enter a valid U.S. phone number.') }
+      else if (!preferredDate)   setError2('Please choose a preferred date.')
+      else if (!timePreference)  setError2('Please choose a preferred time.')
       return
     }
-
-    if (typeof window !== 'undefined') {
-      window.sessionStorage.removeItem(ASSESSMENT_CONTEXT_KEY)
-    }
-
+    if (typeof window !== 'undefined') window.sessionStorage.removeItem(ASSESSMENT_CONTEXT_KEY)
     router.push('/thank-you')
   }
 
   const variants = {
-    enter: (d: number) => ({ opacity: 0, x: d > 0 ? 28 : -28 }),
+    enter:  (d: number) => ({ opacity: 0, x: d > 0 ?  24 : -24 }),
     center: { opacity: 1, x: 0 },
-    exit: (d: number) => ({ opacity: 0, x: d > 0 ? -28 : 28 }),
+    exit:   (d: number) => ({ opacity: 0, x: d > 0 ? -24 :  24 }),
   }
 
   return (
-    <div className="min-h-screen bg-[#07080C] flex flex-col lg:items-stretch">
-      <div className="w-full max-w-[1280px] mx-auto flex flex-col lg:flex-row lg:min-h-screen">
-
-      {/* ── Left panel — context ───────────────────────── */}
-      <div className="order-2 lg:order-1 lg:w-[44%] flex flex-col justify-between px-8 py-10 sm:px-12 sm:py-12 lg:px-16 lg:py-16">
-        <div>
-          {/* Logo / back */}
-          <Link href="/" className="hidden lg:inline-block mb-14 lg:mb-20">
-            <Logo
-              variant="light"
-              width={160}
-              height={44}
-              className="h-9 w-auto opacity-75"
-            />
-          </Link>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: EASE }}
-          >
-            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/40 mb-5">
-              Consultation Request
-            </p>
-            <h1
-              className="font-heading font-bold text-[#EDE6D8] leading-[1.06] tracking-[-0.04em] mb-6"
-              style={{ fontSize: 'clamp(26px, 3vw, 42px)' }}
-            >
-              Start with a<br /> conversation.
-            </h1>
-            <p className="text-white/50 text-[15px] leading-relaxed mb-14 max-w-xs">
-              A care coordinator will match you with the right specialist and confirm your visit within 48 hours.
-            </p>
-          </motion.div>
-
-          {/* What happens next */}
-          <div className="space-y-6">
-            {STEPS_INFO.map((item, i) => (
-              <motion.div
-                key={item.n}
-                initial={{ opacity: 0, x: -12 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, ease: EASE, delay: 0.2 + i * 0.1 }}
-                className="flex gap-4"
-              >
-                <div className="w-7 h-7 rounded-full border border-white/[0.14] flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <span className="font-mono text-[11px] text-white/35 select-none">{item.n}</span>
-                </div>
-                <div>
-                  <p className="text-[#EDE6D8]/85 text-[14px] font-semibold leading-snug">{item.title}</p>
-                  <p className="text-white/35 text-[13px] mt-1 leading-relaxed">{item.desc}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-
-          {assessmentContext && (
-            <div className="mt-8 rounded-2xl border border-white/[0.12] bg-white/[0.03] p-4 max-w-md">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#4DCCE8] mb-2">
-                From your assessment
-              </p>
-              <p className="text-[15px] text-[#EDE6D8] mb-3">
-                Booking for <span className="font-semibold">{assessmentContext.categoryTitle}</span>.
-              </p>
-              {assessmentContext.personalizedSummary.slice(0, 2).map((item) => (
-                <p key={item} className="text-[13px] text-white/70 leading-relaxed mb-1 last:mb-0">
-                  {item}
-                </p>
-              ))}
-              <details className="mt-3">
-                <summary className="text-[12px] text-white/80 cursor-pointer">View your inputs</summary>
-                <div className="mt-3 space-y-2">
-                  {assessmentContext.responses.map((response) => (
-                    <div key={response.questionId} className="text-[12px] text-white/70">
-                      <p className="font-semibold text-white/90">{response.question}</p>
-                      <p>{response.selected.join(', ')}</p>
-                    </div>
-                  ))}
-                </div>
-              </details>
-            </div>
-          )}
-        </div>
-
-        {/* Trust strip */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, ease: EASE, delay: 0.7 }}
-          className="mt-14 pt-7 border-t border-white/[0.07]"
-        >
-          <div className="flex flex-wrap gap-x-4 gap-y-2">
-            {TRUST.map((item) => (
-              <span key={item} className="text-[11px] text-white/40 font-medium">
-                {item}
-              </span>
-            ))}
-          </div>
-        </motion.div>
+    <div
+      className="min-h-screen flex flex-col"
+      style={{ background: 'linear-gradient(160deg, #FDFCFA 0%, #F9F7F4 100%)' }}
+    >
+      {/* ── Nav bar ───────────────────────────────────────────── */}
+      <div className="w-full px-6 pt-7 pb-0 flex items-center justify-center">
+        <Link href="/">
+          <Logo variant="dark" width={148} height={40} className="h-8 w-auto opacity-80" />
+        </Link>
       </div>
 
-      {/* ── Right panel — form card ────────────────────── */}
-      <div className="order-1 lg:order-2 flex-1 flex flex-col items-center justify-center px-6 pt-12 pb-20 sm:px-10 sm:pt-12 sm:pb-20 lg:px-16 lg:py-16">
-        <Link href="/" className="inline-block mb-8 lg:hidden self-start">
-          <Logo
-            variant="light"
-            width={140}
-            height={38}
-            className="h-8 w-auto opacity-75"
-          />
-        </Link>
+      {/* ── Main content ─────────────────────────────────────── */}
+      <div className="flex-1 flex flex-col items-center justify-center px-4 py-12 sm:py-16">
+
+        {/* Assessment context banner */}
+        {assessmentContext && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: EASE }}
+            className="w-full max-w-[520px] mb-5 rounded-2xl border border-black/[0.07] bg-white/70 backdrop-blur-sm px-5 py-4"
+          >
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#4DCCE8] mb-1.5">
+              From your assessment
+            </p>
+            <p className="text-[14px] text-[#1A1814] font-medium mb-2">
+              Booking for <span className="font-semibold">{assessmentContext.categoryTitle}</span>
+            </p>
+            {assessmentContext.personalizedSummary.slice(0, 1).map((item) => (
+              <p key={item} className="text-[13px] text-[#4A4440] leading-relaxed">{item}</p>
+            ))}
+          </motion.div>
+        )}
+
+        {/* Headline */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: EASE }}
+          className="text-center mb-8"
+        >
+          <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#9A9490] mb-3">
+            Consultation Request
+          </p>
+          <h1
+            className="font-heading font-semibold text-[#0E0E0E] leading-[1.06] tracking-[-0.04em]"
+            style={{ fontSize: 'clamp(28px, 4vw, 42px)' }}
+          >
+            Start with a <span style={{ color: '#B8AA82' }}>conversation.</span>
+          </h1>
+          <p className="mt-3 text-[#4A4440] text-[15px] leading-relaxed">
+            A care coordinator confirms your visit within 48 hours.
+          </p>
+        </motion.div>
+
+        {/* Form card */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.65, ease: EASE, delay: 0.15 }}
-          className="w-full max-w-[440px] rounded-3xl"
+          transition={{ duration: 0.65, ease: EASE, delay: 0.1 }}
+          className="w-full max-w-[520px] rounded-3xl overflow-hidden"
           style={{
-            background: '#F9F7F4',
-            boxShadow:
-              '0 4px 8px rgba(0,0,0,0.10), 0 24px 56px rgba(0,0,0,0.30), 0 64px 96px rgba(0,0,0,0.18)',
+            background: '#ffffff',
+            boxShadow: '0 2px 6px rgba(0,0,0,0.04), 0 12px 40px rgba(0,0,0,0.08), 0 32px 64px rgba(0,0,0,0.05)',
           }}
         >
           {/* Progress bar */}
-          <div className="px-8 pt-8">
-            <div className="flex gap-2 mb-8">
+          <div className="px-8 pt-8 pb-0">
+            <div className="flex gap-2 mb-7">
               <div className="h-[3px] flex-1 rounded-full bg-[#4DCCE8] transition-all duration-500" />
               <div
                 className={`h-[3px] flex-1 rounded-full transition-all duration-500 ${
@@ -300,7 +212,7 @@ export default function BookingClient() {
             </div>
           </div>
 
-          {/* Animated step */}
+          {/* Step content */}
           <div className="overflow-hidden">
             <AnimatePresence mode="wait" custom={direction}>
               {step === 'contact' ? (
@@ -311,7 +223,7 @@ export default function BookingClient() {
                   initial="enter"
                   animate="center"
                   exit="exit"
-                  transition={{ duration: 0.32, ease: EASE }}
+                  transition={{ duration: 0.28, ease: EASE }}
                   onSubmit={handleStep1}
                   className="px-8 pb-8"
                 >
@@ -368,8 +280,12 @@ export default function BookingClient() {
 
                   <button
                     type="submit"
-                    className="w-full flex items-center justify-center gap-2 bg-[#4DCCE8] text-[#07080C] rounded-xl py-3.5 text-[15px] font-semibold tracking-[-0.01em] hover:opacity-90 active:scale-[0.99] transition-all duration-200"
-                    style={{ boxShadow: '0 2px 16px rgba(77,204,232,0.30)' }}
+                    className="w-full flex items-center justify-center gap-2 rounded-xl py-3.5 text-[15px] font-semibold tracking-[-0.01em] transition-all duration-200 hover:bg-[#2a2520] active:scale-[0.99]"
+                    style={{
+                      backgroundColor: '#1A1814',
+                      color: '#EDE6D8',
+                      boxShadow: '0 2px 12px rgba(26,24,20,0.14)',
+                    }}
                   >
                     Continue
                     <ArrowRight className="w-4 h-4" />
@@ -387,14 +303,14 @@ export default function BookingClient() {
                   initial="enter"
                   animate="center"
                   exit="exit"
-                  transition={{ duration: 0.32, ease: EASE }}
+                  transition={{ duration: 0.28, ease: EASE }}
                   onSubmit={handleSubmit}
                   className="px-8 pb-8"
                 >
                   <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#9A9490] mb-2">
                     Step 2 of 2
                   </p>
-                  <h2 className="font-heading font-bold text-[#1A1814] text-[20px] leading-snug tracking-[-0.03em] mb-4">
+                  <h2 className="font-heading font-bold text-[#1A1814] text-[20px] leading-snug tracking-[-0.03em] mb-6">
                     When works for you?
                   </h2>
 
@@ -437,8 +353,8 @@ export default function BookingClient() {
                     <div className="grid grid-cols-2 gap-2.5">
                       {(
                         [
-                          { key: 'morning', label: 'Morning', sub: '8am – 12pm', Icon: Sun },
-                          { key: 'afternoon', label: 'Afternoon', sub: '12pm – 5pm', Icon: Sunset },
+                          { key: 'morning',   label: 'Morning',   sub: '8am – 12pm',  Icon: Sun    },
+                          { key: 'afternoon', label: 'Afternoon', sub: '12pm – 5pm',  Icon: Sunset },
                         ] as const
                       ).map(({ key, label, sub, Icon }) => (
                         <button
@@ -446,20 +362,20 @@ export default function BookingClient() {
                           type="button"
                           onClick={() => setTimePreference(key)}
                           className={`flex flex-col items-center gap-2 py-4 rounded-xl border text-sm font-semibold transition-all duration-200 ${
-                              timePreference === key
-                              ? 'bg-[#4DCCE8] border-[#4DCCE8] text-[#07080C]'
+                            timePreference === key
+                              ? 'bg-[#1A1814] border-[#1A1814] text-[#EDE6D8]'
                               : 'bg-white border-black/[0.08] text-[#4A4440] hover:border-black/[0.16]'
                           }`}
                         >
                           <Icon
                             className={`w-5 h-5 transition-colors duration-200 ${
-                              timePreference === key ? 'text-[#07080C]/70' : 'text-[#9A9490]'
+                              timePreference === key ? 'text-[#EDE6D8]/70' : 'text-[#9A9490]'
                             }`}
                           />
                           <span>{label}</span>
                           <span
                             className={`text-[11px] font-normal transition-colors duration-200 ${
-                              timePreference === key ? 'text-[#07080C]/55' : 'text-[#9A9490]'
+                              timePreference === key ? 'text-[#EDE6D8]/55' : 'text-[#9A9490]'
                             }`}
                           >
                             {sub}
@@ -477,23 +393,77 @@ export default function BookingClient() {
                     type="submit"
                     disabled={!canSubmitStep2}
                     aria-disabled={!canSubmitStep2}
-                    className={`w-full flex items-center justify-center gap-2 rounded-xl py-3.5 mb-4 text-[15px] font-semibold tracking-[-0.01em] transition-all duration-200 ${
+                    className={`w-full flex items-center justify-center gap-2 rounded-xl py-3.5 mb-1 text-[15px] font-semibold tracking-[-0.01em] transition-all duration-200 ${
                       canSubmitStep2
-                        ? 'bg-[#4DCCE8] text-[#07080C] hover:opacity-90 active:scale-[0.99] cursor-pointer'
-                        : 'bg-[#E4DFD9] text-[#9A9490] cursor-not-allowed'
+                        ? 'hover:bg-[#2a2520] active:scale-[0.99] cursor-pointer'
+                        : 'cursor-not-allowed opacity-40'
                     }`}
-                    style={canSubmitStep2 ? { boxShadow: '0 2px 16px rgba(77,204,232,0.30)' } : undefined}
+                    style={canSubmitStep2 ? {
+                      backgroundColor: '#1A1814',
+                      color: '#EDE6D8',
+                      boxShadow: '0 2px 12px rgba(26,24,20,0.14)',
+                    } : {
+                      backgroundColor: '#1A1814',
+                      color: '#EDE6D8',
+                    }}
                   >
                     Submit Request
                     <ArrowRight className="w-4 h-4" />
                   </button>
 
+                  <button
+                    type="button"
+                    onClick={() => { setDirection(-1); setStep('contact') }}
+                    className="w-full text-center text-[13px] text-[#9A9490] mt-3 hover:text-[#4A4440] transition-colors duration-200"
+                  >
+                    ← Back
+                  </button>
                 </motion.form>
               )}
             </AnimatePresence>
           </div>
         </motion.div>
-      </div>
+
+        {/* What happens next — 3-step strip */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: EASE, delay: 0.3 }}
+          className="w-full max-w-[520px] mt-6"
+        >
+          <div className="grid grid-cols-3 gap-3">
+            {STEPS_INFO.map((item, i) => (
+              <div
+                key={item.n}
+                className="flex flex-col gap-2 rounded-2xl border border-black/[0.07] bg-white/50 px-4 py-4"
+              >
+                <div className="flex items-center gap-2">
+                  <span
+                    className="w-5 h-5 rounded-full border border-black/[0.10] flex items-center justify-center flex-shrink-0"
+                    style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}
+                  >
+                    <span className="font-mono text-[10px] text-[#1A1814]/35 select-none leading-none">{item.n}</span>
+                  </span>
+                  {i < (step === 'contact' ? 0 : 1) && (
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[#4DCCE8]" />
+                  )}
+                </div>
+                <p className="text-[13px] font-semibold text-[#1A1814] leading-snug">{item.title}</p>
+                <p className="text-[11.5px] text-[#9A9490] leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Trust strip */}
+          <div className="flex items-center justify-center flex-wrap gap-x-5 gap-y-1.5 mt-6">
+            {TRUST.map((item, i) => (
+              <span key={item} className="flex items-center gap-1.5 text-[11px] text-[#9A9490] font-medium">
+                {i !== 0 && <span className="w-[3px] h-[3px] rounded-full bg-black/20 inline-block" />}
+                {item}
+              </span>
+            ))}
+          </div>
+        </motion.div>
 
       </div>
     </div>

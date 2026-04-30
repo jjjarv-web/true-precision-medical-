@@ -13,13 +13,6 @@ import { EASE, PHONE_NUMBER, PHONE_HREF } from '@/lib/constants'
 
 type MatchState = 'idle' | 'pass' | 'fail' | 'unknown'
 
-const IDLE_PILLS = [
-  'Medicare',
-  'Blue Cross Blue Shield',
-  'Aetna',
-  'UnitedHealthcare',
-  'Cigna',
-]
 
 type Props = {
   settings: InsuranceSettings
@@ -86,224 +79,167 @@ export default function InsuranceBar({ settings, site }: Props) {
     e.currentTarget.blur()
   }
 
+  const FEATURED_INSURERS = [
+    'Medicare', 'Aetna', 'Blue Cross Blue Shield', 'UnitedHealthcare',
+    'Cigna', 'Humana', 'Tricare', 'Anthem',
+  ]
+
   return (
-    <section
-      ref={ref}
-      className="relative z-10 -mt-12 rounded-t-[2rem] pb-28"
-      style={{
-        background: 'linear-gradient(to bottom, #F9F7F4 0%, #F9F7F4 60%, #ffffff 100%)',
-        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.55)',
-      }}
-    >
-      <div className="max-w-2xl mx-auto px-6 sm:px-10 text-center">
+    <section ref={ref} className="bg-[#07080C]">
+      <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-12 pt-20 sm:pt-24 pb-28 sm:pb-36">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
 
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, ease: EASE }}
-          className="mb-10 pt-28 sm:pt-32"
-        >
-          <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#9A9490] mb-5 block">
-            Insurance & Coverage
-          </span>
-          <h2 className="font-heading font-bold text-[#1A1814] text-[clamp(28px,4vw,48px)] leading-[1.08] tracking-[-0.04em] mb-4">
-            Your plan is almost<br className="hidden sm:block" /> certainly covered.
-          </h2>
-          <p className="text-[#4A4440] text-base leading-relaxed">
-            We accept most major insurance plans. Type yours to confirm in seconds.
-          </p>
-        </motion.div>
-
-        {/* Search input */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, ease: EASE, delay: 0.1 }}
-          className="relative mb-6"
-        >
+          {/* ── Left: headline + search ─────────────────────── */}
           <motion.div
-            animate={{
-              boxShadow: focused
-                ? '0 0 0 3px rgba(77,204,232,0.18), 0 8px 32px rgba(26,24,20,0.08)'
-                : matchState === 'pass'
-                ? '0 0 0 2.5px rgba(77,204,232,0.28), 0 4px 20px rgba(26,24,20,0.06)'
-                : matchState === 'fail'
-                ? '0 0 0 2.5px rgba(239,68,68,0.20), 0 4px 20px rgba(26,24,20,0.06)'
-                : '0 2px 16px rgba(26,24,20,0.06)',
-            }}
-            transition={{ duration: 0.2 }}
-            className="relative rounded-2xl"
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, ease: EASE }}
           >
-            <div className="relative flex items-center">
-              <Search
-                className="absolute left-5 pointer-events-none z-10 transition-colors duration-200 w-[18px] h-[18px]"
-                style={{ color: focused ? '#4DCCE8' : '#9A9490' }}
-              />
-              <input
-                type="text"
-                value={query}
-                onChange={(e) => handleInputChange(e.target.value)}
-                onFocus={() => setFocused(true)}
-                onBlur={handleInputBlur}
-                onKeyDown={handleKeyDown}
-                placeholder="Search your insurance provider…"
-                className="w-full bg-white pl-13 pr-14 py-4 rounded-2xl border border-black/[0.07]
-                           text-[#1A1814] text-base font-medium placeholder:text-[#9A9490]
-                           outline-none transition-colors duration-200"
-                style={{ paddingLeft: '3.2rem' }}
-              />
+            <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/40 mb-5 block">
+              Insurance & Coverage
+            </span>
+            <h2 className="font-heading font-semibold text-[#EDE6D8] leading-[1.04] tracking-[-0.04em] mb-5"
+                style={{ fontSize: 'clamp(28px,4vw,48px)' }}>
+              Your plan is almost<br className="hidden sm:block" /> certainly covered.
+            </h2>
+            <p className="text-white/50 text-[15px] leading-relaxed mb-8">
+              We accept most major insurance plans. Type yours below to confirm in seconds.
+            </p>
+
+            {/* Search input */}
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/30 mb-2.5">
+              Check your plan
+            </p>
+            <div className="relative mb-4">
+              <motion.div
+                animate={{
+                  boxShadow: focused
+                    ? '0 0 0 3px rgba(77,204,232,0.18), 0 8px 32px rgba(0,0,0,0.25)'
+                    : matchState === 'pass'
+                    ? '0 0 0 2.5px rgba(77,204,232,0.28), 0 4px 20px rgba(0,0,0,0.18)'
+                    : matchState === 'fail'
+                    ? '0 0 0 2.5px rgba(239,68,68,0.20), 0 4px 20px rgba(0,0,0,0.18)'
+                    : '0 2px 16px rgba(0,0,0,0.20)',
+                }}
+                transition={{ duration: 0.2 }}
+                className="relative rounded-2xl"
+              >
+                <div className="relative flex items-center">
+                  <Search
+                    className="absolute left-5 pointer-events-none z-10 transition-colors duration-200 w-[18px] h-[18px]"
+                    style={{ color: focused ? '#4DCCE8' : '#9A9490' }}
+                  />
+                  <input
+                    type="text"
+                    value={query}
+                    onChange={(e) => handleInputChange(e.target.value)}
+                    onFocus={() => setFocused(true)}
+                    onBlur={handleInputBlur}
+                    onKeyDown={handleKeyDown}
+                    placeholder="Search your insurance provider…"
+                    className="w-full bg-white/[0.08] border border-white/[0.10] pl-13 pr-14 py-4 rounded-2xl
+                               text-white text-base font-medium placeholder:text-white/30
+                               outline-none transition-colors duration-200"
+                    style={{ paddingLeft: '3.2rem' }}
+                  />
+                  <AnimatePresence mode="wait">
+                    {matchState === 'pass' && !focused && (
+                      <motion.span key="check" initial={{ opacity: 0, scale: 0.7 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.7 }} transition={{ duration: 0.2, ease: EASE }} className="absolute right-5">
+                        <CheckCircle2 className="w-5 h-5 text-[#4DCCE8]" />
+                      </motion.span>
+                    )}
+                    {matchState === 'fail' && !focused && (
+                      <motion.span key="alert" initial={{ opacity: 0, scale: 0.7 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.7 }} transition={{ duration: 0.2, ease: EASE }} className="absolute right-5">
+                        <AlertCircle className="w-5 h-5 text-amber-400" />
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </motion.div>
+
+              {/* Dropdown */}
+              <AnimatePresence>
+                {showDropdown && (
+                  <motion.ul key="dropdown" initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 3 }} transition={{ duration: 0.18, ease: EASE }}
+                    className="absolute top-full left-0 right-0 mt-2 bg-[#1A1B20] rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.40)] overflow-hidden z-50"
+                  >
+                    {suggestions.map((name) => (
+                      <li key={name}>
+                        <button onMouseDown={() => handleSelect(name)}
+                          className="w-full text-left px-5 py-3.5 text-sm font-medium text-white/70 hover:bg-white/[0.06] hover:text-white transition-colors duration-150"
+                        >
+                          {name}
+                        </button>
+                      </li>
+                    ))}
+                  </motion.ul>
+                )}
+              </AnimatePresence>
+            </div>
+
+            {/* State feedback */}
+            <div className="min-h-[52px] flex flex-col gap-4">
               <AnimatePresence mode="wait">
                 {matchState === 'pass' && !focused && (
-                  <motion.span
-                    key="check"
-                    initial={{ opacity: 0, scale: 0.7 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.7 }}
-                    transition={{ duration: 0.2, ease: EASE }}
-                    className="absolute right-5"
+                  <motion.div key="pass" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.3, ease: EASE }}
+                    className="flex items-start gap-2.5 bg-white/[0.07] border border-[#4DCCE8]/25 rounded-xl px-5 py-3.5"
                   >
-                    <CheckCircle2 className="w-5 h-5 text-[#4DCCE8]" />
-                  </motion.span>
+                    <CheckCircle2 className="w-4 h-4 text-[#4DCCE8] flex-shrink-0 mt-0.5" />
+                    <p className="text-sm text-white/70 leading-snug">{settings.passMessage}</p>
+                  </motion.div>
                 )}
                 {matchState === 'fail' && !focused && (
-                  <motion.span
-                    key="alert"
-                    initial={{ opacity: 0, scale: 0.7 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.7 }}
-                    transition={{ duration: 0.2, ease: EASE }}
-                    className="absolute right-5"
+                  <motion.div key="fail" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.3, ease: EASE }}
+                    className="flex flex-col gap-3 bg-white/[0.06] border border-amber-400/20 rounded-xl px-5 py-4"
                   >
-                    <AlertCircle className="w-5 h-5 text-amber-500" />
-                  </motion.span>
+                    <div className="flex items-start gap-2.5">
+                      <AlertCircle className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
+                      <p className="text-sm text-white/60 leading-snug">{settings.failMessage}</p>
+                    </div>
+                    <a href={phoneHref}
+                      className="inline-flex items-center justify-center gap-2 w-full rounded-xl px-4 py-3 text-sm font-semibold text-[#1A1814] bg-[#D4C4A8] hover:bg-[#C9B896] transition-colors duration-150"
+                    >
+                      <Phone className="w-4 h-4" aria-hidden="true" />
+                      Call {phone}
+                    </a>
+                  </motion.div>
+                )}
+                {matchState === 'unknown' && !focused && (
+                  <motion.div key="unknown" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.3, ease: EASE }}
+                    className="flex items-start gap-2.5 bg-white/[0.06] border border-white/[0.09] rounded-xl px-5 py-3.5"
+                  >
+                    <Phone className="w-4 h-4 text-[#4DCCE8] flex-shrink-0 mt-0.5" />
+                    <p className="text-sm text-white/55 leading-snug">{settings.unknownMessage}</p>
+                  </motion.div>
                 )}
               </AnimatePresence>
             </div>
           </motion.div>
 
-          {/* Dropdown */}
-          <AnimatePresence>
-            {showDropdown && (
-              <motion.ul
-                key="dropdown"
-                initial={{ opacity: 0, y: 4 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 3 }}
-                transition={{ duration: 0.18, ease: EASE }}
-                className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl border
-                           border-black/[0.06] shadow-[0_8px_32px_rgba(13,27,62,0.10)]
-                           overflow-hidden z-50"
-              >
-                {suggestions.map((name) => (
-                  <li key={name}>
-                    <button
-                      onMouseDown={() => handleSelect(name)}
-                      className="w-full text-left px-5 py-3.5 text-sm font-medium text-[#1A1814]
-                                 hover:bg-[#F9F7F4] transition-colors duration-150"
-                    >
-                      {name}
-                    </button>
-                  </li>
-                ))}
-              </motion.ul>
-            )}
-          </AnimatePresence>
-        </motion.div>
-
-        {/* State feedback */}
-        <div className="min-h-[52px] flex flex-col items-center justify-center gap-4">
-          <AnimatePresence mode="wait">
-
-            {matchState === 'pass' && !focused && (
-              <motion.div
-                key="pass"
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -6 }}
-                transition={{ duration: 0.3, ease: EASE }}
-                className="flex items-start gap-2.5 bg-white border border-[#4DCCE8]/25
-                           rounded-xl px-5 py-3.5 shadow-[0_2px_12px_rgba(77,204,232,0.10)] max-w-md text-left"
-              >
-                <CheckCircle2 className="w-4 h-4 text-[#4DCCE8] flex-shrink-0 mt-0.5" />
-                <p className="text-sm text-[#1A1814] leading-snug">
-                  {settings.passMessage}
-                </p>
-              </motion.div>
-            )}
-
-            {matchState === 'fail' && !focused && (
-              <motion.div
-                key="fail"
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -6 }}
-                transition={{ duration: 0.3, ease: EASE }}
-                className="flex flex-col gap-3 bg-white border border-amber-200
-                           rounded-xl px-5 py-4 shadow-[0_2px_12px_rgba(245,158,11,0.08)] max-w-md text-left"
-              >
-                <div className="flex items-start gap-2.5">
-                  <AlertCircle className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
-                  <p className="text-sm text-[#4A4440] leading-snug">
-                    {settings.failMessage}
-                  </p>
-                </div>
-                <a
-                  href={phoneHref}
-                  className="inline-flex items-center justify-center gap-2 w-full
-                             rounded-xl px-4 py-3 text-sm font-semibold text-[#EDE6D8]
-                             bg-[#1A1814] hover:bg-[#2a2520] transition-colors duration-150"
-                  style={{ boxShadow: '0 2px 12px rgba(26,24,20,0.18)' }}
+          {/* ── Right: insurance grid ────────────────────────── */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.65, ease: EASE, delay: 0.15 }}
+          >
+            <div className="grid grid-cols-2 gap-3">
+              {FEATURED_INSURERS.map((name) => (
+                <button
+                  key={name}
+                  onMouseDown={() => handleSelect(name)}
+                  className="bg-white/[0.05] border border-white/[0.08] rounded-xl px-4 py-4 text-center cursor-pointer
+                             hover:bg-white/[0.10] hover:border-[#4DCCE8]/30 hover:text-[#4DCCE8] transition-all duration-200 group"
                 >
-                  <Phone className="w-4 h-4" aria-hidden="true" />
-                  Call {phone}
-                </a>
-              </motion.div>
-            )}
+                  <span className="text-[13px] font-medium text-white/55 group-hover:text-[#4DCCE8] transition-colors duration-200 leading-snug">{name}</span>
+                </button>
+              ))}
+            </div>
+            <p className="mt-5 text-[12px] text-white/30 text-center tracking-wide">
+              + 150 more accepted plans
+            </p>
+          </motion.div>
 
-            {matchState === 'unknown' && !focused && (
-              <motion.div
-                key="unknown"
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -6 }}
-                transition={{ duration: 0.3, ease: EASE }}
-                className="flex items-start gap-2.5 bg-white border border-black/[0.08]
-                           rounded-xl px-5 py-3.5 shadow-[0_2px_12px_rgba(26,24,20,0.05)] max-w-md text-left"
-              >
-                <Phone className="w-4 h-4 text-[#4DCCE8] flex-shrink-0 mt-0.5" />
-                <p className="text-sm text-[#4A4440] leading-snug">
-                  {settings.unknownMessage}
-                </p>
-              </motion.div>
-            )}
-
-            {matchState === 'idle' && (
-              <motion.div
-                key="idle"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.25 }}
-                className="flex flex-wrap justify-center gap-2"
-              >
-                {IDLE_PILLS.map((name) => (
-                  <button
-                    key={name}
-                    onMouseDown={() => handleSelect(name)}
-                    className="px-3 py-1.5 rounded-full bg-white border border-black/[0.07] text-xs
-                               font-medium text-[#4A4440] hover:border-[#4DCCE8]/40
-                               hover:text-[#4DCCE8] transition-colors duration-200 cursor-pointer"
-                  >
-                    {name}
-                  </button>
-                ))}
-              </motion.div>
-            )}
-
-          </AnimatePresence>
         </div>
-
       </div>
     </section>
   )

@@ -6,7 +6,11 @@ import { EASE, HOW_IT_WORKS_STEPS } from '@/lib/constants'
 
 export default function HowItWorks() {
   return (
-    <section id="approach" className="py-28 sm:py-36 bg-[#F9F7F4] overflow-x-hidden">
+    <section
+      id="approach"
+      className="py-28 sm:py-36 overflow-x-hidden"
+      style={{ background: 'linear-gradient(180deg, #FDFCFA 0%, #F9F7F4 100%)' }}
+    >
       <div className="max-w-5xl mx-auto px-6 sm:px-10 lg:px-12">
 
         {/* Section header */}
@@ -20,7 +24,7 @@ export default function HowItWorks() {
           <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#9A9490] mb-5 block">
             Our Process
           </span>
-          <h2 className="font-heading font-bold text-[#1A1814] text-[clamp(28px,3.5vw,48px)] leading-[1.08] tracking-[-0.04em] mb-5">
+          <h2 className="font-heading font-semibold text-[#1A1814] text-[clamp(26px,3.5vw,44px)] leading-[1.04] tracking-[-0.04em] mb-5">
             A simpler path to relief.
           </h2>
           <p className="text-[#4A4440] text-[15px] leading-relaxed max-w-md">
