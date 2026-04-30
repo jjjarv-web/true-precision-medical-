@@ -78,9 +78,15 @@ export default function TreatmentsHubClient() {
         {/* RIGHT — vertical image strip */}
         {/* Desktop: flex columns fill height. Mobile: horizontal scroll strip. */}
         <div
-          className="flex-1 flex overflow-x-auto lg:overflow-x-visible scrollbar-none"
+          className="flex-1 relative flex overflow-x-auto lg:overflow-x-visible scrollbar-none"
           style={{ minHeight: 280 }}
         >
+          {/* Top fade — columns melt into the white header */}
+          <div
+            className="absolute inset-x-0 top-0 h-24 z-10 pointer-events-none"
+            style={{ background: 'linear-gradient(to bottom, rgba(255,255,255,0.85) 0%, transparent 100%)' }}
+            aria-hidden
+          />
           {HERO_COLUMNS.map(({ id, label, tag, img }, i) => (
             <motion.div
               key={id}
@@ -98,7 +104,7 @@ export default function TreatmentsHubClient() {
                 src={img}
                 alt={label}
                 className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-[1.05]"
-                style={{ filter: 'saturate(0.88) contrast(0.94)' }}
+                style={{ opacity: 0.72, filter: 'saturate(0.78) contrast(0.93)' }}
               />
 
               {/* Bottom label */}
