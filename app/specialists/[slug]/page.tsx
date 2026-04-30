@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
-import Header from '@/components/layout/Header'
+import Header2 from '@/components/layout/Header2'
 import Footer from '@/components/layout/Footer'
 import ProviderCard from '@/components/providers/ProviderCard'
 import ProviderExtendedBio from '@/components/providers/ProviderExtendedBio'
@@ -45,7 +45,7 @@ export default async function ProviderDetailPage({ params }: PageProps) {
 
   return (
     <>
-      <Header site={siteSettings} />
+      <Header2 site={siteSettings} />
       <main className="flex-grow bg-white">
         {/* Breadcrumb */}
         <div className="pt-28 sm:pt-32">
@@ -122,10 +122,10 @@ export default async function ProviderDetailPage({ params }: PageProps) {
 
                 <div className="mt-8 flex flex-wrap gap-3">
                   <Link
-                    href="/book"
+                    href="/assessment"
                     className="inline-flex items-center gap-2 rounded-xl bg-[#1A1814] px-5 py-3 text-sm font-semibold text-white transition-all duration-200 hover:bg-[#2A2620] hover:-translate-y-0.5 shadow-[0_2px_14px_rgba(0,0,0,0.18)]"
                   >
-                    Book a Consultation
+                    Start Free Assessment
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                   <Link

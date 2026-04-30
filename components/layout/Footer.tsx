@@ -65,11 +65,11 @@ export default function Footer({ site, conversionDescription }: Props = {}) {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a
-              href="/book"
+              href="/assessment"
               className="inline-flex items-center gap-2.5 bg-[#D4C4A8] text-[#1A1814] px-8 py-3.5 rounded-full text-sm font-semibold tracking-[0.02em] hover:bg-[#C9B896] transition-colors duration-200"
               style={{ boxShadow: '0 6px 28px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.35)' }}
             >
-              Request a Consultation
+              Start Free Assessment
               <ArrowRight className="w-4 h-4" />
             </a>
             <a

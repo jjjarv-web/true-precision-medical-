@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import Header from '@/components/layout/Header'
+import Header2 from '@/components/layout/Header2'
 import Footer from '@/components/layout/Footer'
 import TreatmentsHubClient from '@/components/pages/TreatmentsHubClient'
 import { fetchSiteSettings } from '@/lib/sanity'
@@ -15,7 +15,7 @@ export default async function TreatmentsPage() {
   const siteSettings = await fetchSiteSettings()
   return (
     <>
-      <Header site={siteSettings} />
+      <Header2 site={siteSettings} />
       <TreatmentsHubClient />
       <Footer site={siteSettings} />
     </>

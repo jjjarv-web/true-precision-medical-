@@ -186,11 +186,11 @@ export default function OurApproachClient({ siteSettings }: Props) {
             className="mt-24 flex flex-col sm:flex-row items-start sm:items-center gap-6"
           >
             <Link
-              href="/book"
+              href="/assessment"
               className="group inline-flex items-center gap-2.5 px-8 py-4 rounded-full text-sm font-semibold text-[#EDE6D8] bg-[#1A1814] hover:bg-[#2a2520] transition-colors duration-200"
               style={{ boxShadow: '0 2px 12px rgba(26,24,20,0.18)' }}
             >
-              Request a Consultation
+              Start Free Assessment
               <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5" />
             </Link>
             <span className="text-[13px] text-[#9A9490]">Takes less than 2 minutes</span>

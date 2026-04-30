@@ -95,7 +95,7 @@ export default function Header2({ site }: Props = {}) {
             </a>
 
             <Link
-              href="/book"
+              href="/assessment"
               className="inline-flex items-center px-5 py-2.5 rounded-full text-[13.5px] font-medium
                          tracking-tight text-white select-none
                          shadow-[0_2px_12px_rgba(14,14,14,0.22),inset_0_1px_0_rgba(255,255,255,0.10)]
@@ -103,7 +103,7 @@ export default function Header2({ site }: Props = {}) {
                          hover:shadow-[0_4px_18px_rgba(14,14,14,0.30)] active:scale-[0.98]"
               style={{ backgroundColor: '#0E0E0E' }}
             >
-              Book Consultation
+              Start Free Assessment
             </Link>
           </div>
 
@@ -159,7 +159,7 @@ export default function Header2({ site }: Props = {}) {
           </a>
 
           <Link
-            href="/book"
+            href="/assessment"
             className="mt-1 mx-0 py-4 rounded-full text-[15px] font-medium text-center
                        text-white tracking-tight select-none
                        shadow-[0_2px_14px_rgba(14,14,14,0.20)]
@@ -167,7 +167,7 @@ export default function Header2({ site }: Props = {}) {
             style={{ backgroundColor: '#0E0E0E' }}
             onClick={() => setMobileOpen(false)}
           >
-            Book Consultation
+            Start Free Assessment
           </Link>
         </div>
       )}

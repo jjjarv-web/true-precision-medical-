@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
-import Header from '@/components/layout/Header'
+import Header2 from '@/components/layout/Header2'
 import Footer from '@/components/layout/Footer'
 import ProviderCard from '@/components/providers/ProviderCard'
 import { fetchSiteSettings, fetchProviders } from '@/lib/sanity'
@@ -18,7 +18,7 @@ export default async function SpecialistsIndexPage() {
 
   return (
     <>
-      <Header site={siteSettings} />
+      <Header2 site={siteSettings} />
       <main className="flex-grow bg-white">
         <section className="pt-36 pb-20 sm:pt-44 sm:pb-24">
           <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-12">

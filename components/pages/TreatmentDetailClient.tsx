@@ -264,10 +264,10 @@ export default function TreatmentDetailClient({ slug, specLabel, detail }: Props
               <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5" />
             </Link>
             <Link
-              href="/book"
+              href="/assessment"
               className="group inline-flex items-center gap-2 text-[14px] font-medium text-[#4A4440] hover:text-[#1A1814] transition-colors duration-200"
             >
-              Or request a consultation
+              Or start your assessment
               <ArrowRight className="w-3.5 h-3.5 ml-0.5 transition-transform duration-200 group-hover:translate-x-0.5" />
             </Link>
           </div>

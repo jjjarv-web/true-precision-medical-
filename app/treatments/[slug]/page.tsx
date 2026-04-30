@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import Header from '@/components/layout/Header'
+import Header2 from '@/components/layout/Header2'
 import Footer from '@/components/layout/Footer'
 import TreatmentDetailClient from '@/components/pages/TreatmentDetailClient'
 import { fetchSiteSettings } from '@/lib/sanity'
@@ -36,7 +36,7 @@ export default async function TreatmentDetailPage({ params }: PageProps) {
 
   return (
     <>
-      <Header site={siteSettings} />
+      <Header2 site={siteSettings} />
       <TreatmentDetailClient slug={slug} specLabel={spec.label} detail={detail} />
       <Footer site={siteSettings} />
     </>

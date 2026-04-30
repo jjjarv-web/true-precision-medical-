@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import Header from '@/components/layout/Header'
+import Header2 from '@/components/layout/Header2'
 import Footer from '@/components/layout/Footer'
 import LocationsClient from '@/components/pages/LocationsClient'
 import { fetchSiteSettings, fetchLocations } from '@/lib/sanity'
@@ -18,7 +18,7 @@ export default async function LocationsPage() {
   ])
   return (
     <>
-      <Header site={siteSettings} />
+      <Header2 site={siteSettings} />
       <LocationsClient siteSettings={siteSettings} locations={locations} />
       <Footer
         site={siteSettings}
