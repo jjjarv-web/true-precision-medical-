@@ -83,8 +83,8 @@ export default function TreatmentsHubClient() {
         >
           {/* Top fade — columns melt into the white header */}
           <div
-            className="absolute inset-x-0 top-0 h-24 z-10 pointer-events-none"
-            style={{ background: 'linear-gradient(to bottom, rgba(255,255,255,0.85) 0%, transparent 100%)' }}
+            className="absolute inset-x-0 top-0 h-40 z-10 pointer-events-none"
+            style={{ background: 'linear-gradient(to bottom, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.4) 60%, transparent 100%)' }}
             aria-hidden
           />
           {HERO_COLUMNS.map(({ id, label, tag, img }, i) => (
@@ -104,7 +104,7 @@ export default function TreatmentsHubClient() {
                 src={img}
                 alt={label}
                 className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-[1.05]"
-                style={{ opacity: 0.72, filter: 'saturate(0.78) contrast(0.93)' }}
+                style={{ opacity: 0.38, filter: 'saturate(0.55) contrast(0.90)' }}
               />
 
               {/* Bottom label */}
