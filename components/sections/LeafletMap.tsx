@@ -8,15 +8,14 @@ import 'leaflet/dist/leaflet.css'
 const TILE_URL  = 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
 const TILE_ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
 
+// Fallback used only if no locations are passed
 const DEFAULT_CENTER: [number, number] = [33.5, -111.98]
-const DEFAULT_ZOOM = 11
+const DEFAULT_ZOOM = 8
 
 function createPin(active: boolean) {
   const size = active ? 16 : 10
-  const glow = active
-    ? 'rgba(77,204,232,0.75)'
-    : 'rgba(77,204,232,0.28)'
-  const bg = active ? '#4DCCE8' : 'rgba(77,204,232,0.5)'
+  const glow = active ? 'rgba(77,204,232,0.75)' : 'rgba(77,204,232,0.28)'
+  const bg     = active ? '#4DCCE8' : 'rgba(77,204,232,0.5)'
   const border = active ? '#4DCCE8' : 'rgba(77,204,232,0.35)'
 
   return L.divIcon({
@@ -34,6 +33,33 @@ function createPin(active: boolean) {
   })
 }
 
+// Fits the map to all markers on first load
+function FitBounds({ locations }: { locations: Array<{ lat: number; lng: number }> }) {
+  const map    = useMap()
+  const fitted = useRef(false)
+
+  useEffect(() => {
+    if (fitted.current || locations.length === 0) return
+    const bounds = L.latLngBounds(locations.map((l) => [l.lat, l.lng]))
+    map.fitBounds(bounds, { padding: [48, 48], maxZoom: 10 })
+    fitted.current = true
+  }, [locations, map])
+
+  return null
+}
+
+// Zoom control anchored to bottom-right (matches ARC Joint)
+function ZoomControl() {
+  const map = useMap()
+  useEffect(() => {
+    const control = L.control.zoom({ position: 'bottomright' })
+    control.addTo(map)
+    return () => { control.remove() }
+  }, [map])
+  return null
+}
+
+// Flies to the active location when selection changes
 function MapController({ lat, lng, zoom }: { lat: number; lng: number; zoom: number }) {
   const map  = useMap()
   const prev = useRef('')
@@ -70,6 +96,9 @@ export default function LeafletMap({ locations, activeId, onSelect }: Props) {
       dragging={!L.Browser.mobile}
     >
       <TileLayer url={TILE_URL} attribution={TILE_ATTR} detectRetina />
+
+      <FitBounds locations={locations} />
+      <ZoomControl />
 
       {active && (
         <MapController lat={active.lat} lng={active.lng} zoom={12} />

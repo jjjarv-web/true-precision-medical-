@@ -43,10 +43,10 @@ export const metadata: Metadata = {
     locale: 'en_US',
     images: [
       {
-        url: '/opengraph-image',
+        url: '/images/og-homepage.jpg',
         width: 1200,
         height: 630,
-        alt: 'True Precision Medical | Surgery Reimagined',
+        alt: 'True Precision Medical | Advanced Minimally Invasive Specialty Care',
       },
     ],
   },
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'True Precision Medical',
     description: 'Advanced care. Less invasive. Faster recovery.',
-    images: ['/opengraph-image'],
+    images: ['/images/og-homepage.jpg'],
   },
   robots: {
     index: true,
