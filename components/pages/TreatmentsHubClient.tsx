@@ -5,43 +5,120 @@ import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { EASE, SPECIALTIES } from '@/lib/constants'
 
+// Columns shown in the hero image strip
+const HERO_COLUMNS = [
+  { id: 'knee',       label: 'Knee',               tag: 'GAE & PNS',  img: '/images/hero/hero-knee.png'          },
+  { id: 'shoulder',   label: 'Shoulder',            tag: 'Embo & PNS', img: '/images/hero/hero-shoulder.png'      },
+  { id: 'foot',       label: 'Plantar Fascia',      tag: 'Embo',       img: '/images/hero/hero-plantar-fascia.png'},
+  { id: 'wrist',      label: 'Wrist',               tag: 'Embo',       img: '/images/hero/hero-wrist.png'         },
+  { id: 'neuropathy', label: 'Neuropathy',           tag: 'PNS',        img: '/images/hero/hero-neuropathy.png'   },
+  { id: 'spine',      label: 'Back & Neck',          tag: 'PNS',        img: '/images/hero/hero-back-neck.png'    },
+  { id: 'neuralgia',  label: 'Occipital Neuralgia',  tag: 'PNS',        img: '/images/hero/hero-occipital.png'    },
+]
+
 export default function TreatmentsHubClient() {
   return (
     <main className="flex-grow bg-[#07080C]">
 
-      {/* ── Hero ─────────────────────────────── */}
-      <section className="pt-44 pb-32 sm:pt-52 sm:pb-44">
-        <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-12">
+      {/* ── Hero — white split layout ─────────────────────────────── */}
+      <section className="bg-white flex flex-col lg:flex-row overflow-hidden" style={{ minHeight: '72vh' }}>
+
+        {/* LEFT — copy */}
+        <div className="flex-none lg:w-[38%] flex flex-col justify-center px-8 sm:px-12 lg:px-16 pt-36 pb-10 lg:py-32">
           <motion.span
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: EASE }}
-            className="block mb-7 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/40"
+            className="block mb-5 text-[11px] font-semibold uppercase tracking-[0.3em]"
+            style={{ color: 'rgba(14,14,14,0.40)' }}
           >
-            Specialty Areas
+            Minimally Invasive. Maximum Relief.
           </motion.span>
+
           <motion.h1
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: EASE, delay: 0.08 }}
-            className="font-heading font-semibold text-[#EDE6D8] text-[clamp(34px,5.5vw,62px)] leading-[1.02] tracking-[-0.05em] max-w-3xl"
+            transition={{ duration: 0.75, ease: EASE, delay: 0.08 }}
+            className="font-heading font-semibold leading-[1.06] tracking-[-0.05em]"
+            style={{ fontSize: 'clamp(38px, 3.6vw, 58px)', color: '#0E0E0E' }}
           >
-            Explore treatments.
+            Precisely targeted.<br />
+            Naturally restorative.<br />
+            <span style={{ color: '#B8AA82' }}>Lasting relief.</span>
           </motion.h1>
+
           <motion.p
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: EASE, delay: 0.18 }}
-            className="mt-8 max-w-xl text-[17px] leading-relaxed text-white/50"
+            className="mt-6 leading-[1.6] tracking-tight"
+            style={{ fontSize: 'clamp(14px, 1.2vw, 16px)', color: '#444444', maxWidth: 380 }}
           >
-            Our specialists focus on minimally invasive solutions first — smaller incisions,
-            faster recovery, same-day discharge. For every condition we treat.
+            Advanced Embo and PNS therapies that focus on the source of your
+            pain&mdash;so you can get back to what matters most.
           </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: EASE, delay: 0.3 }}
+            className="mt-8 flex items-center gap-5 flex-wrap"
+          >
+            <Link
+              href="/assessment"
+              className="inline-flex items-center gap-2.5 rounded-full px-7 py-3.5 text-[14px] font-medium tracking-tight text-white select-none transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(0,0,0,0.20)] active:scale-[0.98]"
+              style={{ backgroundColor: '#0E0E0E', boxShadow: '0 2px 10px rgba(0,0,0,0.14)' }}
+            >
+              <ArrowRight className="w-[14px] h-[14px]" aria-hidden />
+              Start Free Assessment
+            </Link>
+          </motion.div>
+        </div>
+
+        {/* RIGHT — vertical image strip */}
+        {/* Desktop: flex columns fill height. Mobile: horizontal scroll strip. */}
+        <div
+          className="flex-1 flex overflow-x-auto lg:overflow-x-visible scrollbar-none"
+          style={{ minHeight: 280 }}
+        >
+          {HERO_COLUMNS.map(({ id, label, tag, img }, i) => (
+            <motion.div
+              key={id}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.7, ease: EASE, delay: 0.12 + i * 0.06 }}
+              className="group relative flex-none lg:flex-1 overflow-hidden border-r border-black/[0.07] last:border-r-0"
+              style={{ width: 136, minWidth: 136 }}
+            >
+              <Link href={`/treatments/${id}`} className="block absolute inset-0" tabIndex={-1} aria-hidden />
+
+              {/* Image fills the column */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={img}
+                alt={label}
+                className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-[1.05]"
+                style={{ filter: 'saturate(0.88) contrast(0.94)' }}
+              />
+
+              {/* Bottom label */}
+              <div className="absolute bottom-0 inset-x-0 px-3 pb-4 pt-10 pointer-events-none"
+                style={{ background: 'linear-gradient(to top, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.7) 50%, transparent 100%)' }}
+              >
+                <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[#0E0E0E] leading-tight">
+                  {label}
+                </p>
+                <p className="text-[9px] tracking-wide mt-0.5" style={{ color: 'rgba(14,14,14,0.42)' }}>
+                  {tag}
+                </p>
+              </div>
+            </motion.div>
+          ))}
         </div>
       </section>
 
       {/* ── Specialty grid ───────────────────── */}
-      <section className="pb-44 sm:pb-52">
+      <section className="pt-20 sm:pt-28 pb-44 sm:pb-52">
         <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-12">
           <div
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px"

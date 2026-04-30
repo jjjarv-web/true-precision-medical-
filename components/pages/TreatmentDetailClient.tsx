@@ -163,7 +163,10 @@ export default function TreatmentDetailClient({ slug, specLabel, detail }: Props
             Our Approach
           </motion.span>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-px" style={{ background: 'rgba(26,24,20,0.06)' }}>
+          <div
+            className={`grid grid-cols-1 gap-px ${detail.approaches.length === 2 ? 'lg:grid-cols-2' : 'lg:grid-cols-3'}`}
+            style={{ background: 'rgba(26,24,20,0.06)' }}
+          >
             {detail.approaches.map((approach, i) => (
               <motion.div
                 key={approach.name}

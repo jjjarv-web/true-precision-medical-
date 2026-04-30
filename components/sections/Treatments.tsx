@@ -27,7 +27,7 @@ export default function Treatments() {
 
         {/* Card grid — gap-px on parent acts as razor-thin divider lines */}
         <div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px"
           style={{ background: 'rgba(255,255,255,0.07)' }}
         >
           {SPECIALTIES.map((spec, i) => (
@@ -41,18 +41,20 @@ export default function Treatments() {
               className="group relative flex flex-col p-8 bg-[#07080c] cursor-pointer transition-colors duration-300 hover:bg-white/[0.04] min-h-[300px] overflow-hidden"
             >
               {/* Anatomical background image */}
-              <div className="absolute inset-x-0 bottom-0 h-[58%] pointer-events-none select-none">
-                <img
-                  src={spec.img}
-                  alt=""
-                  aria-hidden="true"
-                  className="absolute inset-0 w-full h-full object-cover object-top grayscale opacity-[0.09] group-hover:opacity-[0.18] transition-opacity duration-500"
-                />
-                <div
-                  className="absolute inset-0"
-                  style={{ background: 'linear-gradient(to bottom, #07080c 0%, #07080c 15%, transparent 100%)' }}
-                />
-              </div>
+              {spec.img && (
+                <div className="absolute inset-x-0 bottom-0 h-[58%] pointer-events-none select-none">
+                  <img
+                    src={spec.img}
+                    alt=""
+                    aria-hidden="true"
+                    className="absolute inset-0 w-full h-full object-cover object-top grayscale opacity-[0.09] group-hover:opacity-[0.18] transition-opacity duration-500"
+                  />
+                  <div
+                    className="absolute inset-0"
+                    style={{ background: 'linear-gradient(to bottom, #07080c 0%, #07080c 15%, transparent 100%)' }}
+                  />
+                </div>
+              )}
 
               {/* Card content */}
               <div className="relative z-10 flex flex-col gap-5 flex-1">

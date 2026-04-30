@@ -166,7 +166,7 @@ export type Specialty = {
   id: string
   label: string
   desc: string
-  img: string
+  img: string | null
 }
 
 export const SPECIALTIES: Specialty[] = [
@@ -216,7 +216,13 @@ export const SPECIALTIES: Specialty[] = [
     id: 'fibroids',
     label: 'Uterine Fibroids',
     desc: 'Uterine fibroid embolization (UFE) — a uterus-preserving, outpatient alternative to hysterectomy with a significantly shorter recovery.',
-    img: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=800&auto=format&fit=crop',
+    img: '/images/hero/hero-fibroids.png',
+  },
+  {
+    id: 'pad',
+    label: 'Peripheral Arterial Disease',
+    desc: 'Minimally invasive endovascular treatments to restore blood flow, relieve limb pain, and reduce the risk of serious complications — without open surgery.',
+    img: '/images/hero/hero-pad.png',
   },
 ]
 
@@ -843,6 +849,38 @@ export const TREATMENT_DETAILS: Record<string, TreatmentDetail> = {
       before: 'We start with a thorough diagnostic evaluation, review your imaging and prior treatments, and identify which interventions are most likely to produce lasting relief.',
       during: 'Most procedures are performed under light sedation or local anesthetic in our outpatient center. Precision imaging guides every step.',
       after: 'Many patients notice meaningful improvement within days to weeks. We track your response and adjust the protocol to build on what works.',
+    },
+  },
+  pad: {
+    tagline: 'Restore blood flow. Relieve limb pain. No open surgery.',
+    intro:
+      "Peripheral arterial disease occurs when plaque buildup narrows the arteries supplying blood to your legs, feet, or arms — causing pain, cramping, and in severe cases, non-healing wounds or limb-threatening ischemia. Traditional treatment often meant bypass surgery with weeks of recovery.\n\nOur interventional specialists treat PAD endovascularly: through a tiny access point in the wrist or groin, we open blocked arteries with balloons and stents, restoring circulation the same day.",
+    conditions: [
+      'Peripheral arterial disease (PAD)',
+      'Claudication (leg pain with walking)',
+      'Critical limb ischemia',
+      'Non-healing wounds or ulcers',
+      'Rest pain in feet or legs',
+      'Arterial blockages in the iliac, femoral, or tibial arteries',
+    ],
+    approaches: [
+      {
+        name: 'Percutaneous Transluminal Angioplasty (PTA)',
+        desc: 'A tiny balloon catheter is guided to the narrowed artery and inflated to open the blockage, restoring blood flow without any incision.',
+      },
+      {
+        name: 'Endovascular Stenting',
+        desc: "When angioplasty alone isn't sufficient, a small metal stent is placed inside the artery to hold it open long-term and prevent re-narrowing.",
+      },
+      {
+        name: 'Atherectomy',
+        desc: 'A specialized catheter removes or shaves away the plaque buildup directly from within the artery wall, clearing the vessel before or instead of stenting.',
+      },
+    ],
+    expectations: {
+      before: 'A non-invasive vascular ultrasound or CT angiogram maps the location and severity of your arterial disease. We review findings together and build a personalized treatment plan.',
+      during: 'Procedures are performed under light sedation through an access point smaller than a pencil tip. Most cases take one to two hours with minimal discomfort.',
+      after: 'Same-day or next-morning discharge is standard. Most patients notice improved circulation and reduced pain within days. A structured follow-up plan monitors long-term vessel health.',
     },
   },
   vascular: {

@@ -99,16 +99,18 @@ export default function AssessmentLandingClient() {
                 >
                   {/* Image — portrait crop */}
                   <div className="relative w-full" style={{ paddingBottom: '130%' }}>
-                    <Image
-                      src={spec.img}
-                      alt={spec.label}
-                      fill
-                      sizes="(max-width: 640px) 50vw, 25vw"
-                      className="object-cover transition-all duration-500
-                                 saturate-[0.55] brightness-[0.82]
-                                 group-hover:saturate-[0.75] group-hover:brightness-[0.92]"
-                      style={{ objectPosition: imgPosition }}
-                    />
+                    {spec.img && (
+                      <Image
+                        src={spec.img}
+                        alt={spec.label}
+                        fill
+                        sizes="(max-width: 640px) 50vw, 25vw"
+                        className="object-cover transition-all duration-500
+                                   saturate-[0.55] brightness-[0.82]
+                                   group-hover:saturate-[0.75] group-hover:brightness-[0.92]"
+                        style={{ objectPosition: imgPosition }}
+                      />
+                    )}
 
                     {/* Bottom fade to dark */}
                     <div
