@@ -64,12 +64,21 @@ export default function Footer({ site, conversionDescription }: Props = {}) {
               'Virtual assessment available. Most major insurance plans accepted.'}
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            {/* Primary — assessment */}
             <a
               href="/assessment"
               className="inline-flex items-center gap-2.5 bg-[#D4C4A8] text-[#1A1814] px-8 py-3.5 rounded-full text-sm font-semibold tracking-[0.02em] hover:bg-[#C9B896] transition-colors duration-200"
               style={{ boxShadow: '0 6px 28px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.35)' }}
             >
               Start Free Assessment
+              <ArrowRight className="w-4 h-4" />
+            </a>
+            {/* Secondary — consultation */}
+            <a
+              href="/book"
+              className="inline-flex items-center gap-2.5 border border-white/20 text-white/70 px-8 py-3.5 rounded-full text-sm font-semibold tracking-[0.02em] hover:border-white/40 hover:text-white transition-colors duration-200"
+            >
+              Request a Consultation
               <ArrowRight className="w-4 h-4" />
             </a>
             <a

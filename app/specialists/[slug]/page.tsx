@@ -122,10 +122,10 @@ export default async function ProviderDetailPage({ params }: PageProps) {
 
                 <div className="mt-8 flex flex-wrap gap-3">
                   <Link
-                    href="/assessment"
+                    href="/book"
                     className="inline-flex items-center gap-2 rounded-xl bg-[#1A1814] px-5 py-3 text-sm font-semibold text-white transition-all duration-200 hover:bg-[#2A2620] hover:-translate-y-0.5 shadow-[0_2px_14px_rgba(0,0,0,0.18)]"
                   >
-                    Start Free Assessment
+                    Book a Consultation
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                   <Link
