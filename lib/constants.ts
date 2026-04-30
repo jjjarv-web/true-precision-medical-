@@ -49,15 +49,19 @@ export function providerSlug(name: string): string {
 const PROVIDERS_RAW: Omit<Provider, 'slug'>[] = [
   {
     id: 'provider-neuro',
-    name: 'Dr. Elena Vasquez',
+    name: 'Dr. Samuel Kim',
     title: 'Neurosurgeon',
-    cardTagline: 'ABNS board certified · Spine fellowship',
-    highlights: ['ABNS board certified', 'Minimally invasive spine fellowship'],
+    cardTagline: '23 years in neurosurgery · PNS specialist · Former Weill Cornell faculty',
+    highlights: [
+      '23 years of neurosurgical experience',
+      'Former Assistant Professor, Weill Cornell Medical College',
+      'PNS specialist — outpatient same-day surgery',
+    ],
     shortIntro:
-      'Focuses on minimally invasive spine surgery, nerve decompression, and image-guided approaches so patients recover with less downtime than traditional open procedures.',
+      'With 23 years of neurosurgical experience and over a decade as an Assistant Professor at Weill Cornell Medical College, Dr. Kim now specializes in Peripheral Nerve Stimulation (PNS) — a minimally invasive, outpatient treatment for chronic pain conditions including occipital neuralgia, migraines, back and neck pain, and knee and foot pain.',
     extendedBio:
-      'Dr. Vasquez completed residency training in neurological surgery followed by a dedicated fellowship in minimally invasive and complex spine surgery. Her practice philosophy centers on matching the least invasive effective procedure to each patient’s anatomy and goals — whether that means endoscopic decompression, motion-preserving options, or carefully selected fusion when necessary.\n\nShe works closely with physical medicine, pain management, and primary care teams so that surgery is one part of a broader recovery plan. Patients appreciate her direct communication style and emphasis on setting realistic expectations before and after any procedure.\n\nOutside the OR, she contributes to clinical quality initiatives across True Precision Medical’s outpatient centers and stays current with evolving techniques in endoscopic and tubular access spine surgery.',
-    photoUrl: 'https://images.unsplash.com/photo-1594824476967-48c8b964273f?q=80&w=800&auto=format&fit=crop',
+      "Dr. Kim is a neurosurgeon with 23 years of experience, including more than 10 years as an Assistant Professor of Neurological Surgery at Weill Cornell Medical College, where he both performed and taught brain and spine surgeries. He currently runs his own practice in Phoenix, AZ.\n\nOver his career, Dr. Kim has performed numerous complex spine surgeries — historically one of the most effective treatments for chronic pain. The advent of Peripheral Nerve Stimulation (PNS) has given him a revolutionary, minimally invasive alternative: a technique that delivers enormous pain relief with minimal downside risk, performed entirely in the outpatient setting.\n\nDr. Kim specializes in PNS for patients suffering from occipital neuralgia, chronic migraines, chronic neck and low back pain, knee pain, and foot pain. His procedures are performed in an ambulatory surgery center, allowing patients to have their surgery and return home the same day.\n\nDr. Kim takes pride in getting to know each patient as an individual. His approach centers on building a strong doctor-patient relationship, where every treatment plan is carefully tailored to the unique needs and goals of the person in front of him.",
+    photoUrl: '/images/providers/dr-samuel-kim.png',
   },
   {
     id: 'provider-ortho',
