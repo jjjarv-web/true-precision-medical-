@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
+import gsap from 'gsap'
+import { useGSAP } from '@gsap/react'
 import {
   PersonStanding,
   Activity,
@@ -15,6 +17,8 @@ import {
   Phone,
 } from 'lucide-react'
 import { PHONE_NUMBER, PHONE_HREF } from '@/lib/constants'
+
+gsap.registerPlugin(useGSAP)
 
 const BG   = '#F9F7F4'
 const GOLD = '#B8AA82'  // ARC's warm sand-gold
@@ -44,6 +48,55 @@ const CONDITIONS = [
 export default function Hero2() {
   const [active, setActive] = useState(0)
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const containerRef = useRef<HTMLElement>(null)
+
+  useGSAP(() => {
+    const tl = gsap.timeline({ defaults: { ease: 'power2.out' } })
+
+    tl
+      // Eyebrow drifts up, fades in
+      .fromTo('.hero2-eyebrow',
+        { autoAlpha: 0, y: 4 },
+        { autoAlpha: 1, y: 0, duration: 0.7, ease: 'sine.out' },
+        0.1
+      )
+      // Headline — gentle blur + y (ARC's hero-subtitle pattern)
+      .fromTo('.hero2-headline',
+        { autoAlpha: 0, y: 6, filter: 'blur(6px)' },
+        {
+          autoAlpha: 1, y: 0, filter: 'blur(0px)', duration: 1.4, ease: 'sine.out',
+          onComplete() { gsap.set('.hero2-headline', { clearProps: 'filter,transform' }) },
+        },
+        '-=0.25'
+      )
+      // Body copy — micro scale-in (ARC's hero-message pattern)
+      .fromTo('.hero2-body',
+        { autoAlpha: 0, y: 12, scale: 0.97 },
+        {
+          autoAlpha: 1, y: 0, scale: 1, duration: 1.0,
+          onComplete() { gsap.set('.hero2-body', { clearProps: 'transform' }) },
+        },
+        '-=0.4'
+      )
+      // CTAs
+      .fromTo('.hero2-cta',
+        { autoAlpha: 0, y: 10 },
+        {
+          autoAlpha: 1, y: 0, duration: 0.9,
+          onComplete() { gsap.set('.hero2-cta', { clearProps: 'transform' }) },
+        },
+        '-=0.2'
+      )
+      // Chips bar rises in last (ARC's hero-peek pattern)
+      .fromTo('.hero2-chips',
+        { autoAlpha: 0, y: 12 },
+        {
+          autoAlpha: 1, y: 0, duration: 1.0,
+          onComplete() { gsap.set('.hero2-chips', { clearProps: 'transform' }) },
+        },
+        '+=0.1'
+      )
+  }, { scope: containerRef })
 
   const resetTimer = () => {
     if (timerRef.current) clearInterval(timerRef.current)
@@ -66,6 +119,7 @@ export default function Hero2() {
 
   return (
     <section
+      ref={containerRef}
       className="flex flex-col min-h-screen lg:h-screen overflow-hidden"
       style={{ backgroundColor: BG }}
     >
@@ -121,15 +175,15 @@ export default function Hero2() {
             <div style={{ maxWidth: 480 }}>
 
               {/* Eyebrow — ARC style: medium, very wide tracking, muted */}
-              <p className="mb-5 text-[11px] font-medium uppercase tracking-[0.34em]"
-                 style={{ color: 'rgba(14,14,14,0.40)' }}>
+              <p className="hero2-eyebrow mb-5 text-[11px] font-medium uppercase tracking-[0.34em]"
+                 style={{ color: 'rgba(14,14,14,0.40)', opacity: 0 }}>
                 Minimally Invasive. Maximum Relief.
               </p>
 
               {/* Headline — ARC: semibold, tight tracking, near-[0.98] leading */}
               <h1
-                className="font-heading font-semibold leading-[1.08] tracking-[-0.06em] mb-6"
-                style={{ fontSize: 'clamp(46px, 4vw, 62px)', color: '#0E0E0E' }}
+                className="hero2-headline font-heading font-semibold leading-[1.08] tracking-[-0.06em] mb-6"
+                style={{ fontSize: 'clamp(46px, 4vw, 62px)', color: '#0E0E0E', opacity: 0 }}
               >
                 <span className="block">Target the source.</span>
                 <span className="block">Relieve the pain.</span>
@@ -138,15 +192,15 @@ export default function Hero2() {
 
               {/* Body — ARC: normal weight, 1.55 leading, tracking-tight */}
               <p
-                className="font-normal leading-[1.55] tracking-tight mb-8"
-                style={{ fontSize: 'clamp(15px, 1.3vw, 17px)', color: '#444444', maxWidth: 420 }}
+                className="hero2-body font-normal leading-[1.55] tracking-tight mb-8"
+                style={{ fontSize: 'clamp(15px, 1.3vw, 17px)', color: '#444444', maxWidth: 420, opacity: 0 }}
               >
                 Advanced, image-guided treatments that treat the source of your
                 pain&mdash;so you can move better, feel better, and live better.
               </p>
 
               {/* CTAs */}
-              <div className="flex items-center gap-4 flex-wrap">
+              <div className="hero2-cta flex items-center gap-4 flex-wrap" style={{ opacity: 0 }}>
 
                 {/* Primary — Start Free Assessment */}
                 <Link
@@ -233,7 +287,7 @@ export default function Hero2() {
       </div>
 
       {/* ── Condition chips bar ───────────────────────────────────── */}
-      <div className="border-t" style={{ borderColor: 'rgba(14,14,14,0.09)', backgroundColor: BG }}>
+      <div className="hero2-chips border-t" style={{ borderColor: 'rgba(14,14,14,0.09)', backgroundColor: BG, opacity: 0 }}>
         <div
           className="flex overflow-x-auto lg:grid lg:grid-cols-7 scrollbar-none divide-x"
           style={{ borderColor: 'rgba(14,14,14,0.08)' }}

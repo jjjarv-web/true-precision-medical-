@@ -9,7 +9,7 @@ const TILE_URL  = 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.pn
 const TILE_ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
 
 const DEFAULT_CENTER: [number, number] = [33.5, -111.98]
-const DEFAULT_ZOOM = 10
+const DEFAULT_ZOOM = 11
 
 function createPin(active: boolean) {
   const size = active ? 16 : 10
@@ -72,7 +72,7 @@ export default function LeafletMap({ locations, activeId, onSelect }: Props) {
       <TileLayer url={TILE_URL} attribution={TILE_ATTR} detectRetina />
 
       {active && (
-        <MapController lat={active.lat} lng={active.lng} zoom={11} />
+        <MapController lat={active.lat} lng={active.lng} zoom={12} />
       )}
 
       {locations.map((loc) => (
