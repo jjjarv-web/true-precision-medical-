@@ -24,7 +24,7 @@ export default function TreatmentsHubClient() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: EASE, delay: 0.08 }}
-            className="font-heading font-bold text-[#EDE6D8] text-[clamp(38px,6vw,72px)] leading-[1.04] tracking-[-0.04em] max-w-3xl"
+            className="font-heading font-semibold text-[#EDE6D8] text-[clamp(34px,5.5vw,62px)] leading-[1.02] tracking-[-0.05em] max-w-3xl"
           >
             Explore treatments.
           </motion.h1>
@@ -115,8 +115,8 @@ export default function TreatmentsHubClient() {
                 Not sure where to start?
               </p>
               <h2
-                className="font-heading font-bold text-[#EDE6D8] leading-[1.04] tracking-[-0.04em]"
-                style={{ fontSize: 'clamp(30px, 3.5vw, 50px)' }}
+                className="font-heading font-semibold text-[#EDE6D8] leading-[1.04] tracking-[-0.04em]"
+                style={{ fontSize: 'clamp(28px, 3.2vw, 46px)' }}
               >
                 Tell us what brings you in.
               </h2>

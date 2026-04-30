@@ -246,8 +246,8 @@ export default function TreatmentDetailClient({ slug, specLabel, detail }: Props
             Ready to take the next step?
           </span>
           <h2
-            className="font-heading font-bold text-[#1A1814] leading-[1.05] tracking-[-0.04em] mb-6"
-            style={{ fontSize: 'clamp(30px, 4vw, 52px)' }}
+            className="font-heading font-semibold text-[#1A1814] leading-[1.04] tracking-[-0.04em] mb-6"
+            style={{ fontSize: 'clamp(28px, 3.8vw, 46px)' }}
           >
             Find out if you&apos;re a candidate.
           </h2>

@@ -62,15 +62,15 @@ export default function LocationsMap({
           </span>
           {isPageHero ? (
             <h1
-              className="font-heading font-bold text-[#1A1814] leading-[1.04] tracking-[-0.04em]"
-              style={{ fontSize: 'clamp(38px, 6vw, 72px)' }}
+              className="font-heading font-semibold text-[#1A1814] leading-[1.02] tracking-[-0.04em]"
+              style={{ fontSize: 'clamp(34px, 5.5vw, 64px)' }}
             >
               {sectionHeadline}
             </h1>
           ) : (
             <h2
-              className="font-heading font-bold text-[#1A1814] leading-[1.05] tracking-[-0.04em]"
-              style={{ fontSize: 'clamp(28px, 4vw, 48px)' }}
+              className="font-heading font-semibold text-[#1A1814] leading-[1.04] tracking-[-0.04em]"
+              style={{ fontSize: 'clamp(26px, 3.8vw, 44px)' }}
             >
               {sectionHeadline}
             </h2>

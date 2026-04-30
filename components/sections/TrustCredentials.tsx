@@ -63,7 +63,7 @@ export default function TrustCredentials({
               <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#9A9490] mb-5 block">
                 Meet the Specialists
               </span>
-              <h2 className="font-heading font-bold text-[#1A1814] text-[clamp(28px,4vw,48px)] leading-[1.08] tracking-[-0.04em]">
+              <h2 className="font-heading font-semibold text-[#1A1814] text-[clamp(26px,3.8vw,44px)] leading-[1.04] tracking-[-0.04em]">
                 Fellowship-trained surgeons.<br className="hidden sm:block" /> Board-certified. Focused on you.
               </h2>
             </motion.div>
@@ -190,8 +190,8 @@ export default function TrustCredentials({
             className="mb-6"
           >
             <h2
-              className="font-heading font-bold text-[#EDE6D8] leading-[1.0] tracking-[-0.04em]"
-              style={{ fontSize: 'clamp(36px, 5vw, 64px)' }}
+              className="font-heading font-semibold text-[#EDE6D8] leading-[1.0] tracking-[-0.05em]"
+              style={{ fontSize: 'clamp(34px, 4.5vw, 58px)' }}
             >
               Zero hospital stays.
             </h2>

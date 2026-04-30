@@ -59,8 +59,8 @@ export default function OurApproachClient({ siteSettings }: Props) {
             initial={{ opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.75, ease: EASE, delay: 0.08 }}
-            className="font-heading font-bold text-[#1A1814] leading-[1.04] tracking-[-0.04em] max-w-3xl"
-            style={{ fontSize: 'clamp(36px, 5.5vw, 70px)' }}
+            className="font-heading font-semibold text-[#1A1814] leading-[1.02] tracking-[-0.05em] max-w-3xl"
+            style={{ fontSize: 'clamp(34px, 5vw, 62px)' }}
           >
             Major surgery should be the last resort. Not the first option.
           </motion.h1>
@@ -129,7 +129,7 @@ export default function OurApproachClient({ siteSettings }: Props) {
             <span className="block mb-6 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#9A9490]">
               Our Process
             </span>
-            <h2 className="font-heading font-bold text-[#1A1814] text-[clamp(28px,3.5vw,46px)] leading-[1.08] tracking-[-0.04em] mb-6 max-w-xl">
+            <h2 className="font-heading font-semibold text-[#1A1814] text-[clamp(26px,3.5vw,44px)] leading-[1.04] tracking-[-0.04em] mb-6 max-w-xl">
               A simpler path to relief.
             </h2>
             <p className="text-[#4A4440] text-[16px] leading-relaxed max-w-md">
@@ -216,7 +216,7 @@ export default function OurApproachClient({ siteSettings }: Props) {
             <span className="block mb-6 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/40">
               Why True Precision Medical
             </span>
-            <h2 className="font-heading font-bold text-[#EDE6D8] text-[clamp(26px,3.5vw,46px)] leading-[1.08] tracking-[-0.04em] max-w-xl">
+            <h2 className="font-heading font-semibold text-[#EDE6D8] text-[clamp(26px,3.5vw,44px)] leading-[1.04] tracking-[-0.04em] max-w-xl">
               We believe most surgery is avoidable. Here&apos;s how we prove it.
             </h2>
           </motion.div>
@@ -310,7 +310,7 @@ export default function OurApproachClient({ siteSettings }: Props) {
               <span className="block mb-6 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#9A9490]">
                 The Team
               </span>
-              <h2 className="font-heading font-bold text-[#1A1814] text-[clamp(24px,3vw,40px)] leading-[1.08] tracking-[-0.04em] max-w-md">
+              <h2 className="font-heading font-semibold text-[#1A1814] text-[clamp(22px,3vw,38px)] leading-[1.04] tracking-[-0.04em] max-w-md">
                 Meet the specialists behind the approach.
               </h2>
               <p className="mt-5 text-[15px] leading-relaxed text-[#4A4440] max-w-sm">

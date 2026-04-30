@@ -20,7 +20,7 @@ export default function Treatments() {
           <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/40 mb-5 block">
             Specialty Areas
           </span>
-          <h2 className="font-heading font-bold text-[clamp(30px,4vw,52px)] text-[#EDE6D8] leading-[1.08] tracking-[-0.04em]">
+          <h2 className="font-heading font-semibold text-[clamp(28px,3.8vw,48px)] text-[#EDE6D8] leading-[1.04] tracking-[-0.04em]">
             Explore treatments.
           </h2>
         </motion.div>

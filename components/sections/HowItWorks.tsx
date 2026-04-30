@@ -24,7 +24,7 @@ export default function HowItWorks() {
           <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#9A9490] mb-5 block">
             Our Process
           </span>
-          <h2 className="font-heading font-bold text-[#1A1814] text-[clamp(28px,3.5vw,48px)] leading-[1.08] tracking-[-0.04em] mb-5">
+          <h2 className="font-heading font-semibold text-[#1A1814] text-[clamp(26px,3.5vw,44px)] leading-[1.04] tracking-[-0.04em] mb-5">
             A simpler path to relief.
           </h2>
           <p className="text-[#4A4440] text-[15px] leading-relaxed max-w-md">

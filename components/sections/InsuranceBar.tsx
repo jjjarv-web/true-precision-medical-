@@ -98,7 +98,7 @@ export default function InsuranceBar({ settings, site }: Props) {
             <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/40 mb-5 block">
               Insurance & Coverage
             </span>
-            <h2 className="font-heading font-bold text-[#EDE6D8] leading-[1.06] tracking-[-0.04em] mb-5"
+            <h2 className="font-heading font-semibold text-[#EDE6D8] leading-[1.04] tracking-[-0.04em] mb-5"
                 style={{ fontSize: 'clamp(28px,4vw,48px)' }}>
               Your plan is almost<br className="hidden sm:block" /> certainly covered.
             </h2>
