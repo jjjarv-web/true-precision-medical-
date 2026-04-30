@@ -74,7 +74,7 @@ export default function ProviderCard({ provider, index = 0, imageSizes }: Props)
           <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#EDE6D8]/40">
             About
           </p>
-          <p className="mb-4 text-sm leading-relaxed text-[#EDE6D8]/75">
+          <p className="mb-4 text-sm leading-relaxed text-[#EDE6D8]/75 line-clamp-4">
             {provider.shortIntro ?? defaultBioTeaser()}
           </p>
           <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-[#EDE6D8]/30">
